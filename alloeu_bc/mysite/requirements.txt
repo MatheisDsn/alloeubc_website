@@ -1,0 +1,14 @@
+asgiref==3.9.1
+certifi==2025.8.3
+charset-normalizer==3.4.2
+Django==5.2.4
+django-admin-sortable2==2.2.8
+django-browser-reload==1.18.0
+django-tailwind==4.2.0
+idna==3.10
+pillow==11.3.0
+requests==2.32.4
+sqlparse==0.5.3
+typing_extensions==4.14.1
+urllib3==2.5.0
+whitenoise==6.9.0

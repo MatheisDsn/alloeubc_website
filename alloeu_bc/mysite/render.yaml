@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: alloeubc
+    env: python
+    buildCommand: |
+  pip install -r requirements.txt
+  python manage.py migrate
+  python manage.py collectstatic --noinput
+    startCommand: "gunicorn mysite.wsgi:application"
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: mysite.settings

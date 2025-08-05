@@ -5,11 +5,14 @@ Django==5.2.4
 django-admin-sortable2==2.2.8
 django-browser-reload==1.18.0
 django-tailwind==4.2.0
-gunicorn
+gunicorn==23.0.0
 idna==3.10
+packaging==25.0
 pillow==11.3.0
+psycopg2-binary==2.9.10
 requests==2.32.4
 sqlparse==0.5.3
 typing_extensions==4.14.1
+tzdata==2025.2
 urllib3==2.5.0
 whitenoise==6.9.0

@@ -1,6 +1,7 @@
 asgiref==3.9.1
 certifi==2025.8.3
 charset-normalizer==3.4.2
+dj-database-url==3.0.1
 Django==5.2.4
 django-admin-sortable2==2.2.8
 django-browser-reload==1.18.0

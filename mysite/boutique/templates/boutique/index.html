@@ -1,0 +1,226 @@
+{% extends "boutique/base.html" %}
+
+{% block title %}Boutique Officielle | Alloeu BC{% endblock %}
+{% block description %}Découvrez la boutique officielle de l'Alloeu BC. Équipements de basketball, maillots officiels et accessoires pour tous les passionnés.{% endblock %}
+
+{% block contain %}
+{% load static %}
+
+<!-- Styles personnalisés pour la boutique -->
+<style>
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .group:hover .group-hover\:scale-105 {
+    transform: scale(1.05);
+  }
+
+  .hover\:scale-105:hover {
+    transform: scale(1.05);
+  }
+
+  /* Amélioration de l'accessibilité pour les focus */
+  .focus\:ring-4:focus {
+    box-shadow: 0 0 0 4px rgba(var(--color-primary-300), 0.5);
+  }
+
+  /* Transition fluide pour tous les éléments interactifs */
+  a, button {
+    transition: all 0.2s ease-in-out;
+  }
+</style>
+
+{% include "boutique/navbar_boutique.html" %}
+
+<!-- Section d'information importante -->
+<div class="bg-gradient-to-r from-primary-50 to-primary-100 dark:from-gray-800 dark:to-gray-900 border-l-4 border-primary-500 p-6 mx-4 mt-6 rounded-lg shadow-sm" role="alert">
+  <div class="flex items-start space-x-4">
+    <div class="flex-shrink-0">
+      <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+      </svg>
+    </div>
+    <div class="flex-1">
+      <h3 class="text-lg font-semibold text-primary-800 dark:text-primary-200 mb-3">
+        Informations importantes pour votre réservation
+      </h3>
+      <ul class="space-y-2 text-sm text-primary-700 dark:text-primary-300">
+        <li class="flex items-start">
+          <svg class="w-4 h-4 text-primary-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+          <span><strong>Inscription obligatoire :</strong> Vous devez être connecté pour effectuer une réservation</span>
+        </li>
+        <li class="flex items-start">
+          <svg class="w-4 h-4 text-primary-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+          <span><strong>Réservation uniquement :</strong> Pas de paiement en ligne, règlement au club</span>
+        </li>
+        <li class="flex items-start">
+          <svg class="w-4 h-4 text-primary-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+          <span><strong>Suivi par email :</strong> Vous recevrez des notifications pour suivre votre réservation</span>
+        </li>
+        <li class="flex items-start">
+          <svg class="w-4 h-4 text-primary-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+          <span><strong>Mot de passe oublié :</strong> Contactez 
+            <a href="mailto:matheisdasso@gmail.com?subject=Mot de passe oublié" 
+               class="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-200 underline font-medium">
+              matheisdasso@gmail.com
+            </a>
+          </span>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="flex items-start">
+          <svg class="w-4 h-4 text-primary-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+          <span><strong>Modification du profil :</strong> Gérez vos informations dans 
+            <a href="{% url 'boutique:mdp_edit' %}" 
+               class="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-200 underline font-medium">
+              mon profil
+            </a>
+          </span>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Messages de feedback -->
+{% if messages %}
+<div class="mx-4 mt-6">
+  {% for message in messages %}
+  <div class="flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800 shadow-sm animate-fade-in" role="alert">
+    <svg class="flex-shrink-0 w-4 h-4 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+    </svg>
+    <div class="font-medium">{{ message }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- Header de la boutique -->
+<header class="bg-gradient-to-r from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 py-12">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+        Boutique Officielle
+        <span class="text-primary-600 dark:text-primary-400">Alloeu BC</span>
+      </h1>
+      <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        Découvrez notre collection d'équipements de basketball, maillots officiels et accessoires 
+        pour tous les passionnés du club.
+      </p>
+    </div>
+  </div>
+</header>
+
+<!-- Grille des produits -->
+<section class="py-12 bg-gray-50 dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for produit in produits %}
+      <article class="group bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+        <a href="{{ produit.get_absolute_url }}" class="block">
+          <div class="aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700">
+            <img
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              src="{{ produit.image.url }}"
+              alt="{{ produit.nom }} - Équipement de basketball Alloeu BC"
+            />
+          </div>
+        </a>
+        
+        <div class="p-6">
+          <a href="{{ produit.get_absolute_url }}" class="block mb-3">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200">
+              {{ produit.nom }}
+            </h3>
+          </a>
+
+          <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">
+            {{ produit.description_principal }}
+          </p>
+
+          <div class="flex items-center justify-between pt-4">
+            <div class="flex items-center">
+              <span class="text-3xl font-bold text-gray-900 dark:text-white">
+                {{ produit.prix }}
+              </span>
+              <span class="text-xl text-gray-600 dark:text-gray-400 ml-1">€</span>
+            </div>
+
+            {% if user.is_authenticated %}
+            <a
+              href="{% url 'boutique:add_to_card_index' produit.slug %}"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-300 rounded-lg transition-all duration-200 hover:scale-105 focus:outline-none dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+              aria-label="Ajouter {{ produit.nom }} au panier"
+            >
+              <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
+              </svg>
+              Réserver
+            </a>
+            {% else %}
+            <div class="flex flex-col items-end">
+              <span class="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                Connexion requise
+              </span>
+              <a
+                href="{% url 'accounts:connexion' %}"
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-primary-600 hover:text-primary-700 border border-primary-600 hover:border-primary-700 rounded-lg transition-colors duration-200 dark:text-primary-400 dark:border-primary-400 dark:hover:text-primary-300 dark:hover:border-primary-300"
+              >
+                Se connecter
+              </a>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </article>
+      {% empty %}
+      <div class="col-span-full text-center py-12">
+        <div class="mx-auto max-w-md">
+          <svg class="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2m13-8L9 5 9 3"/>
+          </svg>
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            Aucun produit disponible
+          </h3>
+          <p class="text-gray-500 dark:text-gray-400">
+            Les produits seront bientôt disponibles. Revenez plus tard !
+          </p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

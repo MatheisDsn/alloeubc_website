@@ -1,0 +1,31 @@
+/* Styles pour l'admin du carrousel */
+.field-image_preview img {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.field-image_preview img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.fieldset.module h2 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px 6px 0 0;
+}
+
+.field-has_button .vBooleanField {
+    color: #28a745;
+    font-weight: bold;
+}
+
+/* Style pour le drag & drop */
+.sortable {
+    cursor: move;
+}
+
+.sortable:hover {
+    background-color: #f8f9fa;
+}

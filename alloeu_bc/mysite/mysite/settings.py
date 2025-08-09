@@ -147,12 +147,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
-}
-MEDIA_URL = f"https://res.cloudinary.com/{os.getenv('CLOUDINARY_CLOUD_NAME')}/"
+# CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
+CLOUDINARY_URL = "cloudinary://146389552741174:Nzx-chK_nmkznw-NUVJGc2S6P5U@dwuemv68p"
+
+MEDIA_URL = f"https://res.cloudinary.com/{CLOUDINARY_URL.split('@')[1]}/"
 
 # Configuration WhiteNoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

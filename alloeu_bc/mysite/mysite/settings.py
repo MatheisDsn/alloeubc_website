@@ -151,7 +151,8 @@ STATICFILES_DIRS = [
 CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
 
 # MEDIA local (CloudinaryStorage renverra des URLs absolues côté front)
-MEDIA_URL = '/media/'
+MEDIA_URL = f"https://res.cloudinary.com/dwuemv68p/"
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Configuration WhiteNoise

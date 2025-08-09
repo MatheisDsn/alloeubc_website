@@ -3,9 +3,9 @@ boto3
 certifi==2025.8.3
 charset-normalizer==3.4.2
 dj-database-url==3.0.1
-django-storages[s3]
 Django==5.2.4
 django-admin-sortable2==2.2.8
+django-cloudinary-storage==0.3.0
 django-browser-reload==1.18.0
 django-tailwind==4.2.0
 gunicorn==23.0.0
@@ -15,7 +15,6 @@ pillow==11.3.0
 psycopg2-binary==2.9.10
 requests==2.32.4
 sqlparse==0.5.3
-supabase
 typing_extensions==4.14.1
 tzdata==2025.2
 urllib3==2.5.0

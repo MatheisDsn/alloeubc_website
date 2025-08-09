@@ -148,9 +148,9 @@ STATICFILES_DIRS = [
 ]
 
 # CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
-CLOUDINARY_URL = "cloudinary://146389552741174:Nzx-chK_nmkznw-NUVJGc2S6P5U@dwuemv68p"
+os.environ["CLOUDINARY_URL"] = "cloudinary://146389552741174:Nzx-chK_nmkznw-NUVJGc2S6P5U@dwuemv68p"
 
-MEDIA_URL = f"https://res.cloudinary.com/{CLOUDINARY_URL.split('@')[1]}/"
+MEDIA_URL = f"https://res.cloudinary.com/dwuemv68p/"
 
 # Configuration WhiteNoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

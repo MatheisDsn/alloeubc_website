@@ -2,17 +2,17 @@ from pathlib import Path
 import os   
 import dj_database_url
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dwuemv68p',
     'API_KEY': '756359522935887',
     'API_SECRET': '1jLJ3lkv1pjpdnMl2amj2uobsMY',
-    'SECURE': True
+    'SECURE': True,
+    'STATICFILES_MANIFEST_ROOT': os.path.join(BASE_DIR, 'manifest')
 }
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-MEDIA_URL = '/media/'  # Important pour le bon fonctionnement
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Temporaire pour le fallback
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
@@ -24,7 +24,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Temporaire pour le fallback
 SECRET_KEY = 'django-insecure-k976r1deej#t)g%1llmkhv1xl5b)kk^rp*fzo4*+r9j50o(k&$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [".onrender.com", "127.0.0.1"]
 
@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
+        default='postgresql://postgres.hemqlihogxqfasfqexei:Math200815!Math200815@aws-0-us-east-2.pooler.supabase.com:6543/postgres',
         conn_max_age=600,
         ssl_require=True
     )

@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'adminsortable2',
     'analytics',
     'news',
-    'storages',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -141,19 +142,16 @@ AUTH_USER_MODEL = 'accounts.User'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-DEFAULT_FILE_STORAGE = "mysite.storage_backends.SupabaseStorage"
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-SUPABASE_BUCKET = "media"
-AWS_S3_ENDPOINT_URL = "https://hemqlihogxqfasfqexei.supabase.co/storage/v1/s3"
-AWS_QUERYSTRING_AUTH = False
-AWS_S3_REGION_NAME = "us-east-2" 
-
-MEDIA_URL = "https://hemqlihogxqfasfqexei.supabase.co/storage/v1/object/public/media/"
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+}
 
 # Configuration WhiteNoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

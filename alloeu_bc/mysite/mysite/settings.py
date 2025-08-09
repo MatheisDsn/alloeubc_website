@@ -3,12 +3,13 @@ import os
 import dj_database_url
 import cloudinary
 
-cloudinary.config( 
-    cloud_name = "dwuemv68p", 
-    api_key = "756359522935887", 
-    api_secret = "1jLJ3lkv1pjpdnMl2amj2uobsMY", # Click 'View API Keys' above to copy your API secret
-    secure=True
-)
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dwuemv68p',
+    'API_KEY': '756359522935887',
+    'API_SECRET': '1jLJ3lkv1pjpdnMl2amj2uobsMY',
+    'SECURE': True
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -150,15 +151,9 @@ AUTH_USER_MODEL = 'accounts.User'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-
-# MEDIA local (CloudinaryStorage renverra des URLs absolues côté front)
-MEDIA_URL = f"https://res.cloudinary.com/dwuemv68p/"
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Configuration WhiteNoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

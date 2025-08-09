@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'adminsortable2',
     'analytics',
     'news',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -125,7 +126,8 @@ TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
-NPM_BIN_PATH = "C:\\Program Files\\nodejs\\npm.cmd"
+NPM_BIN_PATH = "C:\Program Files\\nodejs\\npm.cmd"
+
 
 #EMAIL CONFIG
 EMAIL_HOST = "smtp.gmail.com"
@@ -142,10 +144,16 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = 'media/'
 MEDIA_DIR = BASE_DIR / 'media'
 MEDIA_ROOT = BASE_DIR / 'media/'
-DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+AWS_ACCESS_KEY_ID = "ta_clef_s3"
+AWS_SECRET_ACCESS_KEY = "ton_secret_s3"
+AWS_STORAGE_BUCKET_NAME = "nom-du-bucket"
+AWS_S3_ENDPOINT_URL = "https://hemqlihogxqfasfqexei.storage.supabase.co/storage/v1/s3"
+AWS_QUERYSTRING_AUTH = False
 
 # Configuration WhiteNoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

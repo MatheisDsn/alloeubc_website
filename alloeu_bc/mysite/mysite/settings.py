@@ -1,6 +1,14 @@
 from pathlib import Path
 import os   
 import dj_database_url
+import cloudinary
+
+cloudinary.config( 
+    cloud_name = "dwuemv68p", 
+    api_key = "756359522935887", 
+    api_secret = "1jLJ3lkv1pjpdnMl2amj2uobsMY", # Click 'View API Keys' above to copy your API secret
+    secure=True
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -146,9 +154,6 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-
-# Configuration Cloudinary via variable d'environnement (à définir sur Render)
-CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
 
 # MEDIA local (CloudinaryStorage renverra des URLs absolues côté front)
 MEDIA_URL = f"https://res.cloudinary.com/dwuemv68p/"

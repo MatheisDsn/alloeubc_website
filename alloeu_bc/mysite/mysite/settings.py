@@ -5,9 +5,9 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dwuemv68p',
-    'API_KEY': '756359522935887',
-    'API_SECRET': '1jLJ3lkv1pjpdnMl2amj2uobsMY',
+    'CLOUD_NAME': os.getenv("CLOUD_NAME"),
+    'API_KEY': os.getenv("API_KEY"),
+    'API_SECRET': os.getenv("API_SECRET"),
     'SECURE': True,
     'STATICFILES_MANIFEST_ROOT': os.path.join(BASE_DIR, 'manifest')
 }
@@ -24,7 +24,7 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 SECRET_KEY = 'django-insecure-k976r1deej#t)g%1llmkhv1xl5b)kk^rp*fzo4*+r9j50o(k&$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [".onrender.com", "127.0.0.1"]
 
@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://postgres.hemqlihogxqfasfqexei:Math200815!Math200815@aws-0-us-east-2.pooler.supabase.com:6543/postgres',
+        default=os.getenv("DATABASE_URL"),
         conn_max_age=600,
         ssl_require=True
     )

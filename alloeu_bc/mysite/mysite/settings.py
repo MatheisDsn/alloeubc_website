@@ -147,10 +147,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-# CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
-os.environ["CLOUDINARY_URL"] = "cloudinary://146389552741174:Nzx-chK_nmkznw-NUVJGc2S6P5U@dwuemv68p"
+# Configuration Cloudinary via variable d'environnement (à définir sur Render)
+CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
 
-MEDIA_URL = f"https://res.cloudinary.com/dwuemv68p/"
+# MEDIA local (CloudinaryStorage renverra des URLs absolues côté front)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Configuration WhiteNoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

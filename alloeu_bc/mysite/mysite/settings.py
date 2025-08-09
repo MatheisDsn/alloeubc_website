@@ -141,8 +141,6 @@ AUTH_USER_MODEL = 'accounts.User'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-MEDIA_DIR = BASE_DIR / 'media'
-MEDIA_ROOT = BASE_DIR / 'media/'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
@@ -151,10 +149,11 @@ STATICFILES_DIRS = [
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = "media"  # nom exact de ton bucket
-AWS_S3_ENDPOINT_URL = "https://hemqlihogxqfasfqexei.storage.supabase.co/storage/v1/s3"
+AWS_S3_ENDPOINT_URL = "https://hemqlihogxqfasfqexei.supabase.co/storage/v1/s3"
 AWS_QUERYSTRING_AUTH = False
 
-MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/"
+MEDIA_URL = "https://hemqlihogxqfasfqexei.supabase.co/storage/v1/object/public/media/"
+
 
 # Configuration WhiteNoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

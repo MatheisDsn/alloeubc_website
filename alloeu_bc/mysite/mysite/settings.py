@@ -152,6 +152,7 @@ print(f"AWS_ACCESS_KEY_ID : {AWS_ACCESS_KEY_ID}, AWS_SECRET_ACCESS_KEY : {AWS_SE
 AWS_STORAGE_BUCKET_NAME = "media"  # nom exact de ton bucket
 AWS_S3_ENDPOINT_URL = "https://hemqlihogxqfasfqexei.supabase.co/storage/v1/s3"
 AWS_QUERYSTRING_AUTH = False
+AWS_S3_REGION_NAME = "us-east-2" 
 
 MEDIA_URL = "https://hemqlihogxqfasfqexei.supabase.co/storage/v1/object/public/media/"
 

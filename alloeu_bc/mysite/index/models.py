@@ -7,19 +7,30 @@ from cloudinary_storage.storage import RawMediaCloudinaryStorage
 
 def validate_image_or_svg(value):
     """Validator pour accepter les images classiques et les fichiers SVG"""
-    if value:
-        ext = os.path.splitext(value.name)[1].lower()
-        valid_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg']
-        if ext not in valid_extensions:
-            raise ValidationError(f'Format de fichier non supporté. Formats acceptés : {", ".join(valid_extensions)}')
+    if not value:
+        return value
         
-        if ext == '.svg':
+    # Gestion spéciale pour CloudinaryResource
+    if hasattr(value, 'resource_type'):
+        # C'est une ressource Cloudinary
+        if value.resource_type == 'image' or value.format == 'svg':
             return value
-            
-        try:
-            get_image_dimensions(value)
-        except Exception:
-            raise ValidationError('Le fichier uploadé n\'est pas une image valide.')
+        raise ValidationError('Le fichier Cloudinary doit être une image ou un SVG')
+    
+    # Gestion pour les fichiers normaux
+    ext = os.path.splitext(value.name)[1].lower()
+    valid_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg']
+    
+    if ext not in valid_extensions:
+        raise ValidationError(f'Format de fichier non supporté. Formats acceptés : {", ".join(valid_extensions)}')
+    
+    if ext == '.svg':
+        return value
+        
+    try:
+        get_image_dimensions(value)
+    except Exception:
+        raise ValidationError('Le fichier uploadé n\'est pas une image valide.')
     return value
 
 class CustomCloudinaryField(CloudinaryField):

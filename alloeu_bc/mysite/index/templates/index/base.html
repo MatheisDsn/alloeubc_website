@@ -33,7 +33,7 @@
   <body class="font-primary tracking-widest">
     <!-- Barre défilante des sponsors -->
 
-    {% if sponsor %}
+    {% if sponsors %}
 
     <div id="sponsors-bar" class="bg-gradient-to-r from-primary-600 via-primary-700 to-primary-600 text-white py-4 overflow-hidden relative transition-all duration-300 ease-in-out">
       <div class="flex animate-scroll">
@@ -341,10 +341,10 @@
     {% block contain %} {% endblock %}
 
     <!-- FOOTER (pied de page) -->
-    <footer class="bg-white rounded-lg shadow dark:bg-gray-900 m-4 border-t-8">
+    <footer class="rounded-lg shadow bg-gray-900 m-4 border-t-8">
       <!-- Section Sponsors dans le footer -->
       {% if sponsors %}
-      <div class="bg-white dark:bg-gray-900 py-6">
+      <div class="bg-gray-900 py-6">
         <div class="w-full max-w-screen-xl mx-auto px-4">
           <div class="flex flex-wrap items-center justify-center gap-8">
             {% for sponsor in sponsors %}
@@ -368,18 +368,18 @@
               alt="Logo Alloeu"
             />
             <p
-              class="hidden min-[960px]:block self-center text-2xl font-semibold whitespace-nowrap dark:text-white break-all max-w-20"
+              class="hidden min-[960px]:block self-center text-2xl font-semibold whitespace-nowrap text-white break-all max-w-20"
             >
               Alloeu Basket Club
             </p>
             <p
-              class="hidden max-[830px]:hidden min-[830px]:block min-[960px]:hidden self-center text-2xl font-semibold whitespace-nowrap dark:text-white break-all max-w-20"
+              class="hidden max-[830px]:hidden min-[830px]:block min-[960px]:hidden self-center text-2xl font-semibold whitespace-nowrap text-white break-all max-w-20"
             >
               Alloeu BC
             </p>
           </div>
           <ul
-            class="flex flex-wrap items-center md:justify-normal justify-center mb-6 text-sm font-medium text-gray-500 md:mb-0 dark:text-gray-400"
+            class="flex flex-wrap items-center md:justify-normal justify-center mb-6 text-sm font-medium md:mb-0 text-gray-400"
           >
             <li>
               <a
@@ -625,7 +625,7 @@
         <br />
 
         <span
-          class="block text-sm font-secondary tracking-tight font-extrabold text-gray-500 text-center dark:text-gray-400"
+          class="block text-sm font-secondary tracking-tight font-extrabold text-center text-gray-400"
           >© <span id="year"></span> Alloeu Basket Club - Tous droits réservés.
         </span>
         <br />
@@ -654,7 +654,7 @@
         </style>
 
         <span
-          class="block text-sm font-secondary tracking-tight font-extrabold text-gray-500 text-center dark:text-gray-400"
+          class="block text-sm font-secondary tracking-tight font-extrabold text-center text-gray-400"
         >
           Créé par Mathéis Dassonneville, au moindre problème ou pour me contacter, <br />
           <a

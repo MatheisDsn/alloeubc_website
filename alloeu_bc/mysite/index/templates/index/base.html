@@ -35,38 +35,23 @@
 
     {% if sponsors %}
 
-    <div id="sponsors-bar" class="bg-gradient-to-r from-primary-600 via-primary-700 to-primary-600 text-white py-4 overflow-hidden relative transition-all duration-300 ease-in-out">
-      <div class="flex animate-scroll">
-        <!-- Premier groupe de sponsors -->
-        <div class="flex items-center space-x-12 whitespace-nowrap min-w-full">
-          {% for sponsor in sponsors %}
-            <div class="flex items-center space-x-4 px-6">
-              {% if sponsor.image_blanc %}
-                <img src="{{ sponsor.image_blanc.url }}" alt="{{ sponsor.nom }}" class="h-10 w-auto object-contain rounded">
-              {% endif %}
-              <span class="text-base font-medium">{{ sponsor.nom }}</span>
+    <div id="sponsors-bar" class="bg-gradient-to-r from-primary-600 via-primary-700 to-primary-600 text-white py-3 md:py-4 overflow-hidden relative">
+      <div class="flex items-center gap-8 md:gap-12 overflow-x-auto no-scrollbar px-2 md:px-4 snap-x snap-mandatory">
+        {% for sponsor in sponsors %}
+          <div class="flex items-center gap-3 md:gap-4 px-2 md:px-4 flex-none snap-start">
+            {% if sponsor.image_blanc %}
+              <img src="{{ sponsor.image_blanc.url }}" alt="{{ sponsor.nom }}" class="h-8 md:h-10 w-auto object-contain rounded">
+            {% elif sponsor.image_noir %}
+              <img src="{{ sponsor.image_noir.url }}" alt="{{ sponsor.nom }}" class="h-8 md:h-10 w-auto object-contain rounded">
+            {% endif %}
+            <div class="flex flex-col min-w-0">
+              <span class="text-sm md:text-base font-medium truncate max-w-[40vw] md:max-w-xs">{{ sponsor.nom }}</span>
               {% if sponsor.fonction %}
-                <span class="text-sm opacity-75">{{ sponsor.fonction }}</span>
+                <span class="text-[11px] md:text-sm opacity-75 truncate max-w-[40vw] md:max-w-xs">{{ sponsor.fonction }}</span>
               {% endif %}
             </div>
-            <div class="text-primary-300 text-lg">•</div>
-          {% endfor %}
-        </div>
-        <!-- Deuxième groupe (duplication pour effet continu) -->
-        <div class="flex items-center space-x-12 whitespace-nowrap min-w-full">
-          {% for sponsor in sponsors %}
-            <div class="flex items-center space-x-4 px-6">
-              {% if sponsor.image_blanc %}
-                <img src="{{ sponsor.image_blanc.url }}" alt="{{ sponsor.nom }}" class="h-10 w-auto object-contain rounded">
-              {% endif %}
-              <span class="text-base font-medium">{{ sponsor.nom }}</span>
-              {% if sponsor.fonction %}
-                <span class="text-sm opacity-75">{{ sponsor.fonction }}</span>
-              {% endif %}
-            </div>
-            <div class="text-primary-300 text-lg">•</div>
-          {% endfor %}
-        </div>
+          </div>
+        {% endfor %}
       </div>
     </div>
 
@@ -273,68 +258,17 @@
     </script>
 
     <style>
-      /* Animation pour le défilement continu des sponsors */
-      @keyframes scroll {
-        0% {
-          transform: translateX(0);
-        }
-        100% {
-          transform: translateX(-100%);
-        }
-      }
-
-      .animate-scroll {
-        animation: scroll 30s linear infinite;
-      }
-
-      /* Pause de l'animation au hover */
-      #sponsors-bar:hover .animate-scroll {
-        animation-play-state: paused;
-      }
+      /* Barre sponsors: scroll horizontal responsive, pas d'animation CSS */
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
       /* Styles pour la barre de sponsors */
-      #sponsors-bar {
-        position: relative;
-        z-index: 60;
-      }
+      #sponsors-bar { position: relative; z-index: 60; }
+      nav { position: sticky; z-index: 50; }
 
-      /* Assurer que la navbar reste en dessous */
-      nav {
-        position: sticky;
-        z-index: 50;
-      }
-
-      /* Amélioration responsive pour la barre de sponsors */
+      /* Ajustements responsive */
       @media (max-width: 768px) {
-        #sponsors-bar {
-          padding-top: 0.75rem;
-          padding-bottom: 0.75rem;
-        }
-        
-        #sponsors-bar .text-base {
-          font-size: 0.875rem;
-        }
-        
-        #sponsors-bar .text-sm {
-          font-size: 0.75rem;
-        }
-        
-        #sponsors-bar img {
-          height: 2rem;
-        }
-        
-        #sponsors-bar .space-x-12 > * + * {
-          margin-left: 2rem;
-        }
-        
-        #sponsors-bar .space-x-4 > * + * {
-          margin-left: 0.75rem;
-        }
-        
-        #sponsors-bar .px-6 {
-          padding-left: 1rem;
-          padding-right: 1rem;
-        }
+        #sponsors-bar { padding-top: 0.75rem; padding-bottom: 0.75rem; }
       }
     </style>
 

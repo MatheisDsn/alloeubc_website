@@ -32,29 +32,48 @@
 
   <body class="font-primary tracking-widest">
     <!-- Barre défilante des sponsors -->
-
     {% if sponsors %}
-
     <div id="sponsors-bar" class="bg-gradient-to-r from-primary-600 via-primary-700 to-primary-600 text-white py-3 md:py-4 overflow-hidden relative">
-      <div class="flex items-center gap-8 md:gap-12 overflow-x-auto no-scrollbar px-2 md:px-4 snap-x snap-mandatory">
-        {% for sponsor in sponsors %}
-          <div class="flex items-center gap-3 md:gap-4 px-2 md:px-4 flex-none snap-start">
-            {% if sponsor.image_blanc %}
-              <img src="{{ sponsor.image_blanc.url }}" alt="{{ sponsor.nom }}" class="h-8 md:h-10 w-auto object-contain rounded">
-            {% elif sponsor.image_noir %}
-              <img src="{{ sponsor.image_noir.url }}" alt="{{ sponsor.nom }}" class="h-8 md:h-10 w-auto object-contain rounded">
-            {% endif %}
-            <div class="flex flex-col min-w-0">
-              <span class="text-sm md:text-base font-medium truncate max-w-[40vw] md:max-w-xs">{{ sponsor.nom }}</span>
-              {% if sponsor.fonction %}
-                <span class="text-[11px] md:text-sm opacity-75 truncate max-w-[40vw] md:max-w-xs">{{ sponsor.fonction }}</span>
-              {% endif %}
-            </div>
+      <div class="marquee">
+        <div class="marquee-track">
+          <div class="marquee-group">
+            {% for sponsor in sponsors %}
+              <div class="sponsor-item">
+                {% if sponsor.image_blanc %}
+                  <img src="{{ sponsor.image_blanc.url }}" alt="{{ sponsor.nom }}" />
+                {% elif sponsor.image_noir %}
+                  <img src="{{ sponsor.image_noir.url }}" alt="{{ sponsor.nom }}" />
+                {% endif %}
+                <div class="min-w-0">
+                  <span class="sponsor-nom">{{ sponsor.nom }}</span>
+                  {% if sponsor.fonction %}
+                    <span class="sponsor-fonction">{{ sponsor.fonction }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
           </div>
-        {% endfor %}
+          <!-- Duplication pour boucle fluide -->
+          <div class="marquee-group" aria-hidden="true">
+            {% for sponsor in sponsors %}
+              <div class="sponsor-item">
+                {% if sponsor.image_blanc %}
+                  <img src="{{ sponsor.image_blanc.url }}" alt="" />
+                {% elif sponsor.image_noir %}
+                  <img src="{{ sponsor.image_noir.url }}" alt="" />
+                {% endif %}
+                <div class="min-w-0">
+                  <span class="sponsor-nom">{{ sponsor.nom }}</span>
+                  {% if sponsor.fonction %}
+                    <span class="sponsor-fonction">{{ sponsor.fonction }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
       </div>
     </div>
-
     {% endif %}
 
     <!-- Navbar modernisée -->
@@ -258,9 +277,36 @@
     </script>
 
     <style>
-      /* Barre sponsors: scroll horizontal responsive, pas d'animation CSS */
-      .no-scrollbar::-webkit-scrollbar { display: none; }
-      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      /* Marquee responsive: défilement continu, sans superposition */
+      .marquee { position: relative; overflow: hidden; }
+      .marquee-track {
+        display: flex;
+        width: max-content;
+        gap: 2.5rem; /* espace entre groupes */
+        animation: marquee 30s linear infinite;
+        will-change: transform;
+      }
+      .marquee:hover .marquee-track { animation-play-state: paused; }
+      .marquee-group { display: flex; gap: 2.5rem; flex: 0 0 auto; }
+      .sponsor-item { display: flex; align-items: center; gap: .75rem; padding: 0 .5rem; flex: 0 0 auto; }
+      .sponsor-item img { height: 2rem; width: auto; object-fit: contain; border-radius: .25rem; }
+      .sponsor-nom { display:block; font-weight: 600; font-size: .9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 40vw; }
+      .sponsor-fonction { display:block; opacity: .8; font-size: .75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 40vw; }
+
+      @media (min-width: 768px) {
+        .marquee-track, .marquee-group { gap: 3rem; }
+        .sponsor-item img { height: 2.5rem; }
+        .sponsor-nom { font-size: 1rem; max-width: 16rem; }
+        .sponsor-fonction { font-size: .9rem; max-width: 16rem; }
+      }
+
+      @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+
+      #sponsors-bar { position: relative; z-index: 60; }
+      nav { position: sticky; z-index: 50; }
 
       /* Styles pour la barre de sponsors */
       #sponsors-bar { position: relative; z-index: 60; }

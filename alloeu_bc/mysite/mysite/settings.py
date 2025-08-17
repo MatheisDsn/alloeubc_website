@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'news',
     'cloudinary',
     'cloudinary_storage',
+    "django.contrib.sitemaps",
 ]
 
 MIDDLEWARE = [

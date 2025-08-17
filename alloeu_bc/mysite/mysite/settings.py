@@ -13,18 +13,10 @@ CLOUDINARY_STORAGE = {
 }
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-k976r1deej#t)g%1llmkhv1xl5b)kk^rp*fzo4*+r9j50o(k&$'
+SECRET_KEY = os.getenv("API_SECRET")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [".onrender.com", "127.0.0.1"]
 
@@ -143,11 +135,11 @@ NPM_BIN_PATH = "C:\Program Files\\nodejs\\npm.cmd"
 
 #EMAIL CONFIG
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "matheisdasso@gmail.com"
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER"),
 EMAIL_PORT = 587 # pr le EMAIL_USE_TLS
 EMAIL_USE_TLS = True # utilise un truc sécurisé 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_PASSWORD = "zbibwxsunazgdoyc"
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 AUTH_USER_MODEL = 'accounts.User'
 

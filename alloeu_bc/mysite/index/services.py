@@ -151,6 +151,21 @@ def format_match_data(matches):
             if away_team:
                 away_team["logo_url"] = away_logo
 
+            # Déterminer l'équipe du club (pour filtrage)
+            club_team = None
+            try:
+                if home_team and (home_team.get('is_team_of_club') == 1 or (home_team.get('name_in_competition') and CLUB_KEYWORD.lower() in home_team.get('name_in_competition', '').lower())):
+                    club_team = home_team
+                elif away_team and (away_team.get('is_team_of_club') == 1 or (away_team.get('name_in_competition') and CLUB_KEYWORD.lower() in away_team.get('name_in_competition', '').lower())):
+                    club_team = away_team
+            except Exception:
+                club_team = None
+
+            club_team_id = club_team.get('team_id') if club_team else None
+            club_team_name = None
+            if club_team:
+                club_team_name = club_team.get('name_in_club') or club_team.get('name_in_competition')
+
             formatted_match = {
                 'id': match['id'],
                 'date': match_date,
@@ -162,7 +177,10 @@ def format_match_data(matches):
                 'location': "🏠 Domicile" if is_home else "🚌 Extérieur",
                 'home_team': home_team,
                 'away_team': away_team,
-                'url': match.get('url', '#')
+                'url': match.get('url', '#'),
+                # Métadonnées pour filtrage par équipe du club
+                'club_team_id': club_team_id,
+                'club_team_name': club_team_name
             }
 
             formatted_matches.append(formatted_match)

@@ -108,6 +108,7 @@ class PartenairesSponsorAdmin(admin.ModelAdmin):
     list_display = ['nom', 'fonction', 'has_image_blanc', 'has_image_noir', 'image_blanc_preview', 'image_noir_preview']
     list_display_links = ['nom']
     search_fields = ['nom', 'fonction']
+    inlines = []
 
     def has_image_blanc(self, obj):
         return bool(obj.image_blanc)
@@ -130,3 +131,10 @@ class PartenairesSponsorAdmin(admin.ModelAdmin):
             return mark_safe(f'<img src="{obj.image_noir.url}" style="max-height:40px; max-width:80px; object-fit:contain; border-radius:4px;"/>')
         return "-"
     image_noir_preview.short_description = "Aperçu noir"
+
+class SponsorLinkInline(admin.TabularInline):
+    model = SponsorLink
+    extra = 1
+    fields = ('title', 'url')
+
+PartenairesSponsorAdmin.inlines = [SponsorLinkInline]

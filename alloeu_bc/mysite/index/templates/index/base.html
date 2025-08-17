@@ -106,7 +106,7 @@
 
               <!-- Dropdown Le Club -->
               <div class="relative group">
-                <button class="{% if request.resolver_match.url_name == 'presentations' or request.resolver_match.url_name == 'informations' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium flex items-center transition-all duration-200">
+                <button class="{% if request.resolver_match.url_name == 'presentations' or request.resolver_match.url_name == 'informations' or request.resolver_match.url_name == 'article_list' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium flex items-center transition-all duration-200">
                   Le Club
                   <svg class="ml-1 h-4 w-4 transform group-hover:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -127,15 +127,28 @@
                     >
                       Informations
                     </a>
+                    <a
+                      href="{% url 'news:article_list' %}"
+                      class="{% if request.resolver_match.url_name == 'article_list' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-4 py-3 text-sm transition-colors duration-150"
+                    >
+                      Actualités
+                    </a>
                   </div>
                 </div>
               </div>
 
               <a
                 href="{% url 'index:lesequipes' %}"
-                class="{% if request.resolver_match.url_name == 'lesequipes' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium text-center transition-all duration-200"
+                class="{% if request.resolver_match.url_name == 'lesequipes' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium transition-all duration-200"
               >
                 Les Équipes
+              </a>
+
+              <a
+                href="{% url 'index:partenaires' %}"
+                class="{% if request.resolver_match.url_name == 'partenaires' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium text-center transition-all duration-200"
+              >
+                Partenaires
               </a>
 
               <a
@@ -145,12 +158,7 @@
                 Matchs
               </a>
 
-              <a
-                href="{% url 'news:article_list' %}"
-                class="{% if request.resolver_match.namespace == 'news' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium transition-all duration-200"
-              >
-                Actualités
-              </a>
+              
               <!-- <a
                 href="{% url 'index:inscriptions' %}"
                 class="{% if request.resolver_match.url_name == 'inscriptions' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium transition-all duration-200"
@@ -216,6 +224,12 @@
             >
               Les Équipes
             </a>
+            <a
+              href="{% url 'index:partenaires' %}"
+              class="{% if request.resolver_match.url_name == 'partenaires' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
+            >
+              Partenaires
+            </a>
             <!-- <a
               href="{% url 'index:inscriptions' %}"
               class="{% if request.resolver_match.url_name == 'inscriptions' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
@@ -223,10 +237,16 @@
               Inscriptions
             </a> -->
             <a
-              href="{% url 'index:inscriptions' %}"
-              class="{% if request.resolver_match.url_name == 'inscriptions' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
+              href="{% url 'index:matches' %}"
+              class="{% if request.resolver_match.url_name == 'matches' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
             >
               Matchs
+            </a>
+            <a
+              href="{% url 'news:article_list' %}"
+              class="{% if request.resolver_match.url_name == 'article_list' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
+            >
+              Actualités
             </a>
           </div>
         </div>

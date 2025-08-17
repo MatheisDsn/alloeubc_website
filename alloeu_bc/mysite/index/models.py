@@ -149,6 +149,19 @@ class PartenairesSponsor(models.Model):
 
     def __str__(self):
         return f"{self.nom} / {self.fonction}"
+
+class SponsorLink(models.Model):
+    sponsor = models.ForeignKey(PartenairesSponsor, related_name='links', on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    url = models.URLField()
+
+    class Meta:
+        verbose_name = "Lien du sponsor"
+        verbose_name_plural = "Liens du sponsor"
+        ordering = ['id']
+
+    def __str__(self):
+        return f"{self.sponsor.nom} - {self.title}"
     
 class DocumentsFonctionnement(models.Model):
     nom = models.CharField(max_length=150)

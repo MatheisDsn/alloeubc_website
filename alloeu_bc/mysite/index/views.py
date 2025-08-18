@@ -117,3 +117,6 @@ def matches(request):
     }
     
     return render(request, 'index/matches.html', context)
+
+def mentions_legales(request):
+    return render(request, 'index/mentions_legales.html')

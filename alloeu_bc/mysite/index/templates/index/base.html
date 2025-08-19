@@ -1,0 +1,687 @@
+{% load static %} {% load tailwind_tags %}
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="{% block description %}{% endblock %}" />
+    <meta name="google-site-verification" content="FDY2U444h7BXaopoNMWZQQkVTuA92uiLgNi5ooa15Og" />
+    <title>{% block title %}{% endblock %}</title>
+
+    <link
+      rel="shortcut icon"
+      href="{%static 'index/assets/img/logo_alloeu.png' %}"
+      type="image/x-icon"
+    />
+
+    {% tailwind_css %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+
+    <link href="https://fonts.cdnfonts.com/css/gagalin" rel="stylesheet" />
+    <link href="https://fonts.cdnfonts.com/css/more-sugar" rel="stylesheet" />
+    <link href="https://fonts.cdnfonts.com/css/calibri-light" rel="stylesheet">
+
+    <!-- swiper JS (Carroussel) -->
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+                
+  </head>
+
+  <body class="font-primary tracking-widest">
+    <!-- Barre défilante des sponsors -->
+    {% if sponsors %}
+    <div id="sponsors-bar" class="bg-gradient-to-r from-primary-600 via-primary-700 to-primary-600 text-white py-3 md:py-4 overflow-hidden relative">
+      <div class="marquee">
+        <div class="marquee-track">
+          <div class="marquee-group">
+            {% for sponsor in sponsors %}
+              <div class="sponsor-item">
+                {% if sponsor.image_blanc %}
+                  <img src="{{ sponsor.image_blanc.url }}" alt="{{ sponsor.nom }}" />
+                {% elif sponsor.image_noir %}
+                  <img src="{{ sponsor.image_noir.url }}" alt="{{ sponsor.nom }}" />
+                {% endif %}
+                <div class="min-w-0">
+                  <span class="sponsor-nom">{{ sponsor.nom }}</span>
+                  {% if sponsor.fonction %}
+                    <span class="sponsor-fonction">{{ sponsor.fonction }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <!-- Duplication pour boucle fluide -->
+          <div class="marquee-group" aria-hidden="true">
+            {% for sponsor in sponsors %}
+              <div class="sponsor-item">
+                {% if sponsor.image_blanc %}
+                  <img src="{{ sponsor.image_blanc.url }}" alt="" />
+                {% elif sponsor.image_noir %}
+                  <img src="{{ sponsor.image_noir.url }}" alt="" />
+                {% endif %}
+                <div class="min-w-0">
+                  <span class="sponsor-nom">{{ sponsor.nom }}</span>
+                  {% if sponsor.fonction %}
+                    <span class="sponsor-fonction">{{ sponsor.fonction }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Navbar modernisée -->
+    <nav class="bg-white/95 backdrop-blur-md shadow-lg sticky z-50 w-full top-0 border-b border-gray-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+          <!-- Logo -->
+          <div class="flex-shrink-0">
+            <a href="{% url 'index:index' %}" class="flex items-center space-x-3 group">
+              <img
+                src="{%static 'index/assets/img/logo_alloeu.png' %}"
+                class="h-12 lg:h-16 transform group-hover:scale-105 transition-transform duration-200"
+                alt="Logo Alloeu Basket Club"
+              />
+              <span class="hidden min-[860px]:block text-xl font-bold text-secondary-900 group-hover:text-primary-600 transition-colors font-primary">
+                Alloeu BC
+              </span>
+            </a>
+          </div>
+
+          <!-- Navigation Desktop - Centrée -->
+          <div class="hidden md:block flex-1">
+            <div class="flex items-center justify-center space-x-8">
+              <a
+                href="{% url 'index:index' %}"
+                class="{% if request.resolver_match.url_name == 'index' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium transition-all duration-200"
+              >
+                Accueil
+              </a>
+
+              <!-- Dropdown Le Club -->
+              <div class="relative group">
+                <button class="{% if request.resolver_match.url_name == 'presentations' or request.resolver_match.url_name == 'informations' or request.resolver_match.url_name == 'article_list' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium flex items-center transition-all duration-200">
+                  Le Club
+                  <svg class="ml-1 h-4 w-4 transform group-hover:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+                
+                <div class="absolute left-0 mt-2 w-48 bg-white rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform group-hover:translate-y-0 translate-y-2 border border-gray-100">
+                  <div class="py-2">
+                    <a
+                      href="{% url 'index:presentations' %}"
+                      class="{% if request.resolver_match.url_name == 'presentations' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-4 py-3 text-sm transition-colors duration-150"
+                    >
+                      Présentations
+                    </a>
+                    <a
+                      href="{% url 'index:informations' %}"
+                      class="{% if request.resolver_match.url_name == 'informations' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-4 py-3 text-sm transition-colors duration-150"
+                    >
+                      Informations
+                    </a>
+                    <a
+                      href="{% url 'news:article_list' %}"
+                      class="{% if request.resolver_match.url_name == 'article_list' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-4 py-3 text-sm transition-colors duration-150"
+                    >
+                      Actualités
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="{% url 'index:lesequipes' %}"
+                class="{% if request.resolver_match.url_name == 'lesequipes' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium transition-all duration-200"
+              >
+                Les Équipes
+              </a>
+
+              <a
+                href="{% url 'index:partenaires' %}"
+                class="{% if request.resolver_match.url_name == 'partenaires' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium text-center transition-all duration-200"
+              >
+                Partenaires
+              </a>
+
+              <a
+                href="{% url 'index:matches' %}"
+                class="{% if request.resolver_match.url_name == 'matches' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium transition-all duration-200"
+              >
+                Matchs
+              </a>
+
+              
+              <!-- <a
+                href="{% url 'index:inscriptions' %}"
+                class="{% if request.resolver_match.url_name == 'inscriptions' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium transition-all duration-200"
+              >
+                Inscriptions
+              </a> -->
+            </div>
+          </div>
+
+          <!-- Espace pour équilibrer (remplace le bouton boutique) -->
+          <div class="flex-shrink-0 w-32">
+            <!-- Espace vide pour équilibrer le logo -->
+          </div>          
+
+          <!-- Bout Boutique -->
+          <!-- <div class="flex items-center space-x-4">
+            <a
+              href="{% url 'boutique:index' %}"
+              class="inline-flex items-center px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+            >
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+              </svg>
+              <span class="hidden sm:inline">Boutique</span>
+            </a> -->
+
+            <!-- Menu Mobile Button -->
+            <button
+              id="mobile-menu-button"
+              class="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-secondary-600 hover:text-primary-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors duration-200"
+            >
+              <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                <path class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Menu Mobile -->
+        <div id="mobile-menu" class="md:hidden hidden border-t border-gray-100">
+          <div class="px-2 pt-2 pb-3 space-y-1 bg-white">
+            <a
+              href="{% url 'index:index' %}"
+              class="{% if request.resolver_match.url_name == 'index' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
+            >
+              Accueil
+            </a>
+            <a
+              href="{% url 'index:presentations' %}"
+              class="{% if request.resolver_match.url_name == 'presentations' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
+            >
+              Présentations
+            </a>
+            <a
+              href="{% url 'index:informations' %}"
+              class="{% if request.resolver_match.url_name == 'informations' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
+            >
+              Informations
+            </a>
+            <a
+              href="{% url 'index:lesequipes' %}"
+              class="{% if request.resolver_match.url_name == 'lesequipes' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
+            >
+              Les Équipes
+            </a>
+            <a
+              href="{% url 'index:partenaires' %}"
+              class="{% if request.resolver_match.url_name == 'partenaires' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
+            >
+              Partenaires
+            </a>
+            <!-- <a
+              href="{% url 'index:inscriptions' %}"
+              class="{% if request.resolver_match.url_name == 'inscriptions' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
+            >
+              Inscriptions
+            </a> -->
+            <a
+              href="{% url 'index:matches' %}"
+              class="{% if request.resolver_match.url_name == 'matches' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
+            >
+              Matchs
+            </a>
+            <a
+              href="{% url 'news:article_list' %}"
+              class="{% if request.resolver_match.url_name == 'article_list' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
+            >
+              Actualités
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <script>
+      // JavaScript pour le menu mobile
+      document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuButton && mobileMenu) {
+          mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+          });
+        }
+
+        // JavaScript pour masquer/afficher la barre de sponsors au scroll
+        const sponsorsBar = document.getElementById('sponsors-bar');
+        let lastScrollTop = 0;
+        let isScrolling = false;
+
+        if (sponsorsBar) {
+          window.addEventListener('scroll', function() {
+            if (!isScrolling) {
+              window.requestAnimationFrame(function() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (scrollTop > lastScrollTop && scrollTop > 50) {
+                  // Scroll vers le bas - masquer la barre
+                  sponsorsBar.style.transform = 'translateY(-100%)';
+                  sponsorsBar.style.opacity = '0';
+                } else if (scrollTop < lastScrollTop || scrollTop <= 10) {
+                  // Scroll vers le haut ou en haut de page - afficher la barre
+                  sponsorsBar.style.transform = 'translateY(0)';
+                  sponsorsBar.style.opacity = '1';
+                }
+                
+                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+                isScrolling = false;
+              });
+            }
+            isScrolling = true;
+          }, { passive: true });
+        }
+      });
+    </script>
+
+    <style>
+      /* Marquee responsive: défilement continu, sans superposition */
+      .marquee { position: relative; overflow: hidden; }
+      .marquee-track {
+        display: flex;
+        width: max-content;
+        gap: 2.5rem; /* espace entre groupes */
+        animation: marquee 30s linear infinite;
+        will-change: transform;
+      }
+      .marquee:hover .marquee-track { animation-play-state: paused; }
+      .marquee-group { display: flex; gap: 2.5rem; flex: 0 0 auto; }
+      .sponsor-item { display: flex; align-items: center; gap: .75rem; padding: 0 .5rem; flex: 0 0 auto; }
+      .sponsor-item img { height: 2rem; width: auto; object-fit: contain; border-radius: .25rem; }
+  .sponsor-nom { display:block; font-weight: 600; font-size: .9rem; white-space: nowrap; }
+  .sponsor-fonction { display:block; opacity: .8; font-size: .75rem; white-space: nowrap; }
+
+      @media (min-width: 768px) {
+        .marquee-track, .marquee-group { gap: 3rem; }
+        .sponsor-item img { height: 2.5rem; }
+  .sponsor-nom { font-size: 1rem; }
+  .sponsor-fonction { font-size: .9rem; }
+      }
+
+      @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+
+      #sponsors-bar { position: relative; z-index: 60; }
+      nav { position: sticky; z-index: 50; }
+
+      /* Styles pour la barre de sponsors */
+      #sponsors-bar { position: relative; z-index: 60; }
+      nav { position: sticky; z-index: 50; }
+
+      /* Ajustements responsive */
+      @media (max-width: 768px) {
+        #sponsors-bar { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+      }
+    </style>
+
+    {% block contain %} {% endblock %}
+
+    <!-- FOOTER (pied de page) -->
+    <footer class="rounded-lg shadow bg-gray-900 m-4 border-t-8">
+      <!-- Section Sponsors dans le footer -->
+      {% if sponsors %}
+      <div class="bg-gray-900 py-6">
+        <div class="w-full max-w-screen-xl mx-auto px-4">
+          <div class="flex flex-wrap items-center justify-center gap-8">
+            {% for sponsor in sponsors %}
+              {% if sponsor.image_blanc %}
+                <img src="{{ sponsor.image_blanc.url }}" alt="{{ sponsor.nom }}" class="h-12 w-auto object-contain hover:scale-105 transition-transform duration-200">
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+        <div class="md:flex md:items-center md:justify-between">
+          <div
+            class="flex items-center md:justify-normal justify-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
+          >
+            <img
+              src="{%static 'index/assets/img/logo_alloeu.png'%}"
+              class="h-16"
+              alt="Logo Alloeu"
+            />
+            <p
+              class="hidden min-[960px]:block self-center text-2xl font-semibold whitespace-nowrap text-white break-all max-w-20"
+            >
+              Alloeu Basket Club
+            </p>
+            <p
+              class="hidden max-[830px]:hidden min-[830px]:block min-[960px]:hidden self-center text-2xl font-semibold whitespace-nowrap text-white break-all max-w-20"
+            >
+              Alloeu BC
+            </p>
+          </div>
+          <ul
+            class="flex flex-wrap items-center md:justify-normal justify-center mb-6 text-sm font-medium md:mb-0 text-gray-400"
+          >
+            <li>
+              <a
+                href="{%url 'index:informations'%}"
+                class="hover:underline me-4 md:me-6"
+                >Informations</a
+              >
+            </li>
+            <li>
+              <a
+                href="{%url 'index:matches'%}"
+                class="hover:underline me-4 md:me-6"
+                >Les Matchs</a
+              >
+            </li>
+            <li>
+              <a
+                href="{%url 'index:informations'%}#contact"
+                class="hover:underline me-4 md:me-6"
+                >Contact</a
+              >
+            </li>
+            <li>
+              <a
+                href="{% url 'index:mentions_legales' %}"
+                class="hover:underline me-4 md:me-6"
+                >Mentions légales</a
+              >
+            </li>
+            <li>
+              <a
+                target="_blank"
+                href="https://www.instagram.com/alloeu_basket_club/"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  x="0px"
+                  y="0px"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 48 48"
+                  class="me-4 md:me-6"
+                >
+                  <radialGradient
+                    id="yOrnnhliCrdS2gy~4tD8ma_Xy10Jcu1L2Su_gr1"
+                    cx="19.38"
+                    cy="42.035"
+                    r="44.899"
+                    gradientUnits="userSpaceOnUse"
+                  >
+                    <stop offset="0" stop-color="#fd5"></stop>
+                    <stop offset=".328" stop-color="#ff543f"></stop>
+                    <stop offset=".348" stop-color="#fc5245"></stop>
+                    <stop offset=".504" stop-color="#e64771"></stop>
+                    <stop offset=".643" stop-color="#d53e91"></stop>
+                    <stop offset=".761" stop-color="#cc39a4"></stop>
+                    <stop offset=".841" stop-color="#c837ab"></stop>
+                  </radialGradient>
+                  <path
+                    fill="url(#yOrnnhliCrdS2gy~4tD8ma_Xy10Jcu1L2Su_gr1)"
+                    d="M34.017,41.99l-20,0.019c-4.4,0.004-8.003-3.592-8.008-7.992l-0.019-20	c-0.004-4.4,3.592-8.003,7.992-8.008l20-0.019c4.4-0.004,8.003,3.592,8.008,7.992l0.019,20	C42.014,38.383,38.417,41.986,34.017,41.99z"
+                  ></path>
+                  <radialGradient
+                    id="yOrnnhliCrdS2gy~4tD8mb_Xy10Jcu1L2Su_gr2"
+                    cx="11.786"
+                    cy="5.54"
+                    r="29.813"
+                    gradientTransform="matrix(1 0 0 .6663 0 1.849)"
+                    gradientUnits="userSpaceOnUse"
+                  >
+                    <stop offset="0" stop-color="#4168c9"></stop>
+                    <stop
+                      offset=".999"
+                      stop-color="#4168c9"
+                      stop-opacity="0"
+                    ></stop>
+                  </radialGradient>
+                  <path
+                    fill="url(#yOrnnhliCrdS2gy~4tD8mb_Xy10Jcu1L2Su_gr2)"
+                    d="M34.017,41.99l-20,0.019c-4.4,0.004-8.003-3.592-8.008-7.992l-0.019-20	c-0.004-4.4,3.592-8.003,7.992-8.008l20-0.019c4.4-0.004,8.003,3.592,8.008,7.992l0.019,20	C42.014,38.383,38.417,41.986,34.017,41.99z"
+                  ></path>
+                  <path
+                    fill="#fff"
+                    d="M24,31c-3.859,0-7-3.14-7-7s3.141-7,7-7s7,3.14,7,7S27.859,31,24,31z M24,19c-2.757,0-5,2.243-5,5	s2.243,5,5,5s5-2.243,5-5S26.757,19,24,19z"
+                  ></path>
+                  <circle cx="31.5" cy="16.5" r="1.5" fill="#fff"></circle>
+                  <path
+                    fill="#fff"
+                    d="M30,37H18c-3.859,0-7-3.14-7-7V18c0-3.86,3.141-7,7-7h12c3.859,0,7,3.14,7,7v12	C37,33.86,33.859,37,30,37z M18,13c-2.757,0-5,2.243-5,5v12c0,2.757,2.243,5,5,5h12c2.757,0,5-2.243,5-5V18c0-2.757-2.243-5-5-5H18z"
+                  ></path>
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                target="_blank"
+                href="https://www.tiktok.com/@alloeu.basket.club"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  version="1.1"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 256 256"
+                  xml:space="preserve"
+                  class="me-4 md:me-6"
+                >
+                  <defs></defs>
+                  <g
+                    style="
+                      stroke: none;
+                      stroke-width: 0;
+                      stroke-dasharray: none;
+                      stroke-linecap: butt;
+                      stroke-linejoin: miter;
+                      stroke-miterlimit: 10;
+                      fill: none;
+                      fill-rule: nonzero;
+                      opacity: 1;
+                    "
+                    transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)"
+                  >
+                    <path
+                      d="M 78.974 90 H 11.026 C 4.936 90 0 85.064 0 78.974 V 11.026 C 0 4.936 4.936 0 11.026 0 h 67.948 C 85.064 0 90 4.936 90 11.026 v 67.948 C 90 85.064 85.064 90 78.974 90 z"
+                      style="
+                        stroke: none;
+                        stroke-width: 1;
+                        stroke-dasharray: none;
+                        stroke-linecap: butt;
+                        stroke-linejoin: miter;
+                        stroke-miterlimit: 10;
+                        fill: rgb(0, 0, 0);
+                        fill-rule: nonzero;
+                        opacity: 1;
+                      "
+                      transform=" matrix(1 0 0 1 0 0) "
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M 10.484 10.346 V 9.714 c -0.219 -0.031 -0.441 -0.047 -0.662 -0.048 c -2.709 0 -4.914 2.205 -4.914 4.914 c 0 1.662 0.831 3.133 2.098 4.023 c -0.848 -0.907 -1.32 -2.103 -1.319 -3.346 C 5.686 12.587 7.828 10.409 10.484 10.346"
+                      style="
+                        stroke: none;
+                        stroke-width: 1;
+                        stroke-dasharray: none;
+                        stroke-linecap: butt;
+                        stroke-linejoin: miter;
+                        stroke-miterlimit: 10;
+                        fill: rgb(0, 242, 234);
+                        fill-rule: nonzero;
+                        opacity: 1;
+                      "
+                      transform=" matrix(3.89 0 0 3.89 -1.9444444444444287 -1.9444444444444287) "
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M 10.6 17.501 c 1.209 0 2.195 -0.962 2.24 -2.16 l 0.004 -10.699 h 1.955 c -0.042 -0.223 -0.063 -0.45 -0.063 -0.677 h -2.67 l -0.005 10.699 c -0.044 1.198 -1.031 2.159 -2.24 2.159 c -0.363 0 -0.72 -0.088 -1.041 -0.258 C 9.201 17.153 9.878 17.501 10.6 17.501 M 18.45 8.274 V 7.68 c -0.718 0.001 -1.421 -0.208 -2.022 -0.601 C 16.954 7.685 17.664 8.105 18.45 8.274"
+                      style="
+                        stroke: none;
+                        stroke-width: 1;
+                        stroke-dasharray: none;
+                        stroke-linecap: butt;
+                        stroke-linejoin: miter;
+                        stroke-miterlimit: 10;
+                        fill: rgb(0, 242, 234);
+                        fill-rule: nonzero;
+                        opacity: 1;
+                      "
+                      transform=" matrix(3.89 0 0 3.89 -1.9444444444444287 -1.9444444444444287) "
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M 16.427 7.078 c -0.589 -0.674 -0.914 -1.539 -0.913 -2.435 h -0.715 C 14.986 5.643 15.574 6.523 16.427 7.078 M 9.822 12.336 c -1.239 0.001 -2.243 1.005 -2.244 2.244 c 0.001 0.834 0.464 1.599 1.203 1.986 c -0.276 -0.381 -0.425 -0.839 -0.425 -1.309 c 0.001 -1.239 1.005 -2.243 2.244 -2.244 c 0.231 0 0.453 0.038 0.662 0.104 v -2.725 c -0.219 -0.031 -0.441 -0.047 -0.662 -0.048 c -0.039 0 -0.077 0.002 -0.116 0.003 v 2.093 C 10.27 12.371 10.047 12.336 9.822 12.336"
+                      style="
+                        stroke: none;
+                        stroke-width: 1;
+                        stroke-dasharray: none;
+                        stroke-linecap: butt;
+                        stroke-linejoin: miter;
+                        stroke-miterlimit: 10;
+                        fill: rgb(255, 0, 79);
+                        fill-rule: nonzero;
+                        opacity: 1;
+                      "
+                      transform=" matrix(3.89 0 0 3.89 -1.9444444444444287 -1.9444444444444287) "
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M 18.45 8.274 v 2.075 c -1.384 0 -2.667 -0.443 -3.714 -1.194 v 5.425 c 0 2.709 -2.204 4.914 -4.913 4.914 c -1.047 0 -2.018 -0.33 -2.816 -0.891 c 0.927 1 2.23 1.569 3.594 1.568 c 2.709 0 4.914 -2.204 4.914 -4.913 V 9.832 c 1.082 0.778 2.381 1.196 3.714 1.194 v -2.67 C 18.961 8.356 18.701 8.327 18.45 8.274"
+                      style="
+                        stroke: none;
+                        stroke-width: 1;
+                        stroke-dasharray: none;
+                        stroke-linecap: butt;
+                        stroke-linejoin: miter;
+                        stroke-miterlimit: 10;
+                        fill: rgb(255, 0, 79);
+                        fill-rule: nonzero;
+                        opacity: 1;
+                      "
+                      transform=" matrix(3.89 0 0 3.89 -1.9444444444444287 -1.9444444444444287) "
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M 14.735 14.58 V 9.154 c 1.082 0.778 2.382 1.196 3.714 1.194 V 8.274 c -0.786 -0.169 -1.495 -0.589 -2.022 -1.196 c -0.853 -0.555 -1.442 -1.435 -1.629 -2.435 h -1.954 L 12.84 15.342 c -0.045 1.198 -1.031 2.16 -2.24 2.16 c -0.722 -0.001 -1.399 -0.349 -1.819 -0.935 c -0.739 -0.387 -1.202 -1.152 -1.203 -1.986 c 0.001 -1.239 1.005 -2.243 2.244 -2.244 c 0.231 0 0.452 0.038 0.662 0.104 v -2.093 c -2.656 0.062 -4.798 2.24 -4.798 4.911 c 0 1.292 0.502 2.467 1.319 3.346 c 0.824 0.58 1.808 0.891 2.816 0.89 C 12.531 19.493 14.735 17.289 14.735 14.58"
+                      style="
+                        stroke: none;
+                        stroke-width: 1;
+                        stroke-dasharray: none;
+                        stroke-linecap: butt;
+                        stroke-linejoin: miter;
+                        stroke-miterlimit: 10;
+                        fill: rgb(255, 255, 255);
+                        fill-rule: nonzero;
+                        opacity: 1;
+                      "
+                      transform=" matrix(3.89 0 0 3.89 -1.9444444444444287 -1.9444444444444287) "
+                      stroke-linecap="round"
+                    />
+                  </g>
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                target="_blank"
+                href="https://www.facebook.com/AlloeuBasketClub62840"
+                class="w-8 h-auto"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  x="0px"
+                  y="0px"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 48 48"
+                >
+                  <path
+                    fill="#3F51B5"
+                    d="M42,37c0,2.762-2.238,5-5,5H11c-2.761,0-5-2.238-5-5V11c0-2.762,2.239-5,5-5h26c2.762,0,5,2.238,5,5V37z"
+                  ></path>
+                  <path
+                    fill="#FFF"
+                    d="M34.368,25H31v13h-5V25h-3v-4h3v-2.41c0.002-3.508,1.459-5.59,5.592-5.59H35v4h-2.287C31.104,17,31,17.6,31,18.723V21h4L34.368,25z"
+                  ></path>
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <br />
+
+        <a href="{% url 'admin:index' %}"
+          class="block text-sm font-secondary tracking-tight font-extrabold text-center text-gray-400 cursor-default"
+          >© <span id="year"></span> Alloeu Basket Club - Tous droits réservés.
+        </a>
+
+        <br />
+
+        <script>
+          document.getElementById("year").textContent = new Date().getFullYear();
+        </script>
+
+        <style>
+          /* Classes utilitaires pour le contenu des actualités */
+          .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+
+          .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+        </style>
+
+        <span
+          class="block text-sm font-secondary tracking-tight font-extrabold text-center text-gray-400"
+        >
+          Créé par Mathéis Dassonneville, au moindre problème ou pour me contacter, <br />
+          <a
+            href="https://www.instagram.com/matheis.dsn/"
+            target="_blank"
+            class="hover:underline"
+          >
+            cliquez ici (Instagram);
+          </a>
+          <a
+            href="mailto:matheis.dsn.pro@gmail.com?subject=Contact%20depuis%20AlloeuBC"
+            class="hover:underline"
+            target="_blank"
+          >
+            ou cliquez ici (Email)
+          </a>
+        </span>
+      </div>
+    </footer>
+  </body>
+</html>

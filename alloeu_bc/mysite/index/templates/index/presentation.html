@@ -1,0 +1,284 @@
+{% extends "index/base.html" %} 
+
+{% block title %}Présentation | Alloeu Basket Club{% endblock %}
+{% block description %}Découvrez l'histoire de l'Alloeu Basket Club, ses membres dirigeants et ses installations. Plongez dans l'univers de notre club de basketball passionné.{% endblock %}
+
+{% block contain %} 
+{% load static %}
+
+
+<!-- Section Histoire modernisée -->
+<section class="py-20 lg:py-28 bg-gradient-to-b from-gray-50 to-white">
+  <div class="container mx-auto px-4">
+    <!-- Titre de section -->
+    <div class="text-center mb-16">
+      <h1 class="text-4xl lg:text-5xl font-bold text-secondary-900 mb-4 font-primary">
+        Notre Histoire
+      </h1>
+      <p class="text-lg text-secondary-600 max-w-2xl mx-auto font-secondary">
+        Découvrez l'évolution et les valeurs qui font la force de l'Alloeu Basket Club
+      </p>
+      <div class="w-24 h-1 bg-primary-500 mx-auto mt-6 rounded-full"></div>
+    </div>
+
+    <!-- Contenu histoire -->
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <!-- Image -->
+        <div class="order-2 lg:order-1">
+          <div class="relative group">
+            <div class="absolute inset-0 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 rounded-2xl transform rotate-3 group-hover:rotate-6 transition-transform duration-300"></div>
+            <img
+              src="{%static 'index/assets/img/child.png' %}"
+              alt="Enfant jouant au basketball - Alloeu Basket Club"
+              class="relative w-full h-auto object-cover rounded-2xl shadow-2xl group-hover:shadow-3xl transition-shadow duration-300"
+            />
+          </div>
+        </div>
+
+        <!-- Texte -->
+        <div class="order-1 lg:order-2 font-secondary font-bold">
+          <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+            <div class="prose prose-lg max-w-none">
+              <p class="text-secondary-700 leading-relaxed mb-6">
+                L'<strong class="text-primary-600">Alloeu Basket Club</strong> a succédé au Basket Club de Laventie en septembre 2014 (officiel en juin 2015), suite à l'ouverture du club de basket de Laventie aux autres communes qui composent le "Pays de l'Alloeu".
+              </p>
+              <p class="text-secondary-700 leading-relaxed mb-6">
+                <strong class="text-primary-600">Sailly-Sur-La-Lys</strong> est la première commune à avoir rejoint ce nouveau groupement en 2014, suivi de <strong class="text-primary-600">Fleurbaix</strong> l'année suivante. La mutualisation de ces trois communes est une première pour une association sportive au sein de la Communauté de Commune Flandre Lys.
+              </p>
+              <p class="text-secondary-700 leading-relaxed mb-6">
+                Depuis la saison 2019-2020, l'Alloeu Basket Club est devenu partenaire avec la commune de <strong class="text-primary-600">Neuve Chapelle</strong>.
+              </p>
+              <p class="text-secondary-700 leading-relaxed">
+                La création de l'Alloeu Basket Club est la base du projet de l'association élaboré par son ancien Président, <strong class="text-primary-600">Alexandre DOURNEL</strong>, joueur formé et arrivé à l'âge de 7 ans au Basket Club de Laventie. Aujourd'hui, le nouveau président Joan Pazdyka est soutenu par une équipe de bénévoles déterminée et convaincue du projet.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistiques -->
+      <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="text-center group">
+          <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+            <div class="text-3xl font-primary text-primary-600 mb-2">2014</div>
+            <div class="text-sm font-secondary font-bold text-secondary-600">Année de création</div>
+          </div>
+        </div>
+        <div class="text-center group">
+          <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+            <div class="text-3xl font-bold text-primary-600 mb-2">4</div>
+            <div class="text-sm font-secondary font-bold text-secondary-600">Communes partenaires</div>
+          </div>
+        </div>
+        <div class="text-center group">
+          <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+            <div class="text-3xl font-bold text-primary-600 mb-2">10+</div>
+            <div class="text-sm font-secondary font-bold text-secondary-600">Années d'expérience</div>
+          </div>
+        </div>
+        <div class="text-center group">
+          <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+            <div class="text-3xl font-bold text-primary-600 mb-2">200+</div>
+            <div class="text-sm font-secondary font-bold text-secondary-600">Licenciés</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section Membres du Bureau modernisée -->
+<section class="relative bg-secondary-900 py-20 lg:py-28 overflow-hidden">
+  <!-- Éléments décoratifs modernisés -->
+  <div class="absolute inset-0">
+    <svg class="absolute -top-1 w-full h-20 text-white" fill="currentColor" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"></path>
+      <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"></path>
+      <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"></path>
+    </svg>
+    <svg class="absolute -bottom-1 w-full h-20 text-white rotate-180" fill="currentColor" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"></path>
+      <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"></path>
+      <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"></path>
+    </svg>
+  </div>
+
+  <div class="relative container mx-auto px-4">
+    <!-- Titre modernisé -->
+    <div class="text-center mb-16">
+      <h2 class="text-4xl lg:text-5xl font-bold text-white mb-4 font-primary">
+        Notre Équipe Dirigeante
+      </h2>
+      <p class="text-lg text-gray-300 max-w-2xl mx-auto font-secondary">
+        Découvrez les membres du bureau qui œuvrent quotidiennement pour le développement de notre club
+      </p>
+      <div class="w-24 h-1 bg-primary-500 mx-auto mt-6 rounded-full"></div>
+    </div>
+
+    <!-- Grille des membres -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">
+      {% for card in cards_inf %}
+      <!-- Carte membre {{ forloop.counter }} - {{ card.nom }} -->
+      <div class="group">
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 transform hover:-translate-y-2 hover:shadow-xl">
+          <div class="flex flex-col items-center">
+            <!-- Photo de profil -->
+            <div class="relative mb-4">
+              <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white/30 group-hover:border-primary-400 transition-colors duration-300 shadow-lg">
+                {% if card.image_profile %}
+                <img
+                  class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
+                  src="{{ card.image_profile.url }}"
+                  alt="Photo de profil de {{ card.nom }}"
+                />
+                {% else %}
+                <img
+                  class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
+                  src="{% static 'index/assets/img/no-image.jpg' %}"
+                  alt="Photo de profil par défaut"
+                />
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Informations -->
+            <div class="text-center">
+              <h3 class="text-xl font-semibold text-white mb-2 group-hover:text-primary-300 transition-colors duration-200 font-secondary">
+                {{ card.nom }}
+              </h3>
+              <p class="text-primary-400 font-medium text-sm bg-primary-500/20 px-3 py-1 rounded-full">
+                {{ card.fonction }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Message de remerciement -->
+    <div class="text-center mt-16">
+      <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 max-w-4xl mx-auto">
+        <svg class="w-12 h-12 text-primary-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+        </svg>
+        <h3 class="text-2xl font-bold text-white mb-4 font-primary">
+          Un grand merci à nos bénévoles !
+        </h3>
+        <p class="text-lg text-gray-300 leading-relaxed font-secondary">
+          Grâce à l'engagement et à la passion de nos membres du bureau, l'Alloeu Basket Club continue de grandir et d'offrir le meilleur à tous nos joueurs et supporters.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section Salle modernisée -->
+<section class="py-20 lg:py-28 bg-gradient-to-b from-white to-gray-50">
+  <div class="container mx-auto px-4">
+    <!-- Titre de section -->
+    <div class="text-center mb-16">
+      <h2 class="text-4xl lg:text-5xl font-bold text-secondary-900 mb-4 font-primary">
+        Nos Installations
+      </h2>
+      <p class="text-lg text-secondary-600 max-w-2xl mx-auto font-secondary">
+        Découvrez la salle de sport où évoluent nos équipes, un environnement moderne et accueillant pour la pratique du basketball
+      </p>
+      <div class="w-24 h-1 bg-primary-500 mx-auto mt-6 rounded-full"></div>
+    </div>
+
+    <!-- Contenu salle -->
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <!-- Carte interactive -->
+        <div class="order-1">
+          <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+            <div class="p-6 bg-gradient-to-r from-primary-50 to-secondary-50">
+              <div class="flex items-center space-x-3 mb-4">
+                <div class="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold text-secondary-900">
+                    Salle des Sports polyvalente de Laventie
+                  </h3>
+                  <p class="text-secondary-600 text-sm">
+                    Avenue Henri Puchois, 62840 Laventie
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="relative overflow-hidden">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d632.7896913920085!2d2.7675980953515524!3d50.62416739260072!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47dd27a25cf5f3df%3A0x2770432bc52e4c88!2sSalle%20des%20Sports!5e0!3m2!1sfr!2sfr!4v1715177255567!5m2!1sfr!2sfr"
+                width="100%"
+                height="400"
+                style="border:0;"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Localisation de la Salle des Sports de Laventie"
+                class="w-full transition-all duration-300 hover:scale-105"
+              ></iframe>
+              <div class="absolute inset-0 bg-black/10 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+            </div>
+
+            <!-- Informations pratiques -->
+            <div class="p-6 bg-gray-50">
+              <div class="grid grid-cols-2 gap-4 text-sm">
+                <div class="flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0M15 17a2 2 0 104 0"/>
+                  </svg>
+                  <span class="text-secondary-700">Parking gratuit</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                  </svg>
+                  <span class="text-secondary-700">Accessible PMR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Galerie photos -->
+        <div class="order-2">
+          <div class="space-y-6">
+            <div class="relative overflow-hidden rounded-2xl shadow-xl group">
+              <img
+                src="{%static 'index/assets/img/salle_lav.jpg' %}"
+                class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300"
+                alt="Vue intérieure de la salle de sport de Laventie"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              </div>
+            </div>
+
+            <div class="relative overflow-hidden rounded-2xl shadow-xl group">
+              <img
+                src="{%static 'index/assets/img/salle2_lav.jpg' %}"
+                class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300"
+                alt="Vue d'ensemble de la salle de sport de Laventie"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

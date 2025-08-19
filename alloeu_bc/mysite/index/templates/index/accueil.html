@@ -1,0 +1,1282 @@
+{% extends "index/base.html" %} 
+
+{% block description %}
+Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes et toutes les informations pour rejoindre notre club de basketball passionné.
+{% endblock %} 
+
+{% block title %}Alloeu Basket Club - Accueil{% endblock %} 
+
+{% block contain %} 
+{% load static %}
+
+<!-- Hero Section avec Carrousel Swiper -->
+<section class="relative w-full overflow-hidden">
+  <!-- ...logo superposé retiré... -->
+
+  <!-- Swiper Carrousel -->
+  <div class="swiper heroSwiper" style="cursor:grab;">
+    <div class="swiper-wrapper">
+      {% for slide in sliders %}
+      <div class="swiper-slide">
+        <div class="relative h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden rounded-b-3xl">
+          <img
+            src="{{ slide.image.url }}"
+            class="w-full h-full object-cover"
+            alt="Image {{ forloop.counter }} - Alloeu Basket Club"
+            loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+          />
+          
+          <!-- Overlay avec opacité dynamique si une valeur est définie et > 0 -->
+          {% if slide.opacite_overlay and slide.opacite_overlay > 0 %}
+            <div class="absolute inset-0 bg-black" style="opacity: {{ slide.opacite_overlay|stringformat:"f"|cut:"," }};"></div>
+          {% endif %}
+          
+          <!-- Contenu textuel superposé -->
+          {% if slide.titre or slide.sous_titre or slide.description or slide.texte_bouton %}
+          <div class="absolute inset-0 flex items-center justify-center p-6 md:p-12 z-20">
+            <div class="carrousel-content-{{ slide.position_texte|default:'center' }} text-center max-w-4xl w-full">
+              
+              {% if slide.titre %}
+              <h2 class="carrousel-text-{{ slide.couleur_texte|default:'white' }} text-3xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight font-primary">
+                {{ slide.titre }}
+              </h2>
+              {% endif %}
+              
+              {% if slide.sous_titre %}
+              <h3 class="carrousel-text-{{ slide.couleur_texte|default:'white' }} text-xl md:text-2xl lg:text-3xl font-semibold mb-6 font-secondary">
+                {{ slide.sous_titre }}
+              </h3>
+              {% endif %}
+              
+              {% if slide.description %}
+              <p class="carrousel-text-{{ slide.couleur_texte|default:'white' }} text-base md:text-lg lg:text-xl mb-8 leading-relaxed font-tertiary">
+                {{ slide.description }}
+              </p>
+              {% endif %}
+              
+              {% if slide.texte_bouton %}
+              <div class="mt-8">
+                {% if slide.lien_bouton %}
+                  <a href="{{ slide.lien_bouton }}" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     class="carrousel-button-{{ slide.couleur_texte|default:'white' }} inline-flex items-center px-8 py-4 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm border border-white/20">
+                    {{ slide.texte_bouton }}
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                    </svg>
+                  </a>
+                {% elif slide.lien_interne %}
+                  <a href="{{ slide.resolved_url }}" 
+                     class="carrousel-button-{{ slide.couleur_texte|default:'white' }} inline-flex items-center px-8 py-4 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm border border-white/20">
+                    {{ slide.texte_bouton }}
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                {% else %}
+                  <span class="carrousel-button-{{ slide.couleur_texte|default:'white' }} inline-flex items-center px-8 py-4 bg-primary-500/50 text-white font-semibold rounded-xl shadow-2xl backdrop-blur-sm border border-white/20 cursor-not-allowed opacity-75">
+                    {{ slide.texte_bouton }}
+                  </span>
+                {% endif %}
+              </div>
+              {% endif %}
+              
+            </div>
+          </div>
+          {% endif %}
+          
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    
+    <!-- Navigation et pagination avec style moderne -->
+    <div class="swiper-pagination !bottom-8"></div>
+    <div class="swiper-button-next !text-white !text-2xl"></div>
+    <div class="swiper-button-prev !text-white !text-2xl"></div>
+  </div>
+</section>
+
+<script>
+  const heroSwiper = new Swiper(".heroSwiper", {
+    slidesPerView: 1,
+    spaceBetween: 0,
+    loop: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true,
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+      bulletClass: 'swiper-pagination-bullet !bg-white/70 !w-3 !h-3',
+      bulletActiveClass: 'swiper-pagination-bullet-active !bg-primary-500',
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    effect: "fade",
+    fadeEffect: {
+      crossFade: true
+    },
+    speed: {{ sliders.0.vitesse_slider|default:800 }},
+  });
+</script>
+
+<!-- Style pour les scrollbars personnalisées et carrousel -->
+<style>
+  /* Scrollbar webkit pour navigateurs webkit */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  /* Support Firefox */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  }
+
+  /* Styles pour le carrousel dynamique */
+  
+  /* Positionnement du contenu */
+  .carrousel-content-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .carrousel-content-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+    padding-left: 2rem;
+  }
+  
+  .carrousel-content-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    text-align: right;
+    padding-right: 2rem;
+  }
+  
+  .carrousel-content-bottom-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    text-align: left;
+    padding-left: 2rem;
+    padding-bottom: 3rem;
+  }
+  
+  .carrousel-content-bottom-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    text-align: right;
+    padding-right: 2rem;
+    padding-bottom: 3rem;
+  }
+  
+  .carrousel-content-top-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+    padding-left: 2rem;
+    padding-top: 3rem;
+  }
+  
+  .carrousel-content-top-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    text-align: right;
+    padding-right: 2rem;
+    padding-top: 3rem;
+  }
+
+  /* Couleurs de texte */
+  .carrousel-text-white {
+    color: white;
+  }
+  
+  .carrousel-text-black {
+    color: #1f2937;
+  }
+  
+  .carrousel-text-primary {
+    color: #3b82f6;
+  }
+
+  /* Boutons avec couleurs adaptatives */
+  .carrousel-button-white {
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+  }
+  
+  .carrousel-button-white:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: white;
+  }
+  
+  .carrousel-button-black {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(0, 0, 0, 0.9);
+    color: white;
+  }
+  
+  .carrousel-button-black:hover {
+    background: rgba(0, 0, 0, 0.9);
+    border-color: rgba(0, 0, 0, 1);
+    color: white;
+  }
+  
+  .carrousel-button-primary {
+    background: #3b82f6;
+    border: 2px solid #2563eb;
+    color: white;
+  }
+  
+  .carrousel-button-primary:hover {
+    background: #2563eb;
+    border-color: #1d4ed8;
+    color: white;
+  }
+
+  /* Animations pour le carrousel */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .swiper-slide-active .carrousel-content-center > *,
+  .swiper-slide-active .carrousel-content-left > *,
+  .swiper-slide-active .carrousel-content-right > *,
+  .swiper-slide-active .carrousel-content-bottom-left > *,
+  .swiper-slide-active .carrousel-content-bottom-right > *,
+  .swiper-slide-active .carrousel-content-top-left > *,
+  .swiper-slide-active .carrousel-content-top-right > * {
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+  
+  .swiper-slide-active .carrousel-content-center > *:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  
+  .swiper-slide-active .carrousel-content-center > *:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+  .swiper-slide-active .carrousel-content-center > *:nth-child(4) {
+    animation-delay: 0.6s;
+  }
+</style>
+
+<!-- Section Actualités -->
+<section class="bg-gradient-to-b from-gray-50 to-white py-16 lg:py-24">
+  <div class="container mx-auto px-4">
+    <!-- Titre de section modernisé -->
+    <div class="text-center mb-16">
+      <h2 class="text-4xl lg:text-5xl font-bold text-secondary-900 mb-4 font-primary">
+        Nos Actualités
+      </h2>
+      <p class="text-lg text-secondary-600 max-w-2xl mx-auto font-secondary">
+        Découvrez les dernières nouvelles et événements de l'Alloeu Basket Club
+      </p>
+      <div class="w-24 h-1 bg-primary-500 mx-auto mt-6 rounded-full"></div>
+    </div>
+
+    {% if latest_news %}
+    <!-- Grille des articles - Une seule ligne de 3 articles -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
+      {% for article in latest_news %}
+      <article class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+        <!-- Image -->
+        {% if article.image %}
+        <div class="relative h-48 overflow-hidden">
+          <img src="{{ article.image.url }}" 
+               alt="{{ article.image_alt|default:article.title }}"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+               loading="lazy">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          
+          <!-- Catégorie badge -->
+          {% if article.category %}
+          <div class="absolute top-4 left-4">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-{{ article.category.color }}-500 text-white">
+              {{ article.category.name }}
+            </span>
+          </div>
+          {% endif %}
+
+          <!-- Badge "À la une" -->
+          {% if article.featured %}
+          <div class="absolute top-4 right-4">
+            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-500 text-white">
+              <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              </svg>
+              Une
+            </span>
+          </div>
+          {% endif %}
+        </div>
+        {% else %}
+        <!-- Placeholder si pas d'image -->
+        <div class="relative h-48 bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
+          <svg class="w-16 h-16 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"></path>
+          </svg>
+          
+          <!-- Catégorie badge -->
+          {% if article.category %}
+          <div class="absolute top-4 left-4">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-{{ article.category.color }}-500 text-white">
+              {{ article.category.name }}
+            </span>
+          </div>
+          {% endif %}
+
+          <!-- Badge "À la une" -->
+          {% if article.featured %}
+          <div class="absolute top-4 right-4">
+            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-500 text-white">
+              <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              </svg>
+              Une
+            </span>
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+        
+        <!-- Contenu -->
+        <div class="p-6">
+          <!-- Métadonnées -->
+          <div class="flex items-center gap-4 mb-3 text-sm text-gray-500 font-tertiary">
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+              {{ article.published_at|date:"j M Y" }}
+            </div>
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              {{ article.reading_time }} min
+            </div>
+          </div>
+          
+          <!-- Titre -->
+          <h3 class="text-xl font-bold text-secondary-900 mb-3 group-hover:text-primary-600 transition-colors duration-200 line-clamp-2 font-secondary">
+            <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+          </h3>
+          
+          <!-- Extrait -->
+          <p class="text-gray-600 mb-4 line-clamp-3 font-tertiary">{{ article.excerpt }}</p>
+          
+          <!-- Lien de lecture -->
+          <a href="{{ article.get_absolute_url }}" class="inline-flex items-center text-primary-600 hover:text-primary-700 font-semibold transition-colors duration-200 font-secondary">
+            Lire la suite
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+
+    <!-- Bouton pour voir toutes les actualités -->
+    <div class="text-center">
+      <a href="{% url 'news:article_list' %}" class="inline-flex items-center px-8 py-4 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200 font-secondary">
+        Voir toutes les actualités
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </a>
+    </div>
+
+    {% else %}
+    <!-- Message si aucune actualité -->
+    <div class="text-center py-16">
+      <svg class="w-24 h-24 mx-auto text-gray-400 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+      </svg>
+      <h3 class="text-2xl font-bold text-gray-600 mb-4 font-secondary">Pas encore d'actualités</h3>
+      <p class="text-gray-500 mb-6 font-tertiary">
+        Les dernières nouvelles du club apparaîtront ici prochainement.
+      </p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Section Réseaux Sociaux -->
+<section class="bg-white py-16 lg:py-24">
+  <div class="container mx-auto px-4">
+    <!-- Titre de section -->
+    <div class="text-center mb-16">
+      <h2 class="text-4xl lg:text-5xl font-bold text-secondary-900 mb-4 font-primary">
+        Suivez-nous
+      </h2>
+      <p class="text-lg text-secondary-600 max-w-2xl mx-auto font-secondary">
+        Restez connectés avec nous sur nos réseaux sociaux
+      </p>
+      <div class="w-24 h-1 bg-primary-500 mx-auto mt-6 rounded-full"></div>
+    </div>
+
+    <!-- Grille des réseaux sociaux -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <!-- Facebook -->
+      <div class="group">
+        <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-100">
+          <div class="text-center mb-6">
+            <h3 class="tracking-tight text-xl font-extrabold text-secondary-800 mb-2 font-secondary">Facebook</h3>
+            <div class="w-12 h-1 bg-blue-500 mx-auto rounded-full"></div>
+          </div>
+          <div class="overflow-hidden rounded-xl">
+            <iframe
+              src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FAlloeuBasketClub62840%2F%3Flocale%3Dfr_FR&tabs=timeline&width=340&height=271&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
+              width="100%"
+              height="300"
+              scrolling="no"
+              frameborder="0"
+              allowfullscreen="true"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              class="w-full"
+              title="Page Facebook Alloeu Basket Club"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- TikTok -->
+      <div class="group">
+        <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-100">
+          <div class="text-center mb-6">
+            <h3 class="tracking-tight text-xl font-extrabold text-secondary-800 mb-2 font-secondary">TikTok</h3>
+            <div class="w-12 h-1 bg-pink-500 mx-auto rounded-full"></div>
+          </div>
+          <div class="overflow-hidden rounded-xl">
+            <iframe
+              src="https://www.tiktok.com/embed/@alloeu.basket.club"
+              width="100%"
+              height="300"
+              frameborder="0"
+              allowfullscreen
+              title="Profil TikTok Alloeu Basket Club"
+              class="w-full"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Instagram -->
+      <div class="group">
+        <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-100">
+          <div class="text-center mb-6">
+            <h3 class="tracking-tight text-xl font-extrabold text-secondary-800 mb-2 font-secondary">Instagram</h3>
+            <div class="w-12 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full"></div>
+          </div>
+          <div class="overflow-hidden rounded-xl">
+            <iframe
+              width="100%"
+              height="300"
+              src="https://www.instagram.com/alloeu_basket_club/embed/"
+              frameborder="0"
+              title="Profil Instagram Alloeu Basket Club"
+              class="w-full"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section Calendrier des Matchs -->
+<section class="relative bg-secondary-900 py-20 lg:py-28 overflow-hidden">
+  <!-- Éléments décoratifs modernisés -->
+  <div class="absolute inset-0">
+    <svg class="absolute -top-1 w-full h-20 text-white" fill="currentColor" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"></path>
+      <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"></path>
+      <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"></path>
+    </svg>
+    <svg class="absolute -bottom-1 w-full h-20 text-white rotate-180" fill="currentColor" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"></path>
+      <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"></path>
+      <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"></path>
+    </svg>
+  </div>
+
+  <div class="relative container mx-auto px-4">
+    <!-- Titre modernisé -->
+    <div class="text-center mb-16">
+      <h2 class="text-4xl lg:text-5xl font-bold text-white mb-4 font-primary">
+        Calendrier des Matchs
+      </h2>
+      <p class="text-lg text-gray-300 max-w-2xl mx-auto font-secondary">
+        Restez informés des prochains matchs et des derniers résultats de nos équipes
+      </p>
+      <div class="w-24 h-1 bg-primary-500 mx-auto mt-6 rounded-full"></div>
+    </div>
+
+    <!-- Sections en vertical avec scroll horizontal -->
+    <div class="space-y-12 max-w-7xl mx-auto">
+      
+      <!-- Prochains matchs - Scroll horizontal -->
+      <div class="relative">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-2xl font-semibold text-white flex items-center">
+            <svg class="w-6 h-6 mr-3 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            Prochains Matchs
+          </h3>
+          <div class="flex items-center space-x-2">
+            <button onclick="scrollMatches('next', 'left')" class="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </button>
+            <button onclick="scrollMatches('next', 'right')" class="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <div id="next-matches-container" class="overflow-x-auto scrollbar-hide">
+          <div class="flex space-x-6 pb-4">
+            {% for match in next_matches %}
+            <div class="flex-none w-80 bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
+              <!-- En-tête avec date et heure -->
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                  <span class="text-primary-300 font-semibold text-sm">{{ match.date_obj|date:"l j F" }}</span>
+                </div>
+                <span class="text-white font-bold text-sm">{{ match.time }}</span>
+              </div>
+              
+              <!-- Compétition -->
+              <div class="text-center mb-6">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-800/50 text-gray-200 border border-gray-600/50">
+                  <svg class="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                  </svg>
+                  {{ match.competition }}
+                </span>
+              </div>
+
+              <!-- Matchup des équipes -->
+              <div class="flex items-center justify-between gap-4 mb-6">
+                <!-- Équipe domicile -->
+                <div class="flex flex-col items-center flex-1 min-w-0">
+                  <div class="relative mb-3">
+                    {% if match.home_team.logo_url %}
+                      <img src="{{ match.home_team.logo_url }}" alt="Logo {{ match.home_team.name_in_competition }}" class="w-14 h-14 rounded-full bg-white/90 shadow-lg object-contain p-2 ring-2 ring-white/20" loading="lazy"/>
+                    {% else %}
+                      <div class="w-14 h-14 bg-white/90 rounded-full shadow-lg flex items-center justify-center ring-2 ring-white/20">
+                        <svg class="w-8 h-10" viewBox="0 0 130 160" alt="Logo équipe">
+                          <g fill="none" fill-rule="evenodd">
+                            <path fill="#1f2937" d="M12.38 7.18S0 35.18 0 63.16c0 62.22 53.53 91.57 63.44 96.47.99.5 2.14.5 3.13 0C76.48 154.8 130 125.7 130 63.17c0-32.65-12.38-55.98-12.38-55.98S99.5 0 65.1 0C30.88 0 12.38 7.18 12.38 7.18"></path>
+                            <path fill="#374151" d="M0 63.16c0 62.22 53.53 91.57 63.44 96.47A3.6 3.6 0 0 0 65 160V0C30.84.01 12.38 7.18 12.38 7.18S0 35.18 0 63.16z"></path>
+                          </g>
+                        </svg>
+                      </div>
+                    {% endif %}
+                  </div>
+                  <span class="text-white font-semibold text-sm text-center leading-tight">{{ match.home_team.name_in_competition|truncatechars:18 }}</span>
+                </div>
+                
+                <!-- VS séparateur -->
+                <div class="flex flex-col items-center px-3">
+                  <div class="w-16 h-8 bg-gradient-to-r from-primary-500 to-primary-400 rounded-full flex items-center justify-center shadow-lg">
+                    <span class="text-white font-bold text-sm tracking-wider">VS</span>
+                  </div>
+                </div>
+                
+                <!-- Équipe extérieure -->
+                <div class="flex flex-col items-center flex-1 min-w-0">
+                  <div class="relative mb-3">
+                    {% if match.away_team.logo_url %}
+                      <img src="{{ match.away_team.logo_url }}" alt="Logo {{ match.away_team.name_in_competition }}" class="w-14 h-14 rounded-full bg-white/90 shadow-lg object-contain p-2 ring-2 ring-white/20" loading="lazy"/>
+                    {% else %}
+                      <div class="w-14 h-14 bg-white/90 rounded-full shadow-lg flex items-center justify-center ring-2 ring-white/20">
+                        <svg class="w-8 h-10" viewBox="0 0 130 160" alt="Logo équipe">
+                          <g fill="none" fill-rule="evenodd">
+                            <path fill="#1f2937" d="M12.38 7.18S0 35.18 0 63.16c0 62.22 53.53 91.57 63.44 96.47.99.5 2.14.5 3.13 0C76.48 154.8 130 125.7 130 63.17c0-32.65-12.38-55.98-12.38-55.98S99.5 0 65.1 0C30.88 0 12.38 7.18 12.38 7.18"></path>
+                            <path fill="#374151" d="M0 63.16c0 62.22 53.53 91.57 63.44 96.47A3.6 3.6 0 0 0 65 160V0C30.84.01 12.38 7.18 12.38 7.18S0 35.18 0 63.16z"></path>
+                          </g>
+                        </svg>
+                      </div>
+                    {% endif %}
+                  </div>
+                  <span class="text-white font-semibold text-sm text-center leading-tight">{{ match.away_team.name_in_competition|truncatechars:18 }}</span>
+                </div>
+              </div>
+              
+              <!-- Lieu -->
+              <div class="flex items-center justify-center">
+                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold {% if match.is_home %}bg-emerald-500/20 text-emerald-300 border border-emerald-400/30{% else %}bg-sky-500/20 text-sky-300 border border-sky-400/30{% endif %} backdrop-blur-sm">
+                  {% if match.is_home %}
+                    <svg class="w-3.5 h-3.5 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                    </svg>
+                    Domicile
+                  {% else %}
+                    🚌 Extérieur
+                  {% endif %}
+                </span>
+              </div>
+              <!-- Bouton Ajouter au calendrier -->
+              <div class="mt-4 flex justify-center">
+                {% with cal_base='https://calendar.google.com/calendar/render?action=TEMPLATE' %}
+                  <a
+                    href="{{ cal_base }}&text={{ match.title|default:'Match de l\'Alloeu BC'|urlencode }}&dates={% if match.has_time %}{{ match.gcal_start }}/{{ match.gcal_end }}{% else %}{{ match.gcal_date_start }}/{{ match.gcal_date_end }}{% endif %}&details={{ 'Plus d\'infos: '|add:match.external_url|urlencode }}{% if match.is_home %}&location={{ match.location_address|urlencode }}{% endif %}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center px-3 py-2 rounded-lg text-xs font-semibold bg-primary-500 hover:bg-primary-600 text-white shadow-md transition-colors"
+                    aria-label="Ajouter ce match à votre agenda"
+                  >
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    Ajouter à l'agenda
+                  </a>
+                {% endwith %}
+              </div>
+            </div>
+            {% empty %}
+            <div class="flex-none w-80 bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 text-center">
+              <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+              <p class="text-gray-400">Aucun match programmé</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        
+        {% if next_matches|length > 3 %}
+        <div class="mt-6 text-center">
+          <a href="{% url 'index:matches' %}?type=next" class="inline-flex items-center text-primary-300 hover:text-primary-200 font-medium transition-colors text-sm">
+            Voir tous les prochains matchs
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Derniers résultats - Scroll horizontal -->
+      <div class="relative">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-2xl font-semibold text-white flex items-center">
+            <svg class="w-6 h-6 mr-3 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+            </svg>
+            Derniers Résultats
+          </h3>
+          <div class="flex items-center space-x-2">
+            <button onclick="scrollMatches('results', 'left')" class="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </button>
+            <button onclick="scrollMatches('results', 'right')" class="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <div id="results-container" class="overflow-x-auto scrollbar-hide">
+          <div class="flex space-x-6 pb-4">
+            {% for match in last_results %}
+            <div class="flex-none w-80 bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
+              <!-- En-tête avec date et heure -->
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                  <span class="text-primary-300 font-semibold text-sm">{{ match.date_obj|date:"l j F" }}</span>
+                </div>
+                <span class="text-white font-bold text-sm">{{ match.time }}</span>
+              </div>
+              
+              <!-- Compétition -->
+              <div class="text-center mb-6">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-800/50 text-gray-200 border border-gray-600/50">
+                  <svg class="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                  </svg>
+                  {{ match.competition }}
+                </span>
+              </div>
+
+              <!-- Résultat du match -->
+              <div class="flex items-center justify-between gap-4 mb-6">
+                <!-- Équipe domicile avec score -->
+                <div class="flex flex-col items-center flex-1 min-w-0">
+                  <div class="relative mb-3">
+                    {% if match.home_team.logo_url %}
+                      <img src="{{ match.home_team.logo_url }}" alt="Logo {{ match.home_team.name_in_competition }}" class="w-14 h-14 rounded-full bg-white/90 shadow-lg object-contain p-2 ring-2 ring-white/20" loading="lazy"/>
+                    {% else %}
+                      <div class="w-14 h-14 bg-white/90 rounded-full shadow-lg flex items-center justify-center ring-2 ring-white/20">
+                        <svg class="w-8 h-10" viewBox="0 0 130 160" alt="Logo équipe">
+                          <g fill="none" fill-rule="evenodd">
+                            <path fill="#1f2937" d="M12.38 7.18S0 35.18 0 63.16c0 62.22 53.53 91.57 63.44 96.47.99.5 2.14.5 3.13 0C76.48 154.8 130 125.7 130 63.17c0-32.65-12.38-55.98-12.38-55.98S99.5 0 65.1 0C30.88 0 12.38 7.18 12.38 7.18"></path>
+                            <path fill="#374151" d="M0 63.16c0 62.22 53.53 91.57 63.44 96.47A3.6 3.6 0 0 0 65 160V0C30.84.01 12.38 7.18 12.38 7.18S0 35.18 0 63.16z"></path>
+                          </g>
+                        </svg>
+                      </div>
+                    {% endif %}
+                  </div>
+                  <span class="text-white font-semibold text-xs text-center leading-tight mb-2">{{ match.home_team.name_in_competition|truncatechars:16 }}</span>
+                  <div class="bg-gradient-to-r from-primary-500 to-primary-400 rounded-lg px-3 py-1.5 shadow-lg">
+                    <span class="text-white font-bold text-xl">{{ match.home_team.score|default:"-" }}</span>
+                  </div>
+                </div>
+                
+                <!-- VS séparateur -->
+                <div class="flex flex-col items-center px-2">
+                  <div class="w-12 h-6 bg-gradient-to-r from-primary-500 to-primary-400 rounded-full flex items-center justify-center shadow-lg border border-white/20">
+                    <span class="text-white font-bold text-sm tracking-wider">VS</span>
+                  </div>
+                </div>
+                
+                <!-- Équipe extérieure avec score -->
+                <div class="flex flex-col items-center flex-1 min-w-0">
+                  <div class="relative mb-3">
+                    {% if match.away_team.logo_url %}
+                      <img src="{{ match.away_team.logo_url }}" alt="Logo {{ match.away_team.name_in_competition }}" class="w-14 h-14 rounded-full bg-white/90 shadow-lg object-contain p-2 ring-2 ring-white/20" loading="lazy"/>
+                    {% else %}
+                      <div class="w-14 h-14 bg-white/90 rounded-full shadow-lg flex items-center justify-center ring-2 ring-white/20">
+                        <svg class="w-8 h-10" viewBox="0 0 130 160" alt="Logo équipe">
+                          <g fill="none" fill-rule="evenodd">
+                            <path fill="#1f2937" d="M12.38 7.18S0 35.18 0 63.16c0 62.22 53.53 91.57 63.44 96.47.99.5 2.14.5 3.13 0C76.48 154.8 130 125.7 130 63.17c0-32.65-12.38-55.98-12.38-55.98S99.5 0 65.1 0C30.88 0 12.38 7.18 12.38 7.18"></path>
+                            <path fill="#374151" d="M0 63.16c0 62.22 53.53 91.57 63.44 96.47A3.6 3.6 0 0 0 65 160V0C30.84.01 12.38 7.18 12.38 7.18S0 35.18 0 63.16z"></path>
+                          </g>
+                        </svg>
+                      </div>
+                    {% endif %}
+                  </div>
+                  <span class="text-white font-semibold text-xs text-center leading-tight mb-2">{{ match.away_team.name_in_competition|truncatechars:16 }}</span>
+                  <div class="bg-gradient-to-r from-primary-500 to-primary-400 rounded-lg px-3 py-1.5 shadow-lg">
+                    <span class="text-white font-bold text-xl">{{ match.away_team.score|default:"-" }}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Lieu -->
+              <div class="flex items-center justify-center">
+                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold {% if match.is_home %}bg-emerald-500/20 text-emerald-300 border border-emerald-400/30{% else %}bg-sky-500/20 text-sky-300 border border-sky-400/30{% endif %} backdrop-blur-sm">
+                  {% if match.is_home %}
+                    <svg class="w-3.5 h-3.5 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                    </svg>
+                    Domicile
+                  {% else %}
+                    🚌 Extérieur
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+            {% empty %}
+            <div class="flex-none w-80 bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 text-center">
+              <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+              </svg>
+              <p class="text-gray-400">Aucun résultat disponible</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bouton pour voir tous les matchs -->
+    <div class="text-center mt-16">
+      <a href="{% url 'index:matches' %}" class="inline-flex items-center px-8 py-4 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+        </svg>
+        Voir le calendrier complet
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Section FAQ modernisée avec corrections -->
+<section class="py-24 lg:py-32 bg-gradient-to-br from-gray-50 via-white to-blue-50 relative overflow-hidden">
+  <!-- Éléments décoratifs en arrière-plan -->
+  <div class="absolute inset-0 opacity-40">
+    <div class="absolute top-20 left-10 w-64 h-64 bg-primary-100 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-20 right-10 w-80 h-80 bg-blue-100 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="container mx-auto px-4 relative z-10">
+    <!-- Titre de section modernisé -->
+    <div class="text-center mb-20">
+      <div class="inline-flex items-center px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-6 font-tertiary">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        FAQ
+      </div>
+      <h2 class="text-5xl lg:text-6xl font-black bg-gradient-to-r from-secondary-900 via-primary-700 to-secondary-800 bg-clip-text text-transparent mb-6 leading-tight font-primary">
+        Questions Fréquentes
+      </h2>
+      <p class="text-xl text-secondary-600 max-w-3xl mx-auto leading-relaxed font-secondary">
+        Trouvez rapidement les réponses à vos questions sur notre club et découvrez toutes les informations essentielles.
+      </p>
+      <div class="flex items-center justify-center mt-8">
+        <div class="w-16 h-1 bg-primary-500 rounded-full"></div>
+        <div class="w-2 h-2 bg-primary-400 rounded-full mx-3"></div>
+        <div class="w-16 h-1 bg-primary-500 rounded-full"></div>
+      </div>
+    </div>
+
+    <!-- Accordéon FAQ amélioré -->
+    <div class="max-w-5xl mx-auto space-y-4">
+      {% for q_r in FAQ %}
+      <div class="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-white/50 overflow-hidden hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 group">
+        <button
+          type="button"
+          id="question{{ forloop.counter }}"
+          data-state="closed"
+          class="flex items-center justify-between w-full px-8 py-8 text-left focus:outline-none  relative overflow-hidden"
+          aria-expanded="false"
+          aria-controls="answer{{ forloop.counter }}"
+        >
+          <!-- Effet de survol subtil -->
+          <div class="absolute inset-0 bg-gradient-to-r from-primary-50/0 via-primary-50/30 to-primary-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          
+          <div class="flex items-start gap-4 relative z-10">
+            <div class="flex-shrink-0 w-10 h-10 bg-primary-100 rounded-2xl flex items-center justify-center text-primary-600 font-bold text-lg group-hover:bg-primary-200 transition-colors duration-300">
+              {{ forloop.counter }}
+            </div>
+            <span class="text-xl font-bold text-secondary-900 group-hover:text-primary-700 transition-colors duration-300 leading-tight pr-4 font-secondary">
+              {{ q_r.question }}
+            </span>
+          </div>
+          
+          <div class="flex-shrink-0 relative z-10">
+            <div class="w-12 h-12 bg-gray-100 group-hover:bg-primary-100 rounded-2xl flex items-center justify-center transition-all duration-300">
+              <svg
+                id="arrow{{ forloop.counter }}"
+                class="w-6 h-6 text-secondary-400 group-hover:text-primary-600 transform transition-all duration-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          </div>
+        </button>
+        
+        <div
+          id="answer{{ forloop.counter }}"
+          class="faq-answer overflow-hidden transition-all duration-700 ease-out"
+          style="max-height: 0;"
+          aria-labelledby="question{{ forloop.counter }}"
+        >
+          <div class="px-8 pb-8">
+            <div class="faq-paragraph ml-14 text-secondary-700 text-lg leading-relaxed bg-gradient-to-br from-gray-50/80 via-white/90 to-blue-50/60 backdrop-blur-sm rounded-2xl p-8 shadow-md border border-white/70">
+              <div class="prose prose-lg prose-secondary max-w-none font-tertiary">
+                {{ q_r.reponse }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Call to action modernisé -->
+    <div class="text-center mt-24">
+      <div class="bg-gradient-to-r from-primary-600 to-blue-800 rounded-3xl p-12 shadow-2xl relative overflow-hidden">
+        <!-- Éléments décoratifs -->
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg" width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
+        
+        <div class="relative z-10">
+          <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+            </svg>
+          </div>
+          <h3 class="text-3xl font-bold text-white mb-4 font-secondary">
+            Vous avez encore des questions ?
+          </h3>
+          <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto font-tertiary">
+            Nous sommes là pour vous aider. N'hésitez pas à nous contacter pour toute question supplémentaire.
+          </p>
+          <a
+            href="{% url 'index:informations' %}#contact"
+            class="leading-normal inline-flex items-center px-10 py-5 bg-white hover:bg-gray-50 text-primary-600 font-bold rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 text-lg group font-secondary"
+          >
+            <svg class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 7.89a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            Contactez-nous maintenant !
+            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// JavaScript optimisé pour la FAQ avec animations fluides et correction des bugs
+document.addEventListener('DOMContentLoaded', function() {
+  // Fonction utilitaire pour calculer la hauteur réelle
+  function getScrollHeight(element) {
+    const clone = element.cloneNode(true);
+    clone.style.position = 'absolute';
+    clone.style.visibility = 'hidden';
+    clone.style.height = 'auto';
+    clone.style.maxHeight = 'none';
+    element.parentNode.appendChild(clone);
+    const height = clone.scrollHeight;
+    clone.remove();
+    return height;
+  }
+
+  // Fermer tous les autres éléments FAQ
+  function closeAllFAQ(except = null) {
+    const allButtons = document.querySelectorAll('[id^="question"]');
+    allButtons.forEach((button, index) => {
+      if (button === except) return;
+      
+      const questionNumber = index + 1;
+      const answer = document.getElementById('answer' + questionNumber);
+      const arrow = document.getElementById('arrow' + questionNumber);
+      
+      if (button.getAttribute('aria-expanded') === 'true') {
+        answer.style.maxHeight = '0px';
+        arrow.style.transform = 'rotate(0deg)';
+        button.setAttribute('aria-expanded', 'false');
+        button.setAttribute('data-state', 'closed');
+      }
+    });
+  }
+
+  // Initialisation des boutons FAQ
+  const faqButtons = document.querySelectorAll('[id^="question"]');
+  
+  faqButtons.forEach(function(button, index) {
+    button.addEventListener('click', function() {
+      const questionNumber = index + 1;
+      const answer = document.getElementById('answer' + questionNumber);
+      const arrow = document.getElementById('arrow' + questionNumber);
+      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+      
+      if (isExpanded) {
+        // Fermer l'élément actuel
+        answer.style.maxHeight = '0px';
+        arrow.style.transform = 'rotate(0deg)';
+        button.setAttribute('aria-expanded', 'false');
+        button.setAttribute('data-state', 'closed');
+      } else {
+        // Fermer tous les autres éléments d'abord
+        closeAllFAQ(button);
+        
+        // Calculer et appliquer la hauteur correcte
+        const scrollHeight = getScrollHeight(answer);
+        
+        // Ouvrir l'élément actuel
+        answer.style.maxHeight = scrollHeight + 20 + 'px'; // +20px pour la marge
+        arrow.style.transform = 'rotate(180deg)';
+        button.setAttribute('aria-expanded', 'true');
+        button.setAttribute('data-state', 'open');
+        
+        // Scroll fluide vers l'élément ouvert
+        setTimeout(() => {
+          button.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest'
+          });
+        }, 200);
+      }
+    });
+
+    // Support clavier (accessibilité)
+    button.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        button.click();
+      }
+    });
+  });
+
+  // Recalculer les hauteurs lors du redimensionnement
+  let resizeTimeout;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      faqButtons.forEach((button, index) => {
+        if (button.getAttribute('aria-expanded') === 'true') {
+          const questionNumber = index + 1;
+          const answer = document.getElementById('answer' + questionNumber);
+          const scrollHeight = getScrollHeight(answer);
+          answer.style.maxHeight = scrollHeight + 20 + 'px';
+        }
+      });
+    }, 150);
+  });
+});
+</script>
+
+<style>
+/* Styles modernisés pour la FAQ avec corrections des bugs d'affichage */
+.faq-answer {
+  transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 0;
+  overflow: hidden;
+}
+
+.faq-paragraph {
+  position: relative;
+  overflow: hidden;
+}
+
+.faq-paragraph::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3B82F6, #6366F1, #8B5CF6);
+  border-radius: 1rem 1rem 0 0;
+  opacity: 0.7;
+}
+
+/* Animations d'entrée pour les éléments FAQ */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container > div:nth-child(2) > div {
+  animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.container > div:nth-child(2) > div:nth-child(1) { animation-delay: 0.1s; }
+.container > div:nth-child(2) > div:nth-child(2) { animation-delay: 0.2s; }
+.container > div:nth-child(2) > div:nth-child(3) { animation-delay: 0.3s; }
+.container > div:nth-child(2) > div:nth-child(4) { animation-delay: 0.4s; }
+.container > div:nth-child(2) > div:nth-child(5) { animation-delay: 0.5s; }
+.container > div:nth-child(2) > div:nth-child(6) { animation-delay: 0.6s; }
+
+/* Styles pour la prose dans les réponses */
+.prose p {
+  margin-bottom: 1rem;
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* Amélioration du focus pour l'accessibilité */
+button:focus-visible {
+  outline: 3px solid rgb(59 130 246 / 0.5);
+  outline-offset: 2px;
+}
+
+/* Animation du gradient de fond */
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.bg-gradient-to-r {
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease-in-out infinite;
+}
+
+/* Styles responsive améliorés */
+@media (max-width: 768px) {
+  .faq-paragraph {
+    padding: 1.5rem;
+    margin-left: 0;
+  }
+  
+  [id^="question"] .flex.items-start {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  [id^="question"] .w-10.h-10 {
+    align-self: flex-start;
+  }
+}
+
+/* Styles pour le scroll horizontal */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Smooth scroll behavior */
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+</style>
+
+<script>
+// Fonction pour gérer le scroll horizontal des matchs
+function scrollMatches(section, direction) {
+  const containerId = section === 'next' ? 'next-matches-container' : 'results-container';
+  const container = document.getElementById(containerId);
+  
+  if (!container) return;
+  
+  const scrollAmount = 320; // Largeur d'une carte + gap
+  const currentScroll = container.scrollLeft;
+  
+  if (direction === 'left') {
+    container.scrollTo({
+      left: currentScroll - scrollAmount,
+      behavior: 'smooth'
+    });
+  } else {
+    container.scrollTo({
+      left: currentScroll + scrollAmount,
+      behavior: 'smooth'
+    });
+  }
+}
+
+// Support du swipe tactile pour mobile
+function setupTouchScroll() {
+  const containers = ['next-matches-container', 'results-container'];
+  
+  containers.forEach(containerId => {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    
+    container.addEventListener('mousedown', (e) => {
+      isDown = true;
+      container.style.cursor = 'grabbing';
+      startX = e.pageX - container.offsetLeft;
+      scrollLeft = container.scrollLeft;
+    });
+    
+    container.addEventListener('mouseleave', () => {
+      isDown = false;
+      container.style.cursor = 'grab';
+    });
+    
+    container.addEventListener('mouseup', () => {
+      isDown = false;
+      container.style.cursor = 'grab';
+    });
+    
+    container.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - container.offsetLeft;
+      const walk = (x - startX) * 2;
+      container.scrollLeft = scrollLeft - walk;
+    });
+    
+    // Touch events pour mobile
+    let touchStartX = 0;
+    let touchScrollLeft = 0;
+    
+    container.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].pageX;
+      touchScrollLeft = container.scrollLeft;
+    });
+    
+    container.addEventListener('touchmove', (e) => {
+      const touchX = e.touches[0].pageX;
+      const walk = touchStartX - touchX;
+      container.scrollLeft = touchScrollLeft + walk;
+    });
+  });
+}
+
+// Initialiser au chargement de la page
+document.addEventListener('DOMContentLoaded', () => {
+  setupTouchScroll();
+  
+  // Ajouter la classe cursor aux conteneurs
+  const containers = document.querySelectorAll('#next-matches-container, #results-container');
+  containers.forEach(container => {
+    container.style.cursor = 'grab';
+  });
+});
+
+// Rendre les fonctions globalement accessibles
+window.scrollMatches = scrollMatches;
+</script>
+
+{% endblock %}

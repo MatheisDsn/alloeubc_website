@@ -1,0 +1,382 @@
+{% extends "boutique/base.html" %}
+
+{% block title %}Inscription | Alloeu BC{% endblock %}
+{% block description %}Créez votre compte Alloeu BC pour accéder à la boutique officielle et rejoindre notre communauté de passionnés de basketball.{% endblock %}
+
+{% block contain %}
+{% load static %}
+
+{% include "boutique/navbar_boutique.html" %}
+
+<main class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-12">
+  <div class="container mx-auto px-4 flex flex-col items-center justify-center">
+    <!-- En-tête -->
+    <div class="mb-8 text-center">
+      <a
+        href="{% url 'index:index' %}"
+        class="inline-flex items-center space-x-3 mb-6 group"
+      >
+        <img
+          class="w-16 h-16 transition-transform duration-300 group-hover:scale-105"
+          src="{% static 'index/assets/img/logo_alloeu.png' %}"
+          alt="Logo Alloeu BC"
+        />
+        <div class="text-left">
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Alloeu BC</h1>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Club de Basketball</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- Carte d'inscription -->
+    <div class="w-full max-w-lg">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <!-- En-tête de la carte -->
+        <div class="bg-primary-600 text-white p-6 text-center">
+          <h2 class="text-2xl font-bold mb-2">Inscription</h2>
+          <p class="text-primary-100">Rejoignez la communauté Alloeu BC</p>
+        </div>
+
+        <div class="p-6 space-y-6">
+          <!-- Messages d'erreur -->
+          <div id="div-error" class="hidden">
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-start space-x-3 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300">
+              <svg
+                class="w-5 h-5 mt-0.5 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <div>
+                <p class="font-medium">Erreur d'inscription</p>
+                <p id="text-error" class="text-sm mt-1"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message de bienvenue -->
+          <div class="text-center space-y-2">
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              ✨ Accès gratuit à la boutique officielle
+            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              🔒 Vos données sont sécurisées
+            </p>
+          </div>
+
+          <!-- Formulaire -->
+          <form method="POST" id="signupForm" class="space-y-4" action="{% url 'accounts:inscription' %}">
+            {% csrf_token %}
+
+            <!-- Nom et Prénom -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="last-name"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                >
+                  Nom <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="last-name"
+                  id="last-name"
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50 text-gray-900 placeholder-gray-500 transition-colors duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:ring-primary-400"
+                  placeholder="Nom de famille"
+                />
+              </div>
+              <div>
+                <label
+                  for="first-name"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                >
+                  Prénom <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="first-name"
+                  id="first-name"
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50 text-gray-900 placeholder-gray-500 transition-colors duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:ring-primary-400"
+                  placeholder="Prénom"
+                />
+              </div>
+            </div>
+
+            <!-- Adresse email -->
+            <div>
+              <label
+                for="email"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
+                Adresse e-mail <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+                  </svg>
+                </div>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  required
+                  class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50 text-gray-900 placeholder-gray-500 transition-colors duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:ring-primary-400"
+                  placeholder="votre@email.com"
+                />
+              </div>
+            </div>
+
+            <!-- Numéro de téléphone -->
+            <div>
+              <label
+                for="phone-number"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
+                Numéro de téléphone <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                  </svg>
+                </div>
+                <input
+                  type="tel"
+                  name="phone-number"
+                  id="phone-number"
+                  required
+                  class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50 text-gray-900 placeholder-gray-500 transition-colors duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:ring-primary-400"
+                  placeholder="06 12 34 56 78"
+                  pattern="[0-9]{10}"
+                />
+              </div>
+            </div>
+
+            <!-- Mot de passe -->
+            <div>
+              <label
+                for="password"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
+                Mot de passe <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                  </svg>
+                </div>
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  required
+                  class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50 text-gray-900 placeholder-gray-500 transition-colors duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:ring-primary-400"
+                  placeholder="••••••••••"
+                  minlength="8"
+                />
+              </div>
+            </div>
+
+            <!-- Confirmation mot de passe -->
+            <div>
+              <label
+                for="new_password2"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
+                Confirmez le mot de passe <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <input
+                  type="password"
+                  name="new_password2"
+                  id="new_password2"
+                  required
+                  class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50 text-gray-900 placeholder-gray-500 transition-colors duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:ring-primary-400"
+                  placeholder="••••••••••"
+                  minlength="8"
+                />
+              </div>
+            </div>
+
+            <!-- Informations mot de passe -->
+            <div class="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-300">
+              <div class="flex items-start space-x-3">
+                <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                </svg>
+                <div>
+                  <p class="font-medium text-sm">Critères de sécurité :</p>
+                  <ul class="text-sm mt-1 space-y-1">
+                    <li>• Minimum 8 caractères</li>
+                    <li>• Mélange majuscules/minuscules recommandé</li>
+                    <li>• Chiffres et caractères spéciaux conseillés</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bouton d'inscription -->
+            <button
+              type="submit"
+              class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+              Créer mon compte
+            </button>
+          </form>
+
+          <!-- Lien connexion -->
+          <div class="text-center pt-4 border-t border-gray-200 dark:border-gray-700">
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              Déjà un compte ?
+              <a
+                href="{% url 'accounts:connexion' %}"
+                class="text-primary-600 hover:text-primary-700 font-medium underline transition-colors duration-200"
+              >
+                Se connecter
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Avantages -->
+    <div class="mt-8 text-center max-w-lg space-y-4">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+        Pourquoi créer un compte ?
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600 dark:text-gray-400">
+        <div class="flex flex-col items-center space-y-2">
+          <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M8 11v6h8v-6H8z"/>
+            </svg>
+          </div>
+          <p class="font-medium">Commandes sécurisées</p>
+        </div>
+        <div class="flex flex-col items-center space-y-2">
+          <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+          </div>
+          <p class="font-medium">Suivi des commandes</p>
+        </div>
+        <div class="flex flex-col items-center space-y-2">
+          <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </div>
+          <p class="font-medium">Communauté ABC</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const signupForm = document.getElementById('signupForm');
+  const errorDiv = document.getElementById('div-error');
+  const errorText = document.getElementById('text-error');
+
+  if (signupForm) {
+    signupForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const firstName = document.getElementById('first-name').value.trim();
+      const lastName = document.getElementById('last-name').value.trim();
+      const phoneNumber = document.getElementById('phone-number').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('new_password2').value;
+      let errorMessage = "";
+      let hasError = false;
+
+      // Validation des champs obligatoires
+      if (!firstName || !lastName) {
+        errorMessage = "Veuillez remplir les champs nom et prénom.";
+        hasError = true;
+      }
+
+      // Validation du numéro de téléphone
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!phoneRegex.test(phoneNumber.replace(/\s/g, ''))) {
+        errorMessage = "Le numéro de téléphone doit contenir 10 chiffres.";
+        hasError = true;
+      }
+
+      // Validation de l'adresse e-mail
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        errorMessage = "Veuillez entrer une adresse e-mail valide.";
+        hasError = true;
+      }
+
+      // Validation des mots de passe
+      if (!password || !confirmPassword) {
+        errorMessage = "Veuillez remplir tous les champs de mot de passe.";
+        hasError = true;
+      } else if (password !== confirmPassword) {
+        errorMessage = "Les mots de passe ne correspondent pas.";
+        hasError = true;
+      } else if (password.length < 8) {
+        errorMessage = "Le mot de passe doit contenir au moins 8 caractères.";
+        hasError = true;
+      }
+
+      if (hasError) {
+        errorDiv.classList.remove('hidden');
+        errorText.textContent = errorMessage;
+        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        errorDiv.classList.add('hidden');
+        event.target.submit();
+      }
+    });
+  }
+
+  // Masquer les erreurs quand l'utilisateur tape
+  const inputs = ['first-name', 'last-name', 'phone-number', 'email', 'password', 'new_password2'];
+  inputs.forEach(inputId => {
+    const input = document.getElementById(inputId);
+    if (input) {
+      input.addEventListener('input', function() {
+        if (!errorDiv.classList.contains('hidden')) {
+          errorDiv.classList.add('hidden');
+        }
+      });
+    }
+  });
+
+  // Formatage automatique du numéro de téléphone
+  const phoneInput = document.getElementById('phone-number');
+  if (phoneInput) {
+    phoneInput.addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length <= 10) {
+        value = value.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5');
+        e.target.value = value.trim();
+      }
+    });
+  }
+});
+</script>
+
+{% endblock %}

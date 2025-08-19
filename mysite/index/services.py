@@ -123,14 +123,22 @@ def format_match_data(matches):
             match_date_obj = datetime.datetime.strptime(match['date'], '%Y-%m-%d').date()
 
             match_time = match['time'] if match['time'] else 'Heure à définir'
+            # Champs calendrier
+            gcal_start = None
+            gcal_end = None
             if match_time != 'Heure à définir':
                 try:
                     if 'T' in match_time:
                         dt = datetime.datetime.fromisoformat(match_time.replace('Z', '+00:00'))
-                        dt_local = dt + datetime.timedelta(hours=2)
+                        dt_local = dt + datetime.timedelta(hours=2)  # Europe/Paris approx
                         hour = dt_local.hour
                         minute = dt_local.minute
                         match_time = f"{hour:02d}h{minute:02d}" if minute != 0 else f"{hour:02d}h00"
+                        # Google Calendar UTC format
+                        dt_utc = dt if dt.tzinfo else dt.replace(tzinfo=datetime.timezone.utc)
+                        dt_utc = dt_utc.astimezone(datetime.timezone.utc)
+                        gcal_start = dt_utc.strftime('%Y%m%dT%H%M%SZ')
+                        gcal_end = (dt_utc + datetime.timedelta(hours=2)).strftime('%Y%m%dT%H%M%SZ')
                     elif ':' in match_time:
                         hour, minute = match_time.split(':')[:2]
                         match_time = f"{hour}h{minute}" if minute != '00' else f"{hour}h00"
@@ -151,6 +159,37 @@ def format_match_data(matches):
             if away_team:
                 away_team["logo_url"] = away_logo
 
+            # Déterminer l'équipe du club (pour filtrage)
+            club_team = None
+            try:
+                if home_team and (home_team.get('is_team_of_club') == 1 or (home_team.get('name_in_competition') and CLUB_KEYWORD.lower() in home_team.get('name_in_competition', '').lower())):
+                    club_team = home_team
+                elif away_team and (away_team.get('is_team_of_club') == 1 or (away_team.get('name_in_competition') and CLUB_KEYWORD.lower() in away_team.get('name_in_competition', '').lower())):
+                    club_team = away_team
+            except Exception:
+                club_team = None
+
+            club_team_id = club_team.get('team_id') if club_team else None
+            club_team_name = None
+            if club_team:
+                club_team_name = club_team.get('name_in_club') or club_team.get('name_in_competition')
+
+            # Titre et adresse pour calendrier
+            title = None
+            if home_team and away_team:
+                title = f"{home_team.get('name_in_competition', 'Équipe 1')} vs {away_team.get('name_in_competition', 'Équipe 2')}"
+
+            location_address = "Av. Henri Puchois, 62840 Laventie" if is_home else ""
+
+            # Dates all-day pour Google Calendar si heure inconnue
+            gcal_date_start = match_date_obj.strftime('%Y%m%d') if match_date_obj else None
+            gcal_date_end = (match_date_obj + datetime.timedelta(days=1)).strftime('%Y%m%d') if match_date_obj else None
+
+            # Lien externe Scorenco complet
+            external_url = match.get('url', '#')
+            if external_url and isinstance(external_url, str) and external_url.startswith('/'):
+                external_url = f"https://scorenco.com{external_url}"
+
             formatted_match = {
                 'id': match['id'],
                 'date': match_date,
@@ -162,7 +201,19 @@ def format_match_data(matches):
                 'location': "🏠 Domicile" if is_home else "🚌 Extérieur",
                 'home_team': home_team,
                 'away_team': away_team,
-                'url': match.get('url', '#')
+                'url': match.get('url', '#'),
+                # Métadonnées pour filtrage par équipe du club
+                'club_team_id': club_team_id,
+                'club_team_name': club_team_name,
+                # Données calendrier
+                'gcal_start': gcal_start,
+                'gcal_end': gcal_end,
+                'gcal_date_start': gcal_date_start,
+                'gcal_date_end': gcal_date_end,
+                'title': title,
+                'location_address': location_address,
+                'external_url': external_url,
+                'has_time': gcal_start is not None,
             }
 
             formatted_matches.append(formatted_match)

@@ -468,7 +468,7 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
       <div class="group">
         <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-100">
           <div class="text-center mb-6">
-            <h3 class="text-xl font-semibold text-secondary-800 mb-2 font-secondary">Facebook</h3>
+            <h3 class="tracking-tight text-xl font-extrabold text-secondary-800 mb-2 font-secondary">Facebook</h3>
             <div class="w-12 h-1 bg-blue-500 mx-auto rounded-full"></div>
           </div>
           <div class="overflow-hidden rounded-xl">
@@ -491,7 +491,7 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
       <div class="group">
         <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-100">
           <div class="text-center mb-6">
-            <h3 class="text-xl font-semibold text-secondary-800 mb-2 font-secondary">TikTok</h3>
+            <h3 class="tracking-tight text-xl font-extrabold text-secondary-800 mb-2 font-secondary">TikTok</h3>
             <div class="w-12 h-1 bg-pink-500 mx-auto rounded-full"></div>
           </div>
           <div class="overflow-hidden rounded-xl">
@@ -512,7 +512,7 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
       <div class="group">
         <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-100">
           <div class="text-center mb-6">
-            <h3 class="text-xl font-semibold text-secondary-800 mb-2 font-secondary">Instagram</h3>
+            <h3 class="tracking-tight text-xl font-extrabold text-secondary-800 mb-2 font-secondary">Instagram</h3>
             <div class="w-12 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full"></div>
           </div>
           <div class="overflow-hidden rounded-xl">
@@ -565,7 +565,7 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
       <!-- Prochains matchs - Scroll horizontal -->
       <div class="relative">
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-2xl font-semibold text-white flex items-center font-secondary">
+          <h3 class="text-2xl font-semibold text-white flex items-center">
             <svg class="w-6 h-6 mr-3 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
             </svg>
@@ -670,6 +670,23 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
                     🚌 Extérieur
                   {% endif %}
                 </span>
+              </div>
+              <!-- Bouton Ajouter au calendrier -->
+              <div class="mt-4 flex justify-center">
+                {% with cal_base='https://calendar.google.com/calendar/render?action=TEMPLATE' %}
+                  <a
+                    href="{{ cal_base }}&text={{ match.title|default:'Match de l\'Alloeu BC'|urlencode }}&dates={% if match.has_time %}{{ match.gcal_start }}/{{ match.gcal_end }}{% else %}{{ match.gcal_date_start }}/{{ match.gcal_date_end }}{% endif %}&details={{ 'Plus d\'infos: '|add:match.external_url|urlencode }}{% if match.is_home %}&location={{ match.location_address|urlencode }}{% endif %}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center px-3 py-2 rounded-lg text-xs font-semibold bg-primary-500 hover:bg-primary-600 text-white shadow-md transition-colors"
+                    aria-label="Ajouter ce match à votre agenda"
+                  >
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    Ajouter à l'agenda
+                  </a>
+                {% endwith %}
               </div>
             </div>
             {% empty %}
@@ -944,7 +961,7 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
           </p>
           <a
             href="{% url 'index:informations' %}#contact"
-            class="inline-flex items-center px-10 py-5 bg-white hover:bg-gray-50 text-primary-600 font-bold rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 text-lg group font-secondary"
+            class="leading-normal inline-flex items-center px-10 py-5 bg-white hover:bg-gray-50 text-primary-600 font-bold rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 text-lg group font-secondary"
           >
             <svg class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 7.89a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>

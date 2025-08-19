@@ -2,51 +2,58 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.files.images import get_image_dimensions
 import os
+from cloudinary.models import CloudinaryField
+from cloudinary_storage.storage import RawMediaCloudinaryStorage
 
 def validate_image_or_svg(value):
     """Validator pour accepter les images classiques et les fichiers SVG"""
-    if value:
-        ext = os.path.splitext(value.name)[1].lower()
-        valid_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg']
-        if ext not in valid_extensions:
-            raise ValidationError(f'Format de fichier non supporté. Formats acceptés : {", ".join(valid_extensions)}')
+    if not value:
+        return value
         
-        # Pour les SVG, on skip la validation d'image
-        if ext == '.svg':
+    # Gestion spéciale pour CloudinaryResource
+    if hasattr(value, 'resource_type'):
+        # C'est une ressource Cloudinary
+        if value.resource_type == 'image' or value.format == 'svg':
             return value
-            
-        # Pour les autres formats, on vérifie que c'est bien une image
-        try:
-            get_image_dimensions(value)
-        except Exception:
-            raise ValidationError('Le fichier uploadé n\'est pas une image valide.')
+        raise ValidationError('Le fichier Cloudinary doit être une image ou un SVG')
     
+    # Gestion pour les fichiers normaux
+    ext = os.path.splitext(value.name)[1].lower()
+    valid_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg']
+    
+    if ext not in valid_extensions:
+        raise ValidationError(f'Format de fichier non supporté. Formats acceptés : {", ".join(valid_extensions)}')
+    
+    if ext == '.svg':
+        return value
+        
+    try:
+        get_image_dimensions(value)
+    except Exception:
+        raise ValidationError('Le fichier uploadé n\'est pas une image valide.')
     return value
 
-class CustomImageField(models.FileField):
-    """Champ personnalisé qui accepte les images et les SVG"""
-    
+class CustomCloudinaryField(CloudinaryField):
+    """Champ personnalisé Cloudinary qui accepte les images et les SVG"""
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault('validators', []).append(validate_image_or_svg)
+        kwargs.setdefault('resource_type', 'auto')
         super().__init__(*args, **kwargs)
 
 class CarrousselImages(models.Model):
-    image = models.ImageField(blank=False, upload_to='accueil/caroussel/')
+    image = CustomCloudinaryField(
+        'image',
+        folder='accueil/caroussel',
+        blank=False,
+        validators=[validate_image_or_svg]
+    )
+    ordre = models.PositiveIntegerField(default=0)
+    titre = models.CharField(max_length=100, blank=True)
+    sous_titre = models.CharField(max_length=200, blank=True)
+    description = models.TextField(max_length=300, blank=True)
+    texte_bouton = models.CharField(max_length=50, blank=True)
+    lien_bouton = models.URLField(blank=True)
+    lien_interne = models.CharField(max_length=100, blank=True)
     
-    # Ordre d'affichage
-    ordre = models.PositiveIntegerField(default=0, help_text="Ordre d'affichage (0 = premier)")
-    
-    # Texte superposé optionnel
-    titre = models.CharField(max_length=100, blank=True, help_text="Titre affiché sur l'image")
-    sous_titre = models.CharField(max_length=200, blank=True, help_text="Sous-titre affiché sur l'image")
-    description = models.TextField(max_length=300, blank=True, help_text="Description affichée sur l'image")
-    
-    # Bouton d'action optionnel
-    texte_bouton = models.CharField(max_length=50, blank=True, help_text="Texte du bouton (ex: 'En savoir plus')")
-    lien_bouton = models.URLField(blank=True, help_text="URL externe vers laquelle le bouton redirige")
-    lien_interne = models.CharField(max_length=100, blank=True, help_text="Nom de l'URL Django (ex: 'index:equipes')")
-    
-    # Options d'affichage
     POSITION_CHOICES = [
         ('center', 'Centre'),
         ('left', 'Gauche'),
@@ -63,35 +70,17 @@ class CarrousselImages(models.Model):
         ('primary', 'Couleur primaire'),
     ]
     
-    position_texte = models.CharField(
-        max_length=20,
-        choices=POSITION_CHOICES,
-        default='center',
-        help_text="Position du texte sur l'image"
-    )
-    
-    couleur_texte = models.CharField(
-        max_length=20,
-        choices=COULEUR_CHOICES,
-        default='white',
-        help_text="Couleur du texte"
-    )
-    
-    opacite_overlay = models.FloatField(
-        default=0.4,
-        help_text="Opacité du fond sombre (0.0 = transparent, 1.0 = opaque)"
-    )
-    vitesse_slider = models.PositiveIntegerField("Vitesse du slider (ms)", default=800, help_text="Durée de transition entre les slides en millisecondes")
+    position_texte = models.CharField(max_length=20, choices=POSITION_CHOICES, default='center')
+    couleur_texte = models.CharField(max_length=20, choices=COULEUR_CHOICES, default='white')
+    opacite_overlay = models.FloatField(default=0.4)
+    vitesse_slider = models.PositiveIntegerField(default=800)
 
     class Meta:
         verbose_name = "Défilement images"
-        verbose_name_plural = "Défilement images"
         ordering = ['ordre']
 
     def __str__(self):
-        if self.titre:
-            return f"{self.ordre} - {self.titre}"
-        return f"{self.ordre} - {os.path.basename(self.image.name)}"
+        return f"{self.ordre} - {self.titre}" if self.titre else f"{self.ordre} - {self.image.public_id}"
 
 class FAQ(models.Model):
     question = models.CharField(max_length=150)
@@ -107,61 +96,87 @@ class FAQ(models.Model):
         return f"{self.ordre} - {self.question}"
     
 class Organisation_card(models.Model):
-    image_profile = models.ImageField(blank=True, upload_to='presentation/organisation/', null=True )
+    image_profile = CustomCloudinaryField(
+        'image',
+        folder='presentation/organisation',
+        blank=True,
+        null=True,
+        validators=[validate_image_or_svg]
+    )
     nom = models.CharField(max_length=150)
     fonction = models.CharField(max_length=250)
-    ordre = models.PositiveIntegerField(default=0, help_text="Ordre d'affichage (0 = premier)")
+    ordre = models.PositiveIntegerField(default=0)
 
     class Meta:
         verbose_name = "Organigramme bureau"
-        verbose_name_plural = "Organigramme bureau"
         ordering = ['ordre']
 
     def __str__(self):
-        return f"{self.ordre} - {self.nom} - {self.fonction}"
+        return f"{self.ordre} - {self.nom}"
     
 class Entrainement(models.Model):
-    image_entrainement = models.ImageField(blank=False, upload_to='informations/entraînements/' )
+    image_entrainement = CustomCloudinaryField(
+        'image',
+        folder='informations/entrainements',
+        blank=False
+    )
 
     class Meta:
         verbose_name = "Planning entraînement"
         verbose_name_plural = "Planning entraînement"
 
     def __str__(self):
-        return os.path.basename(self.image_entrainement.name)
+        return self.image_entrainement.public_id.split('/')[-1]  # Meilleure représentation
 
 class PartenairesSponsor(models.Model):
-    image_blanc = CustomImageField(
-        blank=True, 
-        upload_to='informations/part-spons/blanc/',
-        help_text="Logo blanc/transparent - pour footer et barre défilante (Formats acceptés : JPG, PNG, GIF, BMP, WebP, SVG)"
+    image_blanc = CustomCloudinaryField(
+        'image',
+        folder='informations/part-spons/blanc',
+        blank=True,
+        validators=[validate_image_or_svg]
     )
-    image_noir = CustomImageField(
-        blank=True, 
-        upload_to='informations/part-spons/noir/',
-        help_text="Logo noir/coloré - pour page informations (Formats acceptés : JPG, PNG, GIF, BMP, WebP, SVG)"
+    image_noir = CustomCloudinaryField(
+        'image',
+        folder='informations/part-spons/noir',
+        blank=True,
+        validators=[validate_image_or_svg]
     )
     nom = models.CharField(max_length=150)
     fonction = models.CharField(max_length=250)
 
     class Meta:
         verbose_name = "Partenaires et sponsors"
-        verbose_name_plural = "Partenaires et sponsors"
 
     def __str__(self):
-        return self.nom + ' ' + '/' + ' ' + self.fonction
+        return f"{self.nom} / {self.fonction}"
+
+class SponsorLink(models.Model):
+    sponsor = models.ForeignKey(PartenairesSponsor, related_name='links', on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    url = models.URLField()
+
+    class Meta:
+        verbose_name = "Lien du sponsor"
+        verbose_name_plural = "Liens du sponsor"
+        ordering = ['id']
+
+    def __str__(self):
+        return f"{self.sponsor.nom} - {self.title}"
     
 class DocumentsFonctionnement(models.Model):
     nom = models.CharField(max_length=150)
-    fichier = models.FileField(upload_to="informations/fonctionnement/")
+    fichier = models.FileField(
+        storage=RawMediaCloudinaryStorage(),
+        upload_to='informations/fonctionnement/'
+    )
     date_upload = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.nom + ' ' + '/' + ' ' + self.fichier.name
-    
     class Meta:
         verbose_name = "Documents de fonctionnement"
         verbose_name_plural = "Documents de fonctionnement"
+
+    def __str__(self):
+        return f"{self.nom} / {os.path.basename(self.fichier.name)}"
     
 class Equipes(models.Model):
     nom = models.CharField(max_length=100)
@@ -178,11 +193,14 @@ class Equipes(models.Model):
     
 class DocumentsDossierInscription(models.Model):
     nom = models.CharField(max_length=100)
-    document = models.FileField(upload_to="inscriptions/documents-dossier-inscr/")
+    document = models.FileField(
+        storage=RawMediaCloudinaryStorage(),
+        upload_to='inscriptions/documents-dossier-inscr/'
+    )
 
     class Meta:
         verbose_name = "Documents inscription"
         verbose_name_plural = "Documents inscription"
 
     def __str__(self):
-        return self.nom + ' ' + '/' + ' ' + os.path.basename(self.document.name)
+        return f"{self.nom} / {os.path.basename(self.document.name)}"

@@ -1,0 +1,82 @@
+{% extends "index/base.html" %}
+{% block title %}Partenaires - Alloeu Basket Club{% endblock %}
+{% block description %}Découvrez tous nos partenaires qui soutiennent l'Alloeu Basket Club{% endblock %}
+{% block contain %}
+{% load static %}
+
+<section class="bg-secondary-900 text-white py-16 lg:py-20">
+  <div class="container mx-auto px-4 text-center max-w-4xl">
+    <h1 class="text-4xl lg:text-6xl font-bold mb-4 font-primary">Nos Partenaires</h1>
+    <p class="text-lg lg:text-xl text-gray-300 mb-6 font-secondary">Ils nous accompagnent toute la saison</p>
+    <div class="w-24 h-1 bg-primary-500 mx-auto rounded-full"></div>
+        <div class="font-secondary font-bold mt-4 max-w-4xl mx-auto mb-10 text-center text-white">
+      <p class="mb-4">
+        Au nom de l'ensemble du club, nous tenons à adresser nos plus sincères remerciements à nos partenaires.
+      </p>
+      <p class="mb-4">
+        Grâce à leur soutien et à l'engagement à nos côtés, nous pouvons continuer à développer nos projets sportifs, soutenir nos jeunes talents et faire vivre notre passion du basket.
+      </p>
+      <p class="mb-4">
+        Votre contribution est essentielle à la réussite de cette saison.
+      </p>
+      <p>
+        Merci d'être à nos côtés dans cette belle aventure sportive 🏀❤️🖤
+      </p>
+    </div>
+
+    <!-- Encarts contact sponsoring (section hero) -->
+    <div class="mt-4 flex justify-center">
+      <div class="inline-flex items-start gap-3 bg-white/10 border border-primary-400/40 rounded-xl p-4 text-white shadow-sm">
+        <svg class="w-5 h-5 text-primary-300 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p class="font-secondary font-semibold">
+          Pour toute demande de sponsoring, contactez Julien, responsable sponsoring au
+          <a href="tel:+33673459003" class="underline hover:text-primary-300">06 73 45 90 03</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-14 lg:py-20 bg-gradient-to-b from-white to-gray-50">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">
+      {% for card in cards %}
+      <div class="group">
+        <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+          <div class="flex flex-col items-center h-full">
+            <div class="relative mb-4 w-full h-28 flex items-center justify-center">
+              {% if card.image_noir %}
+                <img class="max-h-24 max-w-full object-contain" src="{{ card.image_noir.url }}" alt="Logo {{ card.nom }}" loading="lazy" />
+              {% elif card.image_blanc %}
+                <img class="max-h-24 max-w-full object-contain" src="{{ card.image_blanc.url }}" alt="Logo {{ card.nom }}" loading="lazy" />
+              {% endif %}
+            </div>
+            <div class="text-center">
+              <h3 class="text-lg font-bold text-secondary-900 mb-1">{{ card.nom }}</h3>
+              {% if card.fonction %}
+                <span class="text-sm text-secondary-600">{{ card.fonction }}</span>
+              {% endif %}
+            </div>
+            {% if card.links.all %}
+            <div class="mt-4 flex flex-wrap gap-2 justify-center">
+              {% for link in card.links.all %}
+                <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition bg-primary-600 text-white hover:bg-primary-700">
+                  {{ link.title }}
+                </a>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% empty %}
+        <p class="text-center text-secondary-600 col-span-full">Aucun sponsor pour le moment.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

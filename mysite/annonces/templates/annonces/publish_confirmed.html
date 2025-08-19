@@ -1,0 +1,17 @@
+{% extends "index/base.html" %}
+{% block title %}Annonce publiée{% endblock %}
+{% block contain %}
+<section class="py-12">
+  <div class="container mx-auto px-4 max-w-2xl">
+    <div class="bg-white border rounded-xl p-6 shadow-sm">
+  <h1 class="text-2xl font-bold mb-2 font-primary">Annonce publiée</h1>
+  <p class="text-secondary-700 font-bold font-secondary">Votre annonce « {{ annonce.title }} » est maintenant visible.</p>
+  <p class="text-secondary-700 font-bold font-secondary">Prix: {% if annonce.price and annonce.price > 0 %}{{ annonce.price }} €{% else %}Gratuit{% endif %}</p>
+  <p class="text-secondary-700 font-bold font-secondary">Conservez l'e-mail de confirmation pour retrouver le lien de suppression si besoin.</p>
+      <div class="mt-4">
+        <a href="{% url 'annonces:list' %}" class="text-primary-700 underline">Voir les annonces</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

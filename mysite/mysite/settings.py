@@ -2,18 +2,21 @@ from pathlib import Path
 import os   
 import dj_database_url
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dwuemv68p',
+    'API_KEY': "146389552741174",
+    'API_SECRET': "Nzx-chK_nmkznw-NUVJGc2S6P5U",
+    'SECURE': True,
+    'STATICFILES_MANIFEST_ROOT': os.path.join(BASE_DIR, 'manifest')
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-k976r1deej#t)g%1llmkhv1xl5b)kk^rp*fzo4*+r9j50o(k&$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [".onrender.com", "127.0.0.1"]
 
@@ -35,6 +38,10 @@ INSTALLED_APPS = [
     'adminsortable2',
     'analytics',
     'news',
+    'cloudinary',
+    'cloudinary_storage',
+    "django.contrib.sitemaps",
+    'annonces',
 ]
 
 MIDDLEWARE = [
@@ -80,7 +87,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
+        default="postgresql://postgres.hemqlihogxqfasfqexei:Math200815%21Math200815%3F@aws-0-us-east-2.pooler.supabase.com:6543/postgres",
         conn_max_age=600,
         ssl_require=True
     )
@@ -128,22 +135,24 @@ INTERNAL_IPS = [
 NPM_BIN_PATH = "C:\Program Files\\nodejs\\npm.cmd"
 
 
-#EMAIL CONFIG
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "matheisdasso@gmail.com"
-EMAIL_PORT = 587 # pr le EMAIL_USE_TLS
-EMAIL_USE_TLS = True # utilise un truc sécurisé 
+# EMAIL CONFIG (force real SMTP even in DEBUG)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_PASSWORD = "zbibwxsunazgdoyc"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587  # TLS port
+EMAIL_USE_TLS = True
+
+# Sender and credentials
+EMAIL_HOST_USER = "site.alloeubc@gmail.com"
+EMAIL_HOST_PASSWORD = "lohb vlzp tykf aoxk"
+
+# From address used by send_mail if not overridden
+DEFAULT_FROM_EMAIL = "site.alloeubc@gmail.com"
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 AUTH_USER_MODEL = 'accounts.User'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-MEDIA_URL = 'media/'
-MEDIA_DIR = BASE_DIR / 'media'
-MEDIA_ROOT = BASE_DIR / 'media/'
-DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]

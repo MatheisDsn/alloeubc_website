@@ -46,6 +46,11 @@ def lesequipes(requests):
 def inscriptions(requests):
     return render(requests, 'index/inscriptions.html', {"docs" : DocumentsDossierInscription.objects.all()})
 
+def partenaires(request):
+    """Page dédiée listant tous les partenaires."""
+    cards = PartenairesSponsor.objects.prefetch_related('links').all()
+    return render(request, 'index/partenaires.html', { 'cards': cards })
+
 def matches(request):
     """Vue pour afficher tous les matchs avec pagination et filtres"""
     # Paramètres de pagination
@@ -55,6 +60,7 @@ def matches(request):
     
     # Filtres
     match_type = request.GET.get('type', 'all')  # 'next', 'past', 'all'
+    team_id_filter = request.GET.get('team')  # id numérique d'équipe du club (team_id)
     
     if match_type == 'next':
         matches_data = get_next_matches(limit=50)  # Récupère plus de matchs
@@ -69,6 +75,27 @@ def matches(request):
         matches_data = next_matches + past_matches
         title = "Tous les Matchs"
     
+    # Construire la liste des équipes du club disponibles dans les données
+    club_teams = {}
+    for m in matches_data:
+        tid = m.get('club_team_id')
+        tname = m.get('club_team_name')
+        if tid and tname:
+            club_teams[tid] = tname
+    # Liste triée pour le template
+    club_teams_list = sorted(
+        [{'id': tid, 'name': tname} for tid, tname in club_teams.items()],
+        key=lambda x: x['name']
+    )
+
+    # Filtrer par équipe si demandé
+    if team_id_filter:
+        try:
+            team_id_int = int(team_id_filter)
+            matches_data = [m for m in matches_data if m.get('club_team_id') == team_id_int]
+        except ValueError:
+            pass
+    
     # Pagination simple côté Python
     total_matches = len(matches_data)
     paginated_matches = matches_data[offset:offset + limit]
@@ -77,6 +104,7 @@ def matches(request):
         'matches': paginated_matches,
         'title': title,
         'match_type': match_type,
+        'team_id_filter': team_id_filter,
         'page': page,
         'limit': limit,
         'total_matches': total_matches,
@@ -84,6 +112,11 @@ def matches(request):
         'has_previous': page > 1,
         'next_page': page + 1 if offset + limit < total_matches else None,
         'previous_page': page - 1 if page > 1 else None,
+        'club_teams': club_teams,
+        'club_teams_list': club_teams_list,
     }
     
     return render(request, 'index/matches.html', context)
+
+def mentions_legales(request):
+    return render(request, 'index/mentions_legales.html')

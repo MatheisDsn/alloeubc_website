@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="{% block description %}{% endblock %}" />
+    <meta name="google-site-verification" content="FDY2U444h7BXaopoNMWZQQkVTuA92uiLgNi5ooa15Og" />
     <title>{% block title %}{% endblock %}</title>
 
     <link
@@ -32,44 +33,48 @@
 
   <body class="font-primary tracking-widest">
     <!-- Barre défilante des sponsors -->
-
-    {% if sponsor %}
-
-    <div id="sponsors-bar" class="bg-gradient-to-r from-primary-600 via-primary-700 to-primary-600 text-white py-4 overflow-hidden relative transition-all duration-300 ease-in-out">
-      <div class="flex animate-scroll">
-        <!-- Premier groupe de sponsors -->
-        <div class="flex items-center space-x-12 whitespace-nowrap min-w-full">
-          {% for sponsor in sponsors %}
-            <div class="flex items-center space-x-4 px-6">
-              {% if sponsor.image_blanc %}
-                <img src="{{ sponsor.image_blanc.url }}" alt="{{ sponsor.nom }}" class="h-10 w-auto object-contain rounded">
-              {% endif %}
-              <span class="text-base font-medium">{{ sponsor.nom }}</span>
-              {% if sponsor.fonction %}
-                <span class="text-sm opacity-75">{{ sponsor.fonction }}</span>
-              {% endif %}
-            </div>
-            <div class="text-primary-300 text-lg">•</div>
-          {% endfor %}
-        </div>
-        <!-- Deuxième groupe (duplication pour effet continu) -->
-        <div class="flex items-center space-x-12 whitespace-nowrap min-w-full">
-          {% for sponsor in sponsors %}
-            <div class="flex items-center space-x-4 px-6">
-              {% if sponsor.image_blanc %}
-                <img src="{{ sponsor.image_blanc.url }}" alt="{{ sponsor.nom }}" class="h-10 w-auto object-contain rounded">
-              {% endif %}
-              <span class="text-base font-medium">{{ sponsor.nom }}</span>
-              {% if sponsor.fonction %}
-                <span class="text-sm opacity-75">{{ sponsor.fonction }}</span>
-              {% endif %}
-            </div>
-            <div class="text-primary-300 text-lg">•</div>
-          {% endfor %}
+    {% if sponsors %}
+    <div id="sponsors-bar" class="bg-gradient-to-r from-primary-600 via-primary-700 to-primary-600 text-white py-3 md:py-4 overflow-hidden relative">
+      <div class="marquee">
+        <div class="marquee-track">
+          <div class="marquee-group">
+            {% for sponsor in sponsors %}
+              <div class="sponsor-item">
+                {% if sponsor.image_blanc %}
+                  <img src="{{ sponsor.image_blanc.url }}" alt="{{ sponsor.nom }}" />
+                {% elif sponsor.image_noir %}
+                  <img src="{{ sponsor.image_noir.url }}" alt="{{ sponsor.nom }}" />
+                {% endif %}
+                <div class="min-w-0">
+                  <span class="sponsor-nom">{{ sponsor.nom }}</span>
+                  {% if sponsor.fonction %}
+                    <span class="sponsor-fonction">{{ sponsor.fonction }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <!-- Duplication pour boucle fluide -->
+          <div class="marquee-group" aria-hidden="true">
+            {% for sponsor in sponsors %}
+              <div class="sponsor-item">
+                {% if sponsor.image_blanc %}
+                  <img src="{{ sponsor.image_blanc.url }}" alt="" />
+                {% elif sponsor.image_noir %}
+                  <img src="{{ sponsor.image_noir.url }}" alt="" />
+                {% endif %}
+                <div class="min-w-0">
+                  <span class="sponsor-nom">{{ sponsor.nom }}</span>
+                  {% if sponsor.fonction %}
+                    <span class="sponsor-fonction">{{ sponsor.fonction }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
         </div>
       </div>
     </div>
-
     {% endif %}
 
     <!-- Navbar modernisée -->
@@ -102,7 +107,7 @@
 
               <!-- Dropdown Le Club -->
               <div class="relative group">
-                <button class="{% if request.resolver_match.url_name == 'presentations' or request.resolver_match.url_name == 'informations' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium flex items-center transition-all duration-200">
+                <button class="{% if request.resolver_match.url_name == 'presentations' or request.resolver_match.url_name == 'informations' or request.resolver_match.url_name == 'article_list' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium flex items-center transition-all duration-200">
                   Le Club
                   <svg class="ml-1 h-4 w-4 transform group-hover:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -123,15 +128,27 @@
                     >
                       Informations
                     </a>
+                    <a
+                      href="{% url 'news:article_list' %}"
+                      class="{% if request.resolver_match.url_name == 'article_list' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-4 py-3 text-sm transition-colors duration-150"
+                    >
+                      Actualités
+                    </a>
+                    <a
+                      href="{% url 'index:lesequipes' %}"
+                      class="{% if request.resolver_match.url_name == 'lesequipes' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium transition-all duration-200"
+                    >
+                      Les Équipes
+                    </a>
                   </div>
                 </div>
               </div>
 
               <a
-                href="{% url 'index:lesequipes' %}"
-                class="{% if request.resolver_match.url_name == 'lesequipes' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium text-center transition-all duration-200"
+                href="{% url 'index:partenaires' %}"
+                class="{% if request.resolver_match.url_name == 'partenaires' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium text-center transition-all duration-200"
               >
-                Les Équipes
+                Partenaires
               </a>
 
               <a
@@ -142,11 +159,13 @@
               </a>
 
               <a
-                href="{% url 'news:article_list' %}"
-                class="{% if request.resolver_match.namespace == 'news' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium transition-all duration-200"
+                href="{% url 'annonces:list' %}"
+                class="{% if request.resolver_match.url_name == 'list' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium transition-all duration-200"
               >
-                Actualités
+                Annonces
               </a>
+
+              
               <!-- <a
                 href="{% url 'index:inscriptions' %}"
                 class="{% if request.resolver_match.url_name == 'inscriptions' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium transition-all duration-200"
@@ -157,21 +176,21 @@
           </div>
 
           <!-- Espace pour équilibrer (remplace le bouton boutique) -->
-          <div class="flex-shrink-0 w-32">
-            <!-- Espace vide pour équilibrer le logo -->
-          </div>          
+          <!-- <div class="flex-shrink-0 w-32">
+          </div>           -->
 
           <!-- Bout Boutique -->
-          <!-- <div class="flex items-center space-x-4">
+          <div class="flex items-center space-x-4">
             <a
-              href="{% url 'boutique:index' %}"
+              href="https://www.helloasso.com/associations/alloeu-basket-club/boutiques/alloeu-shop"
+              target="_blank"
               class="inline-flex items-center px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
             >
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
               </svg>
               <span class="hidden sm:inline">Boutique</span>
-            </a> -->
+            </a>
 
             <!-- Menu Mobile Button -->
             <button
@@ -212,6 +231,18 @@
             >
               Les Équipes
             </a>
+            <a
+              href="{% url 'index:partenaires' %}"
+              class="{% if request.resolver_match.url_name == 'partenaires' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
+            >
+              Partenaires
+            </a>
+            <a
+              href="{% url 'annonces:list' %}"
+              class="{% if request.resolver_match.url_name == 'list' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
+            >
+              Annonces
+            </a>
             <!-- <a
               href="{% url 'index:inscriptions' %}"
               class="{% if request.resolver_match.url_name == 'inscriptions' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
@@ -219,10 +250,16 @@
               Inscriptions
             </a> -->
             <a
-              href="{% url 'index:inscriptions' %}"
-              class="{% if request.resolver_match.url_name == 'inscriptions' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
+              href="{% url 'index:matches' %}"
+              class="{% if request.resolver_match.url_name == 'matches' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
             >
               Matchs
+            </a>
+            <a
+              href="{% url 'news:article_list' %}"
+              class="{% if request.resolver_match.url_name == 'article_list' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
+            >
+              Actualités
             </a>
           </div>
         </div>
@@ -273,78 +310,54 @@
     </script>
 
     <style>
-      /* Animation pour le défilement continu des sponsors */
-      @keyframes scroll {
-        0% {
-          transform: translateX(0);
-        }
-        100% {
-          transform: translateX(-100%);
-        }
+      /* Marquee responsive: défilement continu, sans superposition */
+      .marquee { position: relative; overflow: hidden; }
+      .marquee-track {
+        display: flex;
+        width: max-content;
+        gap: 2.5rem; /* espace entre groupes */
+        animation: marquee 30s linear infinite;
+        will-change: transform;
+      }
+      .marquee:hover .marquee-track { animation-play-state: paused; }
+      .marquee-group { display: flex; gap: 2.5rem; flex: 0 0 auto; }
+      .sponsor-item { display: flex; align-items: center; gap: .75rem; padding: 0 .5rem; flex: 0 0 auto; }
+      .sponsor-item img { height: 2rem; width: auto; object-fit: contain; border-radius: .25rem; }
+  .sponsor-nom { display:block; font-weight: 600; font-size: .9rem; white-space: nowrap; }
+  .sponsor-fonction { display:block; opacity: .8; font-size: .75rem; white-space: nowrap; }
+
+      @media (min-width: 768px) {
+        .marquee-track, .marquee-group { gap: 3rem; }
+        .sponsor-item img { height: 2.5rem; }
+  .sponsor-nom { font-size: 1rem; }
+  .sponsor-fonction { font-size: .9rem; }
       }
 
-      .animate-scroll {
-        animation: scroll 30s linear infinite;
+      @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
       }
 
-      /* Pause de l'animation au hover */
-      #sponsors-bar:hover .animate-scroll {
-        animation-play-state: paused;
-      }
+      #sponsors-bar { position: relative; z-index: 60; }
+      nav { position: sticky; z-index: 50; }
 
       /* Styles pour la barre de sponsors */
-      #sponsors-bar {
-        position: relative;
-        z-index: 60;
-      }
+      #sponsors-bar { position: relative; z-index: 60; }
+      nav { position: sticky; z-index: 50; }
 
-      /* Assurer que la navbar reste en dessous */
-      nav {
-        position: sticky;
-        z-index: 50;
-      }
-
-      /* Amélioration responsive pour la barre de sponsors */
+      /* Ajustements responsive */
       @media (max-width: 768px) {
-        #sponsors-bar {
-          padding-top: 0.75rem;
-          padding-bottom: 0.75rem;
-        }
-        
-        #sponsors-bar .text-base {
-          font-size: 0.875rem;
-        }
-        
-        #sponsors-bar .text-sm {
-          font-size: 0.75rem;
-        }
-        
-        #sponsors-bar img {
-          height: 2rem;
-        }
-        
-        #sponsors-bar .space-x-12 > * + * {
-          margin-left: 2rem;
-        }
-        
-        #sponsors-bar .space-x-4 > * + * {
-          margin-left: 0.75rem;
-        }
-        
-        #sponsors-bar .px-6 {
-          padding-left: 1rem;
-          padding-right: 1rem;
-        }
+        #sponsors-bar { padding-top: 0.75rem; padding-bottom: 0.75rem; }
       }
     </style>
 
     {% block contain %} {% endblock %}
 
     <!-- FOOTER (pied de page) -->
-    <footer class="bg-white rounded-lg shadow dark:bg-gray-900 m-4 border-t-8">
+    <footer class="rounded-lg shadow bg-gray-900 m-4 border-t-8">
       <!-- Section Sponsors dans le footer -->
       {% if sponsors %}
-      <div class="bg-white dark:bg-gray-900 py-6">
+      <div class="bg-gray-900 py-6">
         <div class="w-full max-w-screen-xl mx-auto px-4">
           <div class="flex flex-wrap items-center justify-center gap-8">
             {% for sponsor in sponsors %}
@@ -368,38 +381,52 @@
               alt="Logo Alloeu"
             />
             <p
-              class="hidden min-[960px]:block self-center text-2xl font-semibold whitespace-nowrap dark:text-white break-all max-w-20"
+              class="hidden min-[960px]:block self-center text-2xl font-semibold whitespace-nowrap text-white break-all max-w-20"
             >
               Alloeu Basket Club
             </p>
             <p
-              class="hidden max-[830px]:hidden min-[830px]:block min-[960px]:hidden self-center text-2xl font-semibold whitespace-nowrap dark:text-white break-all max-w-20"
+              class="hidden max-[830px]:hidden min-[830px]:block min-[960px]:hidden self-center text-2xl font-semibold whitespace-nowrap text-white break-all max-w-20"
             >
               Alloeu BC
             </p>
           </div>
           <ul
-            class="flex flex-wrap items-center md:justify-normal justify-center mb-6 text-sm font-medium text-gray-500 md:mb-0 dark:text-gray-400"
+            class="flex flex-wrap items-center md:justify-normal justify-center mb-6 text-sm font-medium md:mb-0 text-gray-400"
           >
             <li>
               <a
-                href="{%url 'index:informations'%}#fonctionnement"
+                href="{%url 'index:informations'%}"
                 class="hover:underline me-4 md:me-6"
-                >le fonctionnement</a
+                >Informations</a
               >
             </li>
             <li>
               <a
-                href="{%url 'index:inscriptions'%}"
+                href="{%url 'index:matches'%}"
                 class="hover:underline me-4 md:me-6"
-                >dossier incription</a
+                >Les Matchs</a
               >
             </li>
             <li>
               <a
                 href="{%url 'index:informations'%}#contact"
                 class="hover:underline me-4 md:me-6"
-                >contact</a
+                >Contact</a
+              >
+            </li>
+            <li>
+              <a
+                href="{% url 'index:mentions_legales' %}"
+                class="hover:underline me-4 md:me-6"
+                >Mentions légales</a
+              >
+            </li>
+            <li>
+              <a
+                href="{% url 'annonces:list' %}"
+                class="hover:underline me-4 md:me-6"
+                >Annonces</a
               >
             </li>
             <li>
@@ -624,10 +651,11 @@
         </div>
         <br />
 
-        <span
-          class="block text-sm font-secondary tracking-tight font-extrabold text-gray-500 text-center dark:text-gray-400"
+        <a href="{% url 'admin:index' %}"
+          class="block text-sm font-secondary tracking-tight font-extrabold text-center text-gray-400 cursor-default"
           >© <span id="year"></span> Alloeu Basket Club - Tous droits réservés.
-        </span>
+        </a>
+
         <br />
 
         <script>
@@ -654,7 +682,7 @@
         </style>
 
         <span
-          class="block text-sm font-secondary tracking-tight font-extrabold text-gray-500 text-center dark:text-gray-400"
+          class="block text-sm font-secondary tracking-tight font-extrabold text-center text-gray-400"
         >
           Créé par Mathéis Dassonneville, au moindre problème ou pour me contacter, <br />
           <a
@@ -669,7 +697,7 @@
             class="hover:underline"
             target="_blank"
           >
-            ou cliquez ici (Mails)
+            ou cliquez ici (Email)
           </a>
         </span>
       </div>

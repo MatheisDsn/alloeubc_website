@@ -1,0 +1,30 @@
+# Django / Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.sqlite3
+
+# Environnements
+.env
+.env.*
+!.env.example
+venv/
+.envrc
+
+# Static & Media (build)
+staticfiles/
+media/
+manifest/
+
+# VS Code & OS
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Node/Tailwind
+node_modules/
+*.map

@@ -1,0 +1,17 @@
+{% extends "index/base.html" %}
+{% block title %}Annonce envoyée - Confirmation requise{% endblock %}
+{% block contain %}
+<section class="py-12">
+  <div class="container mx-auto px-4 max-w-2xl">
+    <div class="bg-white border rounded-xl p-6 shadow-sm">
+      <h1 class="text-2xl font-bold mb-2">Merci !</h1>
+      <p class="font-secondary font-bold text-secondary-700">Nous avons envoyé un e-mail à <strong>{{ email }}</strong>.</p>
+  <p class="font-secondary font-bold text-secondary-700">Cliquez sur le lien reçu pour publier votre annonce.</p>
+  <p class="font-secondary font-bold text-secondary-700">Conservez cet e-mail: le lien de suppression y figure. Si vous le perdez, contactez <a class="underline" href="mailto:site.alloeubc@gmail.com">site.alloeubc@gmail.com</a> depuis l'adresse utilisée.</p>
+      <div class="mt-4">
+        <a href="{% url 'annonces:list' %}" class="text-primary-700 underline">Retourner aux annonces</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

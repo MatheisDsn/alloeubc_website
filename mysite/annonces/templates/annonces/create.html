@@ -1,0 +1,65 @@
+{% extends "index/base.html" %}
+{% block title %}Déposer une annonce - Alloeu Basket Club{% endblock %}
+{% block description %}Déposez votre annonce (vêtements, chaussures, équipements de basket).{% endblock %}
+{% block contain %}
+<section class="py-12">
+  <div class="container mx-auto px-4 max-w-2xl">
+  <h1 class="text-3xl font-bold font-primary mb-6">Déposer une annonce</h1>
+
+    <div class="bg-white border rounded-xl p-6 shadow-sm">
+      <form method="post" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+
+        <div class="font-secondary">
+          <label class="block text-sm font-medium mb-1">Titre</label>
+          {{ form.title }}
+        </div>
+
+        <div class="font-secondary">
+          <label class="block text-sm font-medium mb-1">Catégorie</label>
+          {{ form.category }}
+        </div>
+
+        <div class="font-secondary">
+          <label class="block text-sm font-medium mb-1">Description</label>
+          {{ form.description }}
+        </div>
+
+        <div class="font-secondary">
+          <label class="block text-sm font-medium mb-1">Photo (facultatif)</label>
+          {{ form.image }}
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-secondary">
+          <div>
+            <label class="block text-sm font-medium mb-1">Email</label>
+            {{ form.email }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Téléphone (facultatif)</label>
+            {{ form.phone }}
+          </div>
+        </div>
+
+        <p class="text-xs text-secondary-600 font-secondary">
+          Note: votre adresse e-mail et, si renseigné, votre numéro de téléphone seront affichés publiquement sur l'annonce.
+        </p>
+
+        <div class="font-secondary">
+          <label class="block text-sm font-medium mb-1">Prix (€)</label>
+          {{ form.price }}
+        </div>
+
+        <p class="text-xs text-secondary-600 font-secondary">
+          Un e-mail vous sera envoyé pour confirmer la publication de votre annonce. Sans confirmation, elle ne sera pas visible. Pensez à supprimer votre annonce une fois l'article vendu (lien de suppression dans l'e-mail).
+        </p>
+
+        <div class="pt-2">
+          <button type="submit" class="inline-flex items-center px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700">Envoyer</button>
+          <a href="{% url 'annonces:list' %}" class="ml-3 text-secondary-700 underline">Annuler</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

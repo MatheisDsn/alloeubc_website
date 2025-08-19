@@ -27,18 +27,32 @@ Consultez tous les matchs de l'Alloeu Basket Club : prochains matchs, résultats
 <section class="bg-gray-50 py-8">
   <div class="container mx-auto px-4">
     <div class="flex flex-wrap items-center justify-center gap-4">
-      <a href="{% url 'index:matches' %}" 
+  <a href="{% url 'index:matches' %}{% if team_id_filter %}?team={{ team_id_filter }}{% endif %}" 
          class="px-6 py-3 rounded-xl font-bold transition-all duration-200 {% if match_type == 'all' %}bg-primary-500 text-white shadow-lg{% else %}bg-white text-secondary-700 hover:bg-gray-100{% endif %} font-secondary">
         Tous les matchs
       </a>
-      <a href="{% url 'index:matches' %}?type=next" 
+      <a href="{% url 'index:matches' %}?type=next{% if team_id_filter %}&team={{ team_id_filter }}{% endif %}" 
          class="px-6 py-3 rounded-xl font-bold transition-all duration-200 {% if match_type == 'next' %}bg-primary-500 text-white shadow-lg{% else %}bg-white text-secondary-700 hover:bg-gray-100{% endif %} font-secondary">
         Prochains matchs
       </a>
-      <a href="{% url 'index:matches' %}?type=past" 
+      <a href="{% url 'index:matches' %}?type=past{% if team_id_filter %}&team={{ team_id_filter }}{% endif %}" 
          class="px-6 py-3 rounded-xl font-bold transition-all duration-200 {% if match_type == 'past' %}bg-primary-500 text-white shadow-lg{% else %}bg-white text-secondary-700 hover:bg-gray-100{% endif %} font-secondary">
         Résultats passés
       </a>
+      
+      <!-- Filtre par équipe -->
+      {% if club_teams_list %}
+      <form method="get" class="inline-flex items-center gap-2">
+        <input type="hidden" name="type" value="{{ match_type }}" />
+        <label for="team" class="text-secondary-700 text-sm font-semibold">Équipe</label>
+        <select id="team" name="team" class="px-4 py-3 rounded-xl bg-white border border-gray-300 text-secondary-700 font-secondary" onchange="this.form.submit()">
+          <option value="">Toutes</option>
+          {% for team in club_teams_list %}
+            <option value="{{ team.id }}" {% if team_id_filter and team_id_filter|stringformat:'s' == team.id|stringformat:'s' %}selected{% endif %}>{{ team.name }}</option>
+          {% endfor %}
+        </select>
+      </form>
+      {% endif %}
     </div>
   </div>
 </section>
@@ -163,6 +177,23 @@ Consultez tous les matchs de l'Alloeu Basket Club : prochains matchs, résultats
                       </div>
                     </div>
                   </div>
+                  <!-- Bouton Ajouter à l'agenda -->
+                  <div class="mt-4 flex justify-center">
+                    {% with cal_base='https://calendar.google.com/calendar/render?action=TEMPLATE' %}
+                      <a
+                        href="{{ cal_base }}&text={{ match.title|default:'Match de l\'Alloeu BC'|urlencode }}&dates={% if match.has_time %}{{ match.gcal_start }}/{{ match.gcal_end }}{% else %}{{ match.gcal_date_start }}/{{ match.gcal_date_end }}{% endif %}&details={{ 'Plus d\'infos: '|add:match.external_url|urlencode }}{% if match.is_home %}&location={{ match.location_address|urlencode }}{% endif %}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center px-3 py-2 rounded-lg text-xs font-semibold bg-primary-500 hover:bg-primary-600 text-white shadow-md transition-colors"
+                        aria-label="Ajouter ce match à votre agenda"
+                      >
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        Ajouter à l'agenda
+                      </a>
+                    {% endwith %}
+                  </div>
                 {% endif %}
               </div>
             </div>
@@ -174,7 +205,7 @@ Consultez tous les matchs de l'Alloeu Basket Club : prochains matchs, résultats
         {% if has_previous or has_next %}
         <div class="flex items-center justify-center space-x-4 mt-12">
           {% if has_previous %}
-          <a href="?page={{ previous_page }}{% if match_type != 'all' %}&type={{ match_type }}{% endif %}" 
+          <a href="?page={{ previous_page }}{% if match_type != 'all' %}&type={{ match_type }}{% endif %}{% if team_id_filter %}&team={{ team_id_filter }}{% endif %}" 
              class="flex items-center px-6 py-3 bg-white border border-gray-300 text-secondary-700 font-medium rounded-lg hover:bg-gray-50 transition-colors duration-200">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -188,7 +219,7 @@ Consultez tous les matchs de l'Alloeu Basket Club : prochains matchs, résultats
           </span>
           
           {% if has_next %}
-          <a href="?page={{ next_page }}{% if match_type != 'all' %}&type={{ match_type }}{% endif %}" 
+          <a href="?page={{ next_page }}{% if match_type != 'all' %}&type={{ match_type }}{% endif %}{% if team_id_filter %}&team={{ team_id_filter }}{% endif %}" 
              class="flex items-center px-6 py-3 bg-white border border-gray-300 text-secondary-700 font-medium rounded-lg hover:bg-gray-50 transition-colors duration-200">
             Suivant
             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

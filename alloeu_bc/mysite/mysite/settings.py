@@ -5,18 +5,18 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dwuemv68p',
-    'API_KEY': "146389552741174",
-    'API_SECRET': "Nzx-chK_nmkznw-NUVJGc2S6P5U",
+    'CLOUD_NAME': os.getenv("CLOUD_NAME"),
+    'API_KEY': os.getenv("API_KEY"),
+    'API_SECRET': os.getenv("API_SECRET"),
     'SECURE': True,
     'STATICFILES_MANIFEST_ROOT': os.path.join(BASE_DIR, 'manifest')
 }
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-SECRET_KEY = 'django-insecure-k976r1deej#t)g%1llmkhv1xl5b)kk^rp*fzo4*+r9j50o(k&$'
+SECRET_KEY = os.getenv("API_SECRET")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [".onrender.com", "127.0.0.1"]
 
@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default="postgresql://postgres.hemqlihogxqfasfqexei:Math200815%21Math200815%3F@aws-0-us-east-2.pooler.supabase.com:6543/postgres",
+        default=os.getenv("DATABASE_URL"),
         conn_max_age=600,
         ssl_require=True
     )
@@ -135,18 +135,15 @@ INTERNAL_IPS = [
 NPM_BIN_PATH = "C:\Program Files\\nodejs\\npm.cmd"
 
 
-# EMAIL CONFIG (force real SMTP even in DEBUG)
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL CONFIG
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587  # TLS port
-EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_PORT = 587 # pr le EMAIL_USE_TLS
+EMAIL_USE_TLS = True # utilise un truc sécurisé 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
-# Sender and credentials
-EMAIL_HOST_USER = "site.alloeubc@gmail.com"
-EMAIL_HOST_PASSWORD = "lohb vlzp tykf aoxk"
-
-# From address used by send_mail if not overridden
-DEFAULT_FROM_EMAIL = "site.alloeubc@gmail.com"
+DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 AUTH_USER_MODEL = 'accounts.User'

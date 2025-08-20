@@ -17,8 +17,15 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
       {% for a in page_obj %}
       <article class="bg-white rounded-xl border p-4 shadow-sm">
-        {% if a.image %}
-        <img src="{{ a.image.url }}" alt="{{ a.title }}" class="w-full h-48 object-cover rounded-lg mb-3" loading="lazy" />
+        {% if a.image or a.image2 %}
+        <div class="grid grid-cols-1 gap-2 mb-3 {% if a.image and a.image2 %}sm:grid-cols-2{% endif %}">
+          {% if a.image %}
+          <img src="{{ a.image.url }}" alt="{{ a.title }}" class="w-full h-48 object-cover rounded-lg" loading="lazy" />
+          {% endif %}
+          {% if a.image2 %}
+          <img src="{{ a.image2.url }}" alt="{{ a.title }}" class="w-full h-48 object-cover rounded-lg" loading="lazy" />
+          {% endif %}
+        </div>
         {% endif %}
         <h2 class="text-lg font-semibold text-secondary-900 font-primary">{{ a.title }}</h2>
         <p class="text-sm text-secondary-600 mb-2 font-secondary">{{ a.get_category_display }}</p>

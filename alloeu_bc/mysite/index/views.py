@@ -1,7 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.conf import settings
+from django.core.mail import send_mail
 from django.urls import reverse, NoReverseMatch
 from .models import CarrousselImages, FAQ, Organisation_card, Entrainement, PartenairesSponsor, DocumentsFonctionnement, Equipes, DocumentsDossierInscription
+from annonces.models import Annonce
 from .services import get_next_matches, get_last_results
+from .forms import InscriptionForm
 
 
 def index(requests):
@@ -29,7 +33,11 @@ def index(requests):
         "sliders": slides,
         "FAQ": FAQ.objects.all().order_by('ordre'),
         "next_matches": next_matches,
-        "last_results": last_results
+        "last_results": last_results,
+        # 1 ligne d'annonces (max 3)
+        "home_annonces": Annonce.objects.filter(is_published=True).order_by('-created_at')[:3],
+    # Formulaire d'inscription sur la page d'accueil
+    "home_inscription_form": InscriptionForm(),
     }
     
     return render(requests, 'index/accueil.html', context)
@@ -44,7 +52,66 @@ def lesequipes(requests):
     return render(requests, 'index/equipes.html', {"lesequipes" : Equipes.objects.all()})
 
 def inscriptions(requests):
-    return render(requests, 'index/inscriptions.html', {"docs" : DocumentsDossierInscription.objects.all()})
+    success = False
+    if requests.method == 'POST':
+        form = InscriptionForm(requests.POST)
+        if form.is_valid():
+            full_name = form.cleaned_data['full_name']
+            birth_date = form.cleaned_data['birth_date']
+            email = form.cleaned_data['email']
+            phone = form.cleaned_data['phone']
+            licensed_before = form.cleaned_data.get('licensed_before') or False
+
+            # Email de confirmation au sportif
+            subject_user = "Confirmation d'inscription - Alloeu Basket Club"
+            html_user = (
+                f"<p>Bonjour {full_name},</p>"
+                f"<p>Nous avons bien reçu votre demande d'inscription. Notre secrétariat vous recontactera prochainement.</p>"
+                f"<p>Récapitulatif:</p>"
+                f"<ul>"
+                f"<li>Nom et prénom: {full_name}</li>"
+                f"<li>Date de naissance: {birth_date:%d/%m/%Y}</li>"
+                f"<li>E-mail: {email}</li>"
+                f"<li>Téléphone: {phone}</li>"
+                f"<li>Déjà licencié(e): {'Oui' if licensed_before else 'Non'}</li>"
+                f"</ul>"
+                f"<p>Sportivement,<br>L'équipe Alloeu Basket Club</p>"
+            )
+            send_mail(
+                subject_user,
+                # plain fallback
+                f"Bonjour {full_name},\n\nNous avons bien reçu votre demande d'inscription. Notre secrétariat vous recontactera prochainement.\n\nNom et prénom: {full_name}\nDate de naissance: {birth_date:%d/%m/%Y}\nE-mail: {email}\nTéléphone: {phone}\nDéjà licencié(e): {'Oui' if licensed_before else 'Non'}\n\nSportivement,\nAlloeu Basket Club",
+                getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@alloeubasket.fr'),
+                [email],
+                html_message=html_user,
+            )
+
+            # Email de notification au secrétariat
+            subject_admin = "Nouvelle demande d'inscription - Site Alloeu BC"
+            body_admin = (
+                "Une nouvelle demande d'inscription a été soumise depuis le site."\
+                f"\n\nNom et prénom: {full_name}"\
+                f"\nDate de naissance: {birth_date:%d/%m/%Y}"\
+                f"\nE-mail: {email}"\
+                f"\nTéléphone: {phone}"\
+                f"\nDéjà licencié(e): {'Oui' if licensed_before else 'Non'}"
+            )
+            send_mail(
+                subject_admin,
+                body_admin,
+                getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@alloeubasket.fr'),
+                ['secretariat.alloeubc@gmail.com'],
+            )
+
+            return redirect('index:index')
+    else:
+        form = InscriptionForm()
+
+    return render(requests, 'index/inscriptions.html', {
+        "docs": DocumentsDossierInscription.objects.all(),
+        "form": form,
+        "success": success,
+    })
 
 def partenaires(request):
     """Page dédiée listant tous les partenaires."""

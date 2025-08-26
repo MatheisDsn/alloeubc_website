@@ -112,12 +112,6 @@ def inscriptions(requests):
     else:
         form = InscriptionForm()
 
-    return render(requests, 'index/inscriptions.html', {
-        "docs": DocumentsDossierInscription.objects.all(),
-        "form": form,
-        "success": success,
-    })
-
 def partenaires(request):
     """Page dédiée listant tous les partenaires."""
     cards = PartenairesSponsor.objects.prefetch_related('links').all()

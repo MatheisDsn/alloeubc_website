@@ -64,6 +64,13 @@ class Annonce(models.Model):
         help_text="Condition de l'article",
     )
 
+    # Taille de l'article (flexible selon la catégorie)
+    taille = models.CharField(
+        max_length=20,
+        blank=True,
+        help_text="Taille de l'article (ex: XS, S, M, L, XL, 38, 40, 42, etc.)",
+    )
+
     image = CustomCloudinaryField(
         "image",
         folder="annonces",

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.mail import send_mail
 from django.urls import reverse, NoReverseMatch
-from .models import CarrousselImages, FAQ, Organisation_card, Entrainement, PartenairesSponsor, DocumentsFonctionnement, Equipes, DocumentsDossierInscription
+from .models import CarrousselImages, FAQ, Organisation_card, Entrainement, Tarifs, PartenairesSponsor, DocumentsFonctionnement, Equipes, DocumentsDossierInscription
 from annonces.models import Annonce
 from .services import get_next_matches, get_last_results
 from .forms import InscriptionForm
@@ -46,7 +46,12 @@ def presentation(requests):
     return render(requests, 'index/presentation.html', {"cards_inf" : Organisation_card.objects.all().order_by('ordre')})
 
 def information(requests):
-    return render(requests, 'index/informations.html', {"img_entrainement" : Entrainement.objects.first(), "cards" : PartenairesSponsor.objects.all(), "fichiers" : DocumentsFonctionnement.objects.all()})
+    return render(requests, 'index/informations.html', {
+        "img_entrainement": Entrainement.objects.first(), 
+        "img_tarifs": Tarifs.objects.first(),
+        "cards": PartenairesSponsor.objects.all(), 
+        "fichiers": DocumentsFonctionnement.objects.all()
+    })
 
 def lesequipes(requests):
     return render(requests, 'index/equipes.html', {"lesequipes" : Equipes.objects.all()})

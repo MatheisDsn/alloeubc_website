@@ -69,6 +69,54 @@
     {% endif %}
 </section>
 
+<!-- Section Tarifs -->
+<section class="py-20 lg:py-28 bg-gradient-to-b from-gray-50 to-white">
+  <div class="container mx-auto px-4">
+    <!-- Titre de section -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-6 font-tertiary">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+        </svg>
+        Tarifs
+      </div>
+      <h2 class="text-4xl lg:text-5xl font-bold text-secondary-900 mb-4 font-primary">
+        Nos Tarifs
+      </h2>
+      <p class="text-lg text-secondary-600 max-w-2xl mx-auto font-secondary">
+        Découvrez nos tarifs pour la saison en cours et les modalités d'inscription
+      </p>
+      <div class="w-24 h-1 bg-primary-500 mx-auto mt-6 rounded-full"></div>
+    </div>
+
+    {% if img_tarifs.image_tarifs %}
+
+    <!-- Image modernisée avec effet -->
+    <div class="max-w-6xl mx-auto">
+      <div class="relative group">
+        <div class="absolute inset-0 bg-gradient-to-t from-secondary-900/20 to-transparent rounded-3xl"></div>
+        <img
+          src="{{ img_tarifs.image_tarifs.url }}"
+          class="w-full h-auto rounded-3xl shadow-2xl transform group-hover:scale-[1.02] transition-all duration-500 border border-gray-200"
+          alt="Tarifs Alloeu Basket Club"
+          loading="lazy"
+        />
+        <div class="absolute bottom-6 left-6 right-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <p class="text-lg font-semibold">💰 Tarifs de la saison en cours</p>
+        </div>
+      </div>
+    </div>
+
+    {% else %}
+    <!-- Message si pas d'image -->
+    <div class="max-w-6xl mx-auto text-center">
+      <p class="text-gray-500 text-lg font-secondary">
+        Aucun tarif disponible pour le moment.
+      </p>
+    </div>
+    {% endif %}
+</section>
+
 <!-- Section Partenaires -->
 <section class="relative bg-secondary-900 py-20 lg:py-28 overflow-hidden">
   <!-- Éléments décoratifs modernisés -->

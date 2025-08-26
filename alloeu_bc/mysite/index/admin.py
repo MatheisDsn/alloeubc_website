@@ -102,6 +102,7 @@ class OrganisationCardAdmin(admin.ModelAdmin):
     )
 
 admin.site.register(Entrainement)
+admin.site.register(Tarifs)
 
 @admin.register(PartenairesSponsor)
 class PartenairesSponsorAdmin(admin.ModelAdmin):
@@ -138,3 +139,15 @@ class SponsorLinkInline(admin.TabularInline):
     fields = ('title', 'url')
 
 PartenairesSponsorAdmin.inlines = [SponsorLinkInline]
+
+@admin.register(Equipes)
+class EquipesAdmin(admin.ModelAdmin):
+    list_display = ['nom', 'coach', 'coach_adjoint', 'short_description']
+    search_fields = ['nom', 'coach', 'coach_adjoint', 'description']
+    list_filter = ['coach']
+
+    def short_description(self, obj):
+        if not obj.description:
+            return '-'
+        return (obj.description[:60] + '...') if len(obj.description) > 60 else obj.description
+    short_description.short_description = 'Description'

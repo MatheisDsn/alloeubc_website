@@ -128,6 +128,20 @@ class Entrainement(models.Model):
     def __str__(self):
         return self.image_entrainement.public_id.split('/')[-1]  # Meilleure représentation
 
+class Tarifs(models.Model):
+    image_tarifs = CustomCloudinaryField(
+        'image',
+        folder='informations/tarifs',
+        blank=False
+    )
+
+    class Meta:
+        verbose_name = "Tarifs"
+        verbose_name_plural = "Tarifs"
+
+    def __str__(self):
+        return self.image_tarifs.public_id.split('/')[-1]
+
 class PartenairesSponsor(models.Model):
     image_blanc = CustomCloudinaryField(
         'image',

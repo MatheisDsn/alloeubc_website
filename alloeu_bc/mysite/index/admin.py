@@ -142,10 +142,12 @@ PartenairesSponsorAdmin.inlines = [SponsorLinkInline]
 @admin.register(Equipes)
 class EquipesAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = ['ordre', 'nom', 'coach', 'coach_adjoint', 'short_description']
+    list_editable = ['ordre']
     list_display_links = ['nom']
     search_fields = ['nom', 'coach', 'coach_adjoint', 'description']
     list_filter = ['coach']
     ordering = ['ordre']
+    sortable_field_name = 'ordre'
 
     actions = ['rebuild_order']
 

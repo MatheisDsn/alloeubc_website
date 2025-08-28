@@ -142,11 +142,26 @@ PartenairesSponsorAdmin.inlines = [SponsorLinkInline]
 @admin.register(Equipes)
 class EquipesAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = ['ordre', 'nom', 'coach', 'coach_adjoint', 'short_description']
-    list_editable = ['ordre']
     list_display_links = ['nom']
     search_fields = ['nom', 'coach', 'coach_adjoint', 'description']
     list_filter = ['coach']
     ordering = ['ordre']
+
+    actions = ['rebuild_order']
+
+    def rebuild_order(self, request, queryset):
+        """Rebuild ordre for all Equipes to be contiguous starting from 0.
+
+        Useful if the drag & drop produced inconsistent or duplicate ordre values.
+        """
+        # Use the full queryset in admin ordering to ensure consistent assignment
+        qs = self.get_queryset(request).order_by('ordre', 'id')
+        for idx, obj in enumerate(qs):
+            if obj.ordre != idx:
+                obj.ordre = idx
+                obj.save()
+        self.message_user(request, "Ordre réinitialisé pour toutes les équipes.")
+    rebuild_order.short_description = "Réinitialiser l'ordre des équipes"
 
     def short_description(self, obj):
         if not obj.description:

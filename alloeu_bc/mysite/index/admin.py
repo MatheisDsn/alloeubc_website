@@ -141,10 +141,13 @@ class SponsorLinkInline(admin.TabularInline):
 PartenairesSponsorAdmin.inlines = [SponsorLinkInline]
 
 @admin.register(Equipes)
-class EquipesAdmin(admin.ModelAdmin):
-    list_display = ['nom', 'coach', 'coach_adjoint', 'short_description']
+class EquipesAdmin(SortableAdminMixin, admin.ModelAdmin):
+    list_display = ['ordre', 'nom', 'coach', 'coach_adjoint', 'short_description']
+    list_editable = ['ordre']
+    list_display_links = ['nom']
     search_fields = ['nom', 'coach', 'coach_adjoint', 'description']
     list_filter = ['coach']
+    ordering = ['ordre']
 
     def short_description(self, obj):
         if not obj.description:

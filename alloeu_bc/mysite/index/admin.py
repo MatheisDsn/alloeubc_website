@@ -77,7 +77,6 @@ class FAQAdmin(admin.ModelAdmin):
 @admin.register(Organisation_card)
 class OrganisationCardAdmin(admin.ModelAdmin):
     list_display = ['nom', 'fonction', 'ordre', 'image_preview']
-    list_editable = ['ordre']
     list_display_links = ['nom']
     search_fields = ['nom', 'fonction']
     ordering = ['ordre']

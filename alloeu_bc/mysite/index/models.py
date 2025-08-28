@@ -197,10 +197,12 @@ class Equipes(models.Model):
     coach = models.CharField(max_length=100)
     coach_adjoint = models.CharField(max_length=100, blank=True)
     description = models.TextField(max_length=1000, blank=True)
+    ordre = models.PositiveIntegerField(default=0, help_text="Ordre d'affichage (0 = premier)")
 
     class Meta:
         verbose_name = "Équipes"
         verbose_name_plural = "Équipes"
+    ordering = ['ordre']
 
     def __str__(self):
         return self.nom + ' ' + '/' + ' ' + self.coach

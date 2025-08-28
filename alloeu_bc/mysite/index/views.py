@@ -54,7 +54,8 @@ def information(requests):
     })
 
 def lesequipes(requests):
-    return render(requests, 'index/equipes.html', {"lesequipes" : Equipes.objects.all()})
+    # Ensure teams are ordered by the 'ordre' field so admin edits are reflected on the site
+    return render(requests, 'index/equipes.html', {"lesequipes": Equipes.objects.all().order_by('ordre')})
 
 def inscriptions(requests):
     success = False

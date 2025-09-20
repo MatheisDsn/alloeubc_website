@@ -98,7 +98,11 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
   </div>
 </section>
 
+{% with hero_speed=sliders.0.vitesse_slider|default:800 %}
+<span id="hero-speed" data-speed="{{ hero_speed }}" hidden></span>
 <script>
+  const heroSpeedEl = document.getElementById('hero-speed');
+  const HERO_SLIDER_SPEED = heroSpeedEl ? parseInt(heroSpeedEl.dataset.speed, 10) || 800 : 800;
   const heroSwiper = new Swiper(".heroSwiper", {
     slidesPerView: 1,
     spaceBetween: 0,
@@ -122,9 +126,10 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
     fadeEffect: {
       crossFade: true
     },
-    speed: {{ sliders.0.vitesse_slider|default:800 }},
+    speed: HERO_SLIDER_SPEED,
   });
 </script>
+{% endwith %}
 
 <!-- Style pour les scrollbars personnalisées et carrousel -->
 <style>
@@ -307,7 +312,7 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
 </style>
 
 <!-- Section Inscription (début de page) -->
-<section class="bg-white py-14 py-20">
+<section class="bg-white py-20">
   <div class="container mx-auto px-4">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
       <div>
@@ -326,6 +331,10 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
             <div>
               <label for="id_full_name" class="block text-sm font-medium text-secondary-700 mb-1">Nom et prénom</label>
               {{ home_inscription_form.full_name }}
+            </div>
+            <div>
+              <label for="id_sexe" class="block text-sm font-medium text-secondary-700 mb-1">Sexe</label>
+              {{ home_inscription_form.sexe }}
             </div>
             <div>
               <label for="id_birth_date" class="block text-sm font-medium text-secondary-700 mb-1">Date de naissance</label>
@@ -353,6 +362,23 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
   </div>
   
 </section>
+
+<script>
+  (function() {
+    const form = document.querySelector("form[action$='{% url 'index:inscriptions' %}']");
+    if (!form) return;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (!submitBtn) return;
+    const originalHTML = submitBtn.innerHTML;
+    form.addEventListener('submit', function(e) {
+      if (submitBtn.disabled) return; // Already submitting
+      submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-70','cursor-not-allowed');
+        submitBtn.textContent = 'Envoi...';
+      // Optional safety timeout to re-enable after 15s if something goes wrong
+    });
+  })();
+</script>
 
 {% if latest_news %}
 <!-- Section Actualités -->

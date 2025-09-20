@@ -141,7 +141,7 @@ PartenairesSponsorAdmin.inlines = [SponsorLinkInline]
 
 @admin.register(Equipes)
 class EquipesAdmin(SortableAdminMixin, admin.ModelAdmin):
-    list_display = ['ordre', 'nom', 'coach', 'coach_adjoint', 'short_description']
+    list_display = ['ordre', 'nom', 'coach', 'coach_adjoint', 'photo_preview', 'short_description']
     list_editable = ['ordre']
     list_display_links = ['nom']
     search_fields = ['nom', 'coach', 'coach_adjoint', 'description']
@@ -170,3 +170,9 @@ class EquipesAdmin(SortableAdminMixin, admin.ModelAdmin):
             return '-'
         return (obj.description[:60] + '...') if len(obj.description) > 60 else obj.description
     short_description.short_description = 'Description'
+
+    def photo_preview(self, obj):
+        if obj.photo:
+            return mark_safe(f"<img src='{obj.photo.url}' style='height:50px;width:50px;object-fit:cover;border-radius:6px;' />")
+        return '-'
+    photo_preview.short_description = 'Photo'

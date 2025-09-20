@@ -63,6 +63,7 @@ def inscriptions(requests):
         form = InscriptionForm(requests.POST)
         if form.is_valid():
             full_name = form.cleaned_data['full_name']
+            sexe = form.cleaned_data['sexe']
             birth_date = form.cleaned_data['birth_date']
             email = form.cleaned_data['email']
             phone = form.cleaned_data['phone']
@@ -70,16 +71,23 @@ def inscriptions(requests):
 
             # Email de confirmation au sportif
             subject_user = "Confirmation d'inscription - Alloeu Basket Club"
+            sexe_label = dict(form.fields['sexe'].choices).get(sexe, sexe)
             html_user = (
                 f"<p>Bonjour {full_name},</p>"
-                f"<p>Nous avons bien reçu votre demande d'inscription. Notre secrétariat vous recontactera prochainement.</p>"
-                f"<p>Récapitulatif:</p>"
+                f"<p>Nous avons bien reçu votre demande d'inscription. IMPORTANT : ce formulaire ne signifie <strong>pas</strong> encore l'inscription au club.</p>"
+                f"<p>Prochaines étapes :</p>"
                 f"<ul>"
-                f"<li>Nom et prénom: {full_name}</li>"
-                f"<li>Date de naissance: {birth_date:%d/%m/%Y}</li>"
-                f"<li>E-mail: {email}</li>"
-                f"<li>Téléphone: {phone}</li>"
-                f"<li>Déjà licencié(e): {'Oui' if licensed_before else 'Non'}</li>"
+                f"<li>Vous recevrez sous peu (ou dans les prochains jours) un e-mail de la Fédération pour compléter la licence.</li>"
+                f"<li>Surveillez vos spams / courriers indésirables : l'e-mail peut s'y retrouver.</li>"
+                f"</ul>"
+                f"<p>Récapitulatif de votre demande :</p>"
+                f"<ul>"
+                f"<li>Nom et prénom : {full_name}</li>"
+                f"<li>Sexe : {sexe_label}</li>"
+                f"<li>Date de naissance : {birth_date:%d/%m/%Y}</li>"
+                f"<li>E-mail : {email}</li>"
+                f"<li>Téléphone : {phone}</li>"
+                f"<li>Déjà licencié(e) : {'Oui' if licensed_before else 'Non'}</li>"
                 f"</ul>"
                 f"<p>Sportivement,<br>L'équipe Alloeu Basket Club</p>"
             )
@@ -96,11 +104,12 @@ def inscriptions(requests):
             subject_admin = "Nouvelle demande d'inscription - Site Alloeu BC"
             body_admin = (
                 "Une nouvelle demande d'inscription a été soumise depuis le site."\
-                f"\n\nNom et prénom: {full_name}"\
-                f"\nDate de naissance: {birth_date:%d/%m/%Y}"\
-                f"\nE-mail: {email}"\
-                f"\nTéléphone: {phone}"\
-                f"\nDéjà licencié(e): {'Oui' if licensed_before else 'Non'}"
+                f"\nNom et prénom : {full_name}"\
+                f"\nSexe : {sexe_label}"\
+                f"\nDate de naissance : {birth_date:%d/%m/%Y}"\
+                f"\nE-mail : {email}"\
+                f"\nTéléphone : {phone}"\
+                f"\nDéjà licencié(e) : {'Oui' if licensed_before else 'Non'}"
             )
             send_mail(
                 subject_admin,
@@ -110,8 +119,27 @@ def inscriptions(requests):
             )
 
             return redirect('index:index')
+        # Form invalide: on laisse afficher les erreurs
+        return render(requests, 'index/accueil.html', {
+            "home_inscription_form": form,
+            # Ajouter contenus minimaux pour éviter erreurs template si attendu
+            "sliders": CarrousselImages.objects.all().order_by('ordre'),
+            "FAQ": FAQ.objects.all().order_by('ordre'),
+            "home_annonces": Annonce.objects.filter(is_published=True).order_by('-created_at')[:3],
+            "next_matches": get_next_matches(limit=7),
+            "last_results": get_last_results(limit=7),
+        })
     else:
         form = InscriptionForm()
+    # GET request: ré-afficher la page d'accueil avec le formulaire
+    return render(requests, 'index/accueil.html', {
+        "home_inscription_form": form,
+        "sliders": CarrousselImages.objects.all().order_by('ordre'),
+        "FAQ": FAQ.objects.all().order_by('ordre'),
+        "home_annonces": Annonce.objects.filter(is_published=True).order_by('-created_at')[:3],
+        "next_matches": get_next_matches(limit=7),
+        "last_results": get_last_results(limit=7),
+    })
 
 def partenaires(request):
     """Page dédiée listant tous les partenaires."""

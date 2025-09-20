@@ -51,46 +51,33 @@
         <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-primary-200 transform hover:-translate-y-2 h-full flex flex-col">
           
           <!-- En-tête de la carte avec icône basket -->
-          <div class="relative rounded-t-2xl overflow-hidden">
-            {% if equipe.photo %}
-            <!-- Grande photo bannière -->
-            <div class="h-48 w-full relative group">
-              <img src="{{ equipe.photo.url }}" alt="Photo {{ equipe.nom }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy">
-              <div class="absolute inset-0 bg-gradient-to-t from-secondary-900/80 via-secondary-900/40 to-transparent"></div>
-              <div class="absolute top-3 left-3 flex items-center gap-2">
-                <div class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold tracking-wide flex items-center gap-1">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                    <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
-                    <path d="M12 8c-2.21 0-4 1.79-4 4h8c0-2.21-1.79-4-4-4z"/>
-                  </svg>
-                  Équipe #{{ forloop.counter }}
-                </div>
+          <div class="relative bg-gradient-to-br from-primary-500 to-primary-600 rounded-t-2xl p-6 text-white overflow-hidden">
+            <!-- Éléments décoratifs -->
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+            <div class="absolute bottom-0 left-0 w-20 h-20 bg-white/10 rounded-full -translate-y-10 -translate-x-10"></div>
+            
+            <!-- Icône basket -->
+            <div class="relative z-10 flex items-center justify-between mb-4">
+              <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                  <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
+                  <path d="M12 8c-2.21 0-4 1.79-4 4h8c0-2.21-1.79-4-4-4z"/>
+                </svg>
               </div>
-              <h3 class="absolute bottom-3 left-4 right-4 text-white text-2xl font-bold font-primary drop-shadow-md">
-                {{ equipe.nom }}
-              </h3>
+              
+              <!-- Badge catégorie -->
+              <div class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
+                Équipe #{{ forloop.counter }}
+              </div>
             </div>
-            {% else %}
-            <!-- Version sans photo: gradient original -->
-            <div class="bg-gradient-to-br from-primary-500 to-primary-600 p-6 text-white">
-              <div class="flex items-center justify-between mb-4">
-                <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                    <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
-                    <path d="M12 8c-2.21 0-4 1.79-4 4h8c0-2.21-1.79-4-4-4z"/>
-                  </svg>
-                </div>
-                <div class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
-                  Équipe #{{ forloop.counter }}
-                </div>
-              </div>
+            
+            <!-- Nom de l'équipe -->
+            <div class="flex items-start gap-4">
               <h3 class="text-2xl font-bold mb-2 group-hover:text-primary-100 transition-colors duration-200 font-primary">
                 {{ equipe.nom }}
               </h3>
             </div>
-            {% endif %}
           </div>
 
           <!-- Corps de la carte -->
@@ -135,6 +122,12 @@
                   {{ equipe.description }}
                 </p>
               </div>
+            </div>
+            {% endif %}
+
+            {% if equipe.photo %}
+            <div class="mt-6">
+              <img src="{{ equipe.photo.url }}" alt="Photo de l'équipe {{ equipe.nom }}" class="w-full h-48 object-cover rounded-lg shadow-sm" loading="lazy">
             </div>
             {% endif %}
           </div>

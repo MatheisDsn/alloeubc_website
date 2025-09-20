@@ -10,6 +10,13 @@ class InscriptionForm(forms.Form):
             "placeholder": "Ex: Martin Dupont",
         }),
     )
+    sexe = forms.ChoiceField(
+        label="Sexe",
+        choices=[("M", "Masculin"), ("F", "Féminin"), ("A", "Autre")],
+        widget=forms.Select(attrs={
+            "class": "w-full rounded-lg border-gray-300 font-secondary focus:border-primary-500 focus:ring-primary-500",
+        }),
+    )
     birth_date = forms.DateField(
         label="Date de naissance",
         widget=forms.DateInput(format="%Y-%m-%d", attrs={

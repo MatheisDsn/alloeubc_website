@@ -198,6 +198,13 @@ class Equipes(models.Model):
     coach_adjoint = models.CharField(max_length=100, blank=True)
     description = models.TextField(max_length=1000, blank=True)
     ordre = models.PositiveIntegerField(default=0, help_text="Ordre d'affichage (0 = premier)")
+    photo = CustomCloudinaryField(
+        'photo',
+        folder='equipes/photos',
+        blank=True,
+        null=True,
+        validators=[validate_image_or_svg]
+    )
 
     class Meta:
         verbose_name = "Équipes"

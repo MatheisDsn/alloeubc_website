@@ -140,6 +140,8 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_PORT = 587 # pr le EMAIL_USE_TLS
 EMAIL_USE_TLS = True # utilise un truc sécurisé 
+EMAIL_TIMEOUT = 15  # Timeout de 15 secondes pour éviter blocage
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 

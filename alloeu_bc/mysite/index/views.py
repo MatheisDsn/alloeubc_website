@@ -2,10 +2,14 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.mail import send_mail
 from django.urls import reverse, NoReverseMatch
+from django.contrib import messages
 from .models import CarrousselImages, FAQ, Organisation_card, Entrainement, Tarifs, PartenairesSponsor, DocumentsFonctionnement, Equipes, DocumentsDossierInscription
 from annonces.models import Annonce
 from .services import get_next_matches, get_last_results
 from .forms import InscriptionForm
+import logging
+from smtplib import SMTPException
+from socket import timeout as socket_timeout
 
 
 def index(requests):
@@ -91,14 +95,25 @@ def inscriptions(requests):
                 f"</ul>"
                 f"<p>Sportivement,<br>L'équipe Alloeu Basket Club</p>"
             )
-            send_mail(
-                subject_user,
-                # plain fallback
-                f"Bonjour {full_name},\n\nNous avons bien reçu votre demande d'inscription. Notre secrétariat vous recontactera prochainement.\n\nNom et prénom: {full_name}\nDate de naissance: {birth_date:%d/%m/%Y}\nE-mail: {email}\nTéléphone: {phone}\nDéjà licencié(e): {'Oui' if licensed_before else 'Non'}\n\nSportivement,\nAlloeu Basket Club",
-                getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@alloeubasket.fr'),
-                [email],
-                html_message=html_user,
-            )
+            # Tentative d'envoi des emails avec gestion d'erreur
+            logger = logging.getLogger(__name__)
+            email_errors = []
+            
+            # Email de confirmation au sportif
+            try:
+                logger.info(f"Tentative d'envoi email confirmation à {email}")
+                send_mail(
+                    subject_user,
+                    # plain fallback
+                    f"Bonjour {full_name},\n\nNous avons bien reçu votre demande d'inscription. Notre secrétariat vous recontactera prochainement.\n\nNom et prénom: {full_name}\nDate de naissance: {birth_date:%d/%m/%Y}\nE-mail: {email}\nTéléphone: {phone}\nDéjà licencié(e): {'Oui' if licensed_before else 'Non'}\n\nSportivement,\nAlloeu Basket Club",
+                    getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@alloeubasket.fr'),
+                    [email],
+                    html_message=html_user,
+                )
+                logger.info(f"Email confirmation envoyé avec succès à {email}")
+            except (SMTPException, socket_timeout, Exception) as e:
+                logger.error(f"Erreur envoi email confirmation à {email}: {str(e)}")
+                email_errors.append(f"Email de confirmation: {str(e)}")
 
             # Email de notification au secrétariat
             subject_admin = "Nouvelle demande d'inscription - Site Alloeu BC"
@@ -111,12 +126,25 @@ def inscriptions(requests):
                 f"\nTéléphone : {phone}"\
                 f"\nDéjà licencié(e) : {'Oui' if licensed_before else 'Non'}"
             )
-            send_mail(
-                subject_admin,
-                body_admin,
-                getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@alloeubasket.fr'),
-                ['secretariat.alloeubc@gmail.com'],
-            )
+            try:
+                logger.info("Tentative d'envoi email notification secrétariat")
+                send_mail(
+                    subject_admin,
+                    body_admin,
+                    getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@alloeubasket.fr'),
+                    ['secretariat.alloeubc@gmail.com'],
+                )
+                logger.info("Email secrétariat envoyé avec succès")
+            except (SMTPException, socket_timeout, Exception) as e:
+                logger.error(f"Erreur envoi email secrétariat: {str(e)}")
+                email_errors.append(f"Email secrétariat: {str(e)}")
+            
+            # Afficher un message selon le résultat des emails
+            if email_errors:
+                messages.warning(requests, f"Votre demande a été enregistrée mais il y a eu des problèmes d'envoi d'email. Contactez-nous si vous ne recevez pas de confirmation.")
+                logger.warning(f"Inscription {full_name} ({email}) avec erreurs email: {email_errors}")
+            else:
+                messages.success(requests, "Votre demande d'inscription a été envoyée avec succès ! Vous allez recevoir un email de confirmation.")
 
             return redirect('index:index')
         # Form invalide: on laisse afficher les erreurs

@@ -367,16 +367,117 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
   (function() {
     const form = document.querySelector("form[action$='{% url 'index:inscriptions' %}']");
     if (!form) return;
+    
     const submitBtn = form.querySelector('button[type="submit"]');
     if (!submitBtn) return;
+    
     const originalHTML = submitBtn.innerHTML;
+    
     form.addEventListener('submit', function(e) {
       if (submitBtn.disabled) return; // Already submitting
+      
+      // Désactiver le bouton et changer l'apparence
       submitBtn.disabled = true;
-        submitBtn.classList.add('opacity-70','cursor-not-allowed');
-        submitBtn.textContent = 'Envoi...';
-      // Optional safety timeout to re-enable after 15s if something goes wrong
+      submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+      
+      // Ajouter une animation de chargement avec icône
+      submitBtn.innerHTML = `
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Envoi en cours...
+      `;
+      
+      // Afficher une notification immédiate
+      showInstantNotification();
+      
+      // Timeout de sécurité de 30 secondes
+      setTimeout(() => {
+        if (submitBtn.disabled) {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+          submitBtn.innerHTML = originalHTML;
+          showErrorNotification('Délai d\'attente dépassé. Veuillez réessayer.');
+        }
+      }, 30000);
     });
+    
+    // Fonction pour afficher une notification immédiate
+    function showInstantNotification() {
+      const notification = document.createElement('div');
+      notification.className = 'fixed top-4 right-4 z-[100] max-w-sm bg-blue-500 text-white rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 ease-out';
+      notification.innerHTML = `
+        <div class="flex items-center p-4">
+          <div class="flex-shrink-0">
+            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium">
+              Envoi de votre demande d'inscription...
+            </p>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Animation d'entrée
+      setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+        notification.classList.add('translate-x-0');
+      }, 100);
+      
+      // Cette notification sera automatiquement remplacée par le message Django
+      // ou supprimée si l'envoi prend trop de temps
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.classList.add('translate-x-full');
+          setTimeout(() => {
+            if (notification.parentNode) {
+              notification.parentNode.removeChild(notification);
+            }
+          }, 300);
+        }
+      }, 10000);
+    }
+    
+    // Fonction pour afficher une erreur de timeout
+    function showErrorNotification(message) {
+      const notification = document.createElement('div');
+      notification.className = 'fixed top-4 right-4 z-[100] max-w-sm bg-red-500 text-white rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 ease-out';
+      notification.innerHTML = `
+        <div class="flex items-center p-4">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium">${message}</p>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+        notification.classList.add('translate-x-0');
+      }, 100);
+      
+      setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 300);
+      }, 5000);
+    }
   })();
 </script>
 

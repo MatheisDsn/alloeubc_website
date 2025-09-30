@@ -19,11 +19,10 @@ class InscriptionForm(forms.Form):
     )
     birth_date = forms.DateField(
         label="Date de naissance",
-        widget=forms.DateInput(format="%Y-%m-%d", attrs={
-            "type": "date",
+        widget=forms.DateInput(format="%d/%m/%Y", attrs={
+            "type": "date",  # HTML5 date input utilise toujours YYYY-MM-DD en interne
             "class": "w-full rounded-lg border-gray-300 font-secondary focus:border-primary-500 focus:ring-primary-500",
         }),
-        input_formats=["%Y-%m-%d"],
     )
     email = forms.EmailField(
         label="Adresse mail",

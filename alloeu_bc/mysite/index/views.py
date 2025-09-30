@@ -167,7 +167,7 @@ def inscriptions(requests):
                 
                 admin_message = Mail(
                     from_email=settings.DEFAULT_FROM_EMAIL,
-                    to_emails='matheisdasso@gmail.com',
+                    to_emails='secretariat.alloeubc@gmail.com',
                     subject=subject_admin,
                     html_content=html_admin
                 )

@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouvelle demande d'inscription - Site Alloeu BC</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px auto;
+            display: block;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .header .subtitle {
+            margin: 10px 0 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px 25px;
+        }
+        .alert-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .alert-box h3 {
+            margin: 0 0 10px 0;
+            color: #1d4ed8;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .info-item {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .info-value {
+            color: #1f2937;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .actions-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        .actions-box h3 {
+            margin: 0 0 15px 0;
+            color: #92400e;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .actions-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .actions-box li {
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+        .footer {
+            background: #1f2937;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        .timestamp {
+            background: #f3f4f6;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 600px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .content {
+                padding: 20px 15px;
+            }
+            .header {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>Nouvelle Inscription</h1>
+            <p class="subtitle">Demande reçue depuis le site web</p>
+        </div>
+        
+        <div class="content">
+            <div class="timestamp">
+                📅 Reçu le {{ current_date }} à {{ current_time }}
+            </div>
+            
+            <div class="alert-box">
+                <h3>🎯 Nouvelle demande d'inscription</h3>
+                <p>Une nouvelle demande d'inscription a été soumise depuis le site web. Voici les détails :</p>
+            </div>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">👤 Nom et prénom</div>
+                    <div class="info-value">{{ full_name }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">⚧ Sexe</div>
+                    <div class="info-value">{{ sexe_label }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🎂 Date de naissance</div>
+                    <div class="info-value">{{ birth_date }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📧 E-mail</div>
+                    <div class="info-value">{{ email }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📱 Téléphone</div>
+                    <div class="info-value">{{ phone }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🏀 Déjà licencié(e)</div>
+                    <div class="info-value">{{ licensed_before_text }}</div>
+                </div>
+            </div>
+            
+            <p style="text-align: center; color: #6b7280; font-style: italic;">
+                Un email de confirmation a été automatiquement envoyé à la personne.
+            </p>
+        </div>
+        
+        <div class="footer">
+            <p>🏀 <strong>Alloeu Basket Club</strong> - Secrétariat</p>
+            <p style="font-size: 12px; margin-top: 15px; opacity: 0.8;">
+                Email automatique généré depuis le site web<br>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,15 +1,16 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
-from django.core.mail import send_mail
 from django.urls import reverse, NoReverseMatch
 from django.contrib import messages
+from django.template.loader import render_to_string
 from .models import CarrousselImages, FAQ, Organisation_card, Entrainement, Tarifs, PartenairesSponsor, DocumentsFonctionnement, Equipes, DocumentsDossierInscription
 from annonces.models import Annonce
 from .services import get_next_matches, get_last_results
 from .forms import InscriptionForm
 import logging
-from smtplib import SMTPException
-from socket import timeout as socket_timeout
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+from datetime import datetime
 
 
 def index(requests):
@@ -95,47 +96,85 @@ def inscriptions(requests):
                 f"</ul>"
                 f"<p>Sportivement,<br>L'équipe Alloeu Basket Club</p>"
             )
-            # Tentative d'envoi des emails avec gestion d'erreur
+            # Tentative d'envoi des emails avec SendGrid
             logger = logging.getLogger(__name__)
             email_errors = []
+            sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
             
-            # Email de confirmation au sportif
+            # Préparer les données pour les templates
+            current_datetime = datetime.now()
+            
+            # Debug: log pour vérifier le format de date
+            logger.info(f"Date reçue du formulaire: {birth_date} (type: {type(birth_date)})")
+            
+            # Formatage sécurisé de la date
+            if isinstance(birth_date, str):
+                # Si c'est une chaîne, essayer de la parser
+                try:
+                    from datetime import datetime as dt
+                    parsed_date = dt.strptime(birth_date, '%Y-%m-%d')
+                    formatted_birth_date = parsed_date.strftime('%d/%m/%Y')
+                except ValueError:
+                    try:
+                        parsed_date = dt.strptime(birth_date, '%d/%m/%Y')
+                        formatted_birth_date = birth_date  # Déjà au bon format
+                    except ValueError:
+                        formatted_birth_date = str(birth_date)  # Fallback
+            else:
+                # Si c'est un objet date/datetime
+                formatted_birth_date = birth_date.strftime('%d/%m/%Y')
+            
+            logger.info(f"Date formatée pour email: {formatted_birth_date}")
+            
+            email_context = {
+                'full_name': full_name,
+                'sexe_label': sexe_label,
+                'birth_date': formatted_birth_date,
+                'email': email,
+                'phone': phone,
+                'licensed_before_text': 'Oui' if licensed_before else 'Non',
+                'current_date': current_datetime.strftime('%d/%m/%Y'),
+                'current_time': current_datetime.strftime('%H:%M'),
+            }
+            
+            # Email de confirmation au sportif avec template HTML
             try:
                 logger.info(f"Tentative d'envoi email confirmation à {email}")
-                send_mail(
-                    subject_user,
-                    # plain fallback
-                    f"Bonjour {full_name},\n\nNous avons bien reçu votre demande d'inscription. Notre secrétariat vous recontactera prochainement.\n\nNom et prénom: {full_name}\nDate de naissance: {birth_date:%d/%m/%Y}\nE-mail: {email}\nTéléphone: {phone}\nDéjà licencié(e): {'Oui' if licensed_before else 'Non'}\n\nSportivement,\nAlloeu Basket Club",
-                    getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@alloeubasket.fr'),
-                    [email],
-                    html_message=html_user,
+                
+                # Générer le HTML depuis le template
+                html_content = render_to_string('index/emails/inscription_confirmation.html', email_context)
+                
+                message = Mail(
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    to_emails=email,
+                    subject=subject_user,
+                    html_content=html_content
                 )
-                logger.info(f"Email confirmation envoyé avec succès à {email}")
-            except (SMTPException, socket_timeout, Exception) as e:
+                
+                response = sg.send(message)
+                logger.info(f"Email confirmation envoyé avec succès à {email} - Status: {response.status_code}")
+            except Exception as e:
                 logger.error(f"Erreur envoi email confirmation à {email}: {str(e)}")
                 email_errors.append(f"Email de confirmation: {str(e)}")
 
-            # Email de notification au secrétariat
+            # Email de notification au secrétariat avec template HTML
             subject_admin = "Nouvelle demande d'inscription - Site Alloeu BC"
-            body_admin = (
-                "Une nouvelle demande d'inscription a été soumise depuis le site."\
-                f"\nNom et prénom : {full_name}"\
-                f"\nSexe : {sexe_label}"\
-                f"\nDate de naissance : {birth_date:%d/%m/%Y}"\
-                f"\nE-mail : {email}"\
-                f"\nTéléphone : {phone}"\
-                f"\nDéjà licencié(e) : {'Oui' if licensed_before else 'Non'}"
-            )
             try:
                 logger.info("Tentative d'envoi email notification secrétariat")
-                send_mail(
-                    subject_admin,
-                    body_admin,
-                    getattr(settings, 'DEFAULT_FROM_EMAIL', 'no-reply@alloeubasket.fr'),
-                    ['secretariat.alloeubc@gmail.com'],
+                
+                # Générer le HTML depuis le template
+                html_admin = render_to_string('index/emails/inscription_admin.html', email_context)
+                
+                admin_message = Mail(
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    to_emails='matheisdasso@gmail.com',
+                    subject=subject_admin,
+                    html_content=html_admin
                 )
-                logger.info("Email secrétariat envoyé avec succès")
-            except (SMTPException, socket_timeout, Exception) as e:
+                
+                response = sg.send(admin_message)
+                logger.info(f"Email secrétariat envoyé avec succès - Status: {response.status_code}")
+            except Exception as e:
                 logger.error(f"Erreur envoi email secrétariat: {str(e)}")
                 email_errors.append(f"Email secrétariat: {str(e)}")
             

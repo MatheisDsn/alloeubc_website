@@ -16,7 +16,7 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 SECRET_KEY = os.getenv("API_SECRET")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [".onrender.com", "127.0.0.1"]
 
@@ -135,16 +135,10 @@ INTERNAL_IPS = [
 NPM_BIN_PATH = "C:\Program Files\\nodejs\\npm.cmd"
 
 
-#EMAIL CONFIG
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_PORT = 587 # pr le EMAIL_USE_TLS
-EMAIL_USE_TLS = True # utilise un truc sécurisé 
-EMAIL_TIMEOUT = 15  # Timeout de 15 secondes pour éviter blocage
+# EMAIL CONFIG with SendGrid
+SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-
+# From address used by SendGrid
 DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 

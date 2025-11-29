@@ -178,6 +178,13 @@
                     <div class="info-value">{{ licensed_before_text }}</div>
                 </div>
             </div>
+
+            {% if participation_role %}
+            <div class="info-item">
+                <div class="info-label">🎯 Souhait au club</div>
+                <div class="info-value">{{ participation_role }}</div>
+            </div>
+            {% endif %}
             
             <p style="text-align: center; color: #6b7280; font-style: italic;">
                 Un email de confirmation a été automatiquement envoyé à la personne.

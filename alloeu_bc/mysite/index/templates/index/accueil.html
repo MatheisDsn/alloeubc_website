@@ -28,7 +28,7 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
           
           <!-- Overlay avec opacité dynamique si une valeur est définie et > 0 -->
           {% if slide.opacite_overlay and slide.opacite_overlay > 0 %}
-            <div class="absolute inset-0 bg-black" style="opacity: {{ slide.opacite_overlay }};"></div>
+            <div class="absolute inset-0 bg-black" style="opacity: {{ slide.opacite_overlay|stringformat:"f"|cut:"," }};"></div>
           {% endif %}
           
           <!-- Contenu textuel superposé -->

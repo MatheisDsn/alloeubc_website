@@ -28,7 +28,7 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
           
           <!-- Overlay avec opacité dynamique si une valeur est définie et > 0 -->
           {% if slide.opacite_overlay and slide.opacite_overlay > 0 %}
-            <div class="absolute inset-0 bg-black" style="opacity: {{ slide.opacite_overlay|stringformat:"f"|cut:"," }};"></div>
+            <div class="absolute inset-0 bg-black" style="opacity: {{ slide.opacite_overlay }};"></div>
           {% endif %}
           
           <!-- Contenu textuel superposé -->
@@ -359,10 +359,19 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
               <label for="id_licensed_before" class="text-sm font-medium text-secondary-700">J'ai déjà été licencié(e)</label>
             </div>
             <div>
-              <label for="id_participation_role" class="block text-sm font-medium text-secondary-700 mb-1">Souhait au club</label>
-              {{ home_inscription_form.participation_role }}
-              {% if home_inscription_form.participation_role.help_text %}
-                <p class="mt-1 text-xs text-secondary-500">{{ home_inscription_form.participation_role.help_text }}</p>
+              <p class="block text-sm font-medium text-secondary-700 mb-2">Souhait(s) au club</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {% for cb in home_inscription_form.participation_roles %}
+                  <label class="flex items-start gap-2 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 hover:bg-gray-100 text-sm text-secondary-800">
+                    {{ cb.tag }} {{ cb.choice_label }}
+                  </label>
+                {% endfor %}
+              </div>
+              {% if home_inscription_form.participation_roles.help_text %}
+                <p class="mt-1 text-xs text-secondary-500">{{ home_inscription_form.participation_roles.help_text }}</p>
+              {% endif %}
+              {% if home_inscription_form.participation_roles.errors %}
+                <p class="mt-1 text-xs text-red-600">{{ home_inscription_form.participation_roles.errors|striptags }}</p>
               {% endif %}
             </div>
           </div>

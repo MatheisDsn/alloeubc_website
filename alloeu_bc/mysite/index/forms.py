@@ -57,12 +57,10 @@ class InscriptionForm(forms.Form):
         ("adherent", "Être uniquement adhérent au club"),
     )
 
-    participation_role = forms.ChoiceField(
-        label="Souhait au club",
+    participation_roles = forms.MultipleChoiceField(
+        label="Souhait(s) au club",
         required=False,
         choices=PARTICIPATION_CHOICES,
-        widget=forms.Select(attrs={
-            "class": "w-full rounded-lg border-gray-300 font-secondary focus:border-primary-500 focus:ring-primary-500",
-        }),
-        help_text="Choisissez une option",
+        widget=forms.CheckboxSelectMultiple,
+        help_text="Vous pouvez en choisir plusieurs",
     )

@@ -46,3 +46,23 @@ class InscriptionForm(forms.Form):
             "class": "h-4 w-4 text-primary-600 border-gray-300 rounded",
         }),
     )
+
+    PARTICIPATION_CHOICES = (
+        ("competition", "Jouer en compétition"),
+        ("loisir", "Jouer en loisir"),
+        ("entrainer", "Entraîner une équipe"),
+        ("arbitrer", "Arbitrer"),
+        ("officier", "Officier hors arbitrage"),
+        ("diriger", "Diriger"),
+        ("adherent", "Être uniquement adhérent au club"),
+    )
+
+    participation_role = forms.ChoiceField(
+        label="Souhait au club",
+        required=False,
+        choices=PARTICIPATION_CHOICES,
+        widget=forms.Select(attrs={
+            "class": "w-full rounded-lg border-gray-300 font-secondary focus:border-primary-500 focus:ring-primary-500",
+        }),
+        help_text="Choisissez une option",
+    )

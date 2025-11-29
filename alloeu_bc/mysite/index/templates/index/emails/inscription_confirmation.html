@@ -191,6 +191,12 @@
                     <span class="recap-label">Déjà licencié(e) : </span>
                     <span> {{ licensed_before_text }}</span>
                 </div>
+                {% if participation_role %}
+                <div class="recap-item">
+                    <span class="recap-label">Souhait au club : </span>
+                    <span> {{ participation_role }}</span>
+                </div>
+                {% endif %}
             </div>
             
             <p>Si vous avez des questions, n'hésitez pas à nous contacter à <strong>alloeu.basket.club@gmail.com</strong> ou au <strong>06 89 84 43 54</strong>.</p>

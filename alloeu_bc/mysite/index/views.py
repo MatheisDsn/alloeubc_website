@@ -73,7 +73,7 @@ def inscriptions(requests):
             email = form.cleaned_data['email']
             phone = form.cleaned_data['phone']
             licensed_before = form.cleaned_data.get('licensed_before') or False
-            participation_role = form.cleaned_data.get('participation_role')
+            participation_roles = form.cleaned_data.get('participation_roles') or []
 
             # Email de confirmation au sportif
             subject_user = "Confirmation d'inscription - Alloeu Basket Club"
@@ -127,10 +127,11 @@ def inscriptions(requests):
             
             logger.info(f"Date formatée pour email: {formatted_birth_date}")
             
-            # Libellé lisible pour le rôle
-            role_label = None
-            if participation_role:
-                role_label = dict(form.fields['participation_role'].choices).get(participation_role, participation_role)
+            # Libellés lisibles pour les rôles multiples
+            roles_labels = []
+            if participation_roles:
+                choices_map = dict(form.fields['participation_roles'].choices)
+                roles_labels = [choices_map.get(r, r) for r in participation_roles]
 
             email_context = {
                 'full_name': full_name,
@@ -139,7 +140,7 @@ def inscriptions(requests):
                 'email': email,
                 'phone': phone,
                 'licensed_before_text': 'Oui' if licensed_before else 'Non',
-                'participation_role': role_label,
+                'participation_roles': roles_labels,
                 'current_date': current_datetime.strftime('%d/%m/%Y'),
                 'current_time': current_datetime.strftime('%H:%M'),
             }

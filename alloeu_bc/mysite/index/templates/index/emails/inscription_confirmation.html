@@ -191,10 +191,15 @@
                     <span class="recap-label">Déjà licencié(e) : </span>
                     <span> {{ licensed_before_text }}</span>
                 </div>
-                {% if participation_role %}
-                <div class="recap-item">
-                    <span class="recap-label">Souhait au club : </span>
-                    <span> {{ participation_role }}</span>
+                {% if participation_roles %}
+                <div style="margin-top:12px;padding-top:10px;border-top:1px solid #1d4ed833;">
+                    <div class="recap-item" style="margin-bottom:6px;">
+                        <span class="recap-label">Souhait(s) au club :</span>
+                        <span></span>
+                    </div>
+                    <ul style="margin:0;padding-left:20px;color:#374151;">
+                        {% for role in participation_roles %}<li>• {{ role }}</li>{% endfor %}
+                    </ul>
                 </div>
                 {% endif %}
             </div>

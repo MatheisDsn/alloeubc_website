@@ -179,10 +179,14 @@
                 </div>
             </div>
 
-            {% if participation_role %}
-            <div class="info-item">
-                <div class="info-label">🎯 Souhait au club</div>
-                <div class="info-value">{{ participation_role }}</div>
+            {% if participation_roles %}
+            <div class="info-item" style="grid-column:1 / -1;">
+                <div class="info-label">🎯 Souhait(s) au club</div>
+                <div class="info-value" style="display:block;">
+                    <ul style="margin:6px 0 0 0;padding-left:18px;">
+                        {% for role in participation_roles %}<li>{{ role }}</li>{% endfor %}
+                    </ul>
+                </div>
             </div>
             {% endif %}
             

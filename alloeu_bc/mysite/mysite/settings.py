@@ -135,11 +135,12 @@ INTERNAL_IPS = [
 NPM_BIN_PATH = "C:\Program Files\\nodejs\\npm.cmd"
 
 
-# EMAIL CONFIG with SendGrid
-SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
+# EMAIL CONFIG with Brevo
+BREVO_API_KEY = os.getenv("BREVO_API_KEY")
 
-# From address used by SendGrid
+# From address used by Brevo
 DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
+DEFAULT_FROM_NAME = "Alloeu Basket Club"
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 AUTH_USER_MODEL = 'accounts.User'

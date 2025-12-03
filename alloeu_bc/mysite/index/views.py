@@ -8,8 +8,7 @@ from annonces.models import Annonce
 from .services import get_next_matches, get_last_results
 from .forms import InscriptionForm
 import logging
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+import requests as http_requests
 from datetime import datetime
 
 
@@ -78,29 +77,17 @@ def inscriptions(requests):
             # Email de confirmation au sportif
             subject_user = "Confirmation d'inscription - Alloeu Basket Club"
             sexe_label = dict(form.fields['sexe'].choices).get(sexe, sexe)
-            html_user = (
-                f"<p>Bonjour {full_name},</p>"
-                f"<p>Nous avons bien reçu votre demande d'inscription. IMPORTANT : ce formulaire ne signifie <strong>pas</strong> encore l'inscription au club.</p>"
-                f"<p>Prochaines étapes :</p>"
-                f"<ul>"
-                f"<li>Vous recevrez sous peu (ou dans les prochains jours) un e-mail de la Fédération pour compléter la licence.</li>"
-                f"<li>Surveillez vos spams / courriers indésirables : l'e-mail peut s'y retrouver.</li>"
-                f"</ul>"
-                f"<p>Récapitulatif de votre demande :</p>"
-                f"<ul>"
-                f"<li>Nom et prénom : {full_name}</li>"
-                f"<li>Sexe : {sexe_label}</li>"
-                f"<li>Date de naissance : {birth_date:%d/%m/%Y}</li>"
-                f"<li>E-mail : {email}</li>"
-                f"<li>Téléphone : {phone}</li>"
-                f"<li>Déjà licencié(e) : {'Oui' if licensed_before else 'Non'}</li>"
-                f"</ul>"
-                f"<p>Sportivement,<br>L'équipe Alloeu Basket Club</p>"
-            )
-            # Tentative d'envoi des emails avec SendGrid
+            
+            # Tentative d'envoi des emails avec Brevo
             logger = logging.getLogger(__name__)
             email_errors = []
-            sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+            
+            brevo_url = "https://api.brevo.com/v3/smtp/email"
+            brevo_headers = {
+                "accept": "application/json",
+                "api-key": settings.BREVO_API_KEY,
+                "content-type": "application/json"
+            }
             
             # Préparer les données pour les templates
             current_datetime = datetime.now()
@@ -148,21 +135,36 @@ def inscriptions(requests):
             # Email de confirmation au sportif avec template HTML
             try:
                 logger.info(f"Tentative d'envoi email confirmation à {email}")
+                logger.info(f"FROM_EMAIL: {settings.DEFAULT_FROM_EMAIL}")
+                logger.info(f"BREVO_API_KEY présente: {bool(settings.BREVO_API_KEY)}")
                 
                 # Générer le HTML depuis le template
                 html_content = render_to_string('index/emails/inscription_confirmation.html', email_context)
+                logger.info(f"Template rendu avec succès, longueur HTML: {len(html_content)}")
                 
-                message = Mail(
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    to_emails=email,
-                    subject=subject_user,
-                    html_content=html_content
-                )
+                payload_user = {
+                    "sender": {
+                        "name": settings.DEFAULT_FROM_NAME,
+                        "email": settings.DEFAULT_FROM_EMAIL
+                    },
+                    "to": [{"email": email, "name": full_name}],
+                    "subject": subject_user,
+                    "htmlContent": html_content
+                }
                 
-                response = sg.send(message)
-                logger.info(f"Email confirmation envoyé avec succès à {email} - Status: {response.status_code}")
+                response = http_requests.post(brevo_url, json=payload_user, headers=brevo_headers)
+                
+                if response.status_code == 201:
+                    logger.info(f"Email confirmation envoyé à {email} - Status: {response.status_code}")
+                    logger.info(f"Message ID: {response.json().get('messageId')}")
+                else:
+                    logger.error(f"Erreur Brevo: {response.status_code} - {response.text}")
+                    email_errors.append(f"Email de confirmation: {response.text}")
             except Exception as e:
+                import traceback
                 logger.error(f"Erreur envoi email confirmation à {email}: {str(e)}")
+                logger.error(f"Type d'erreur: {type(e).__name__}")
+                logger.error(f"Traceback complet:\n{traceback.format_exc()}")
                 email_errors.append(f"Email de confirmation: {str(e)}")
 
             # Email de notification au secrétariat avec template HTML
@@ -172,18 +174,34 @@ def inscriptions(requests):
                 
                 # Générer le HTML depuis le template
                 html_admin = render_to_string('index/emails/inscription_admin.html', email_context)
+                logger.info(f"Template admin rendu, longueur HTML: {len(html_admin)}")
                 
-                admin_message = Mail(
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    to_emails='secretariat.alloeubc@gmail.com',
-                    subject=subject_admin,
-                    html_content=html_admin
-                )
+                payload_admin = {
+                    "sender": {
+                        "name": settings.DEFAULT_FROM_NAME,
+                        "email": settings.DEFAULT_FROM_EMAIL
+                    },
+                    "to": [
+                        {"email": "secretariat.alloeubc@gmail.com", "name": "Secrétariat Alloeu BC"},
+                        {"email": "site.alloeubc@gmail.com", "name": "Site Alloeu BC"}
+                    ],
+                    "subject": subject_admin,
+                    "htmlContent": html_admin
+                }
                 
-                response = sg.send(admin_message)
-                logger.info(f"Email secrétariat envoyé avec succès - Status: {response.status_code}")
+                response = http_requests.post(brevo_url, json=payload_admin, headers=brevo_headers)
+                
+                if response.status_code == 201:
+                    logger.info(f"Email secrétariat envoyé - Status: {response.status_code}")
+                    logger.info(f"Message ID: {response.json().get('messageId')}")
+                else:
+                    logger.error(f"Erreur Brevo admin: {response.status_code} - {response.text}")
+                    email_errors.append(f"Email secrétariat: {response.text}")
             except Exception as e:
+                import traceback
                 logger.error(f"Erreur envoi email secrétariat: {str(e)}")
+                logger.error(f"Type d'erreur: {type(e).__name__}")
+                logger.error(f"Traceback complet:\n{traceback.format_exc()}")
                 email_errors.append(f"Email secrétariat: {str(e)}")
             
             # Afficher un message selon le résultat des emails

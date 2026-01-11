@@ -1,0 +1,212 @@
+{% extends 'index/base.html' %}
+{% load static %}
+
+{% block title %}Panel Admin - Inscriptions Soirée{% endblock %}
+
+{% block contain %}
+
+<style>
+    .status-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+    .status-en_attente {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+    .status-valide {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+    .status-refuse {
+        background-color: #fee2e2;
+        color: #991b1b;
+    }
+</style>
+
+<div class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        
+        <!-- En-tête -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800 font-primary">
+                        📋 Panel Admin - Inscriptions Soirée Festive
+                    </h1>
+                    <p class="text-gray-600 mt-2 font-secondary">
+                        Gérez les inscriptions à la soirée festive du club
+                    </p>
+                </div>
+                <div class="text-right">
+                    <a href="{% url 'index:index' %}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200">
+                        🏠 Retour à l'accueil
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-6">
+                {% for message in messages %}
+                    <div class="bg-{% if message.tags == 'error' %}red{% elif message.tags == 'success' %}green{% elif message.tags == 'warning' %}yellow{% else %}blue{% endif %}-100 border border-{% if message.tags == 'error' %}red{% elif message.tags == 'success' %}green{% elif message.tags == 'warning' %}yellow{% else %}blue{% endif %}-400 text-{% if message.tags == 'error' %}red{% elif message.tags == 'success' %}green{% elif message.tags == 'warning' %}yellow{% else %}blue{% endif %}-700 px-4 py-3 rounded relative mb-4" role="alert">
+                        <span class="block sm:inline">{{ message }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Statistiques -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm font-secondary">Total inscriptions</p>
+                        <p class="text-3xl font-bold text-gray-800">{{ total_inscriptions }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 mr-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm font-secondary">En attente</p>
+                        <p class="text-3xl font-bold text-gray-800">{{ inscriptions_en_attente }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm font-secondary">Validées</p>
+                        <p class="text-3xl font-bold text-gray-800">{{ inscriptions_validees }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liste des inscriptions -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-gray-800 font-primary">
+                    📝 Liste des inscriptions
+                </h2>
+            </div>
+
+            {% if inscriptions %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom / Prénom</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Personnes</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for inscription in inscriptions %}
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ inscription.date_inscription|date:"d/m/Y H:i" }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">
+                                            {{ inscription.prenom }} {{ inscription.nom }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        <div>📧 {{ inscription.email }}</div>
+                                        <div>📱 {{ inscription.telephone }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span class="font-bold">{{ inscription.nombre_personnes }}</span>
+                                        <button onclick="toggleDetails({{ inscription.id }})" class="ml-2 text-blue-600 hover:text-blue-800">
+                                            ℹ️ Détails
+                                        </button>
+                                        <div id="details-{{ inscription.id }}" class="hidden mt-2 p-2 bg-gray-50 rounded text-xs">
+                                            <ul class="list-disc list-inside">
+                                                {% for participant in inscription.participants.all %}
+                                                    <li>{{ participant.lien_club }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="status-badge status-{{ inscription.statut }}">
+                                            {% if inscription.statut == 'en_attente' %}⏳ En attente
+                                            {% elif inscription.statut == 'valide' %}✅ Validé
+                                            {% elif inscription.statut == 'refuse' %}❌ Refusé
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        {% if inscription.statut == 'en_attente' %}
+                                            <a href="{% url 'index:valider_inscription' inscription.id %}" 
+                                               class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2 transition duration-200"
+                                               onclick="return confirm('Valider cette inscription et envoyer l\'email à {{ inscription.prenom }} {{ inscription.nom }} ?');">
+                                                ✅ Valider
+                                            </a>
+                                            <a href="{% url 'index:refuser_inscription' inscription.id %}" 
+                                               class="inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-200"
+                                               onclick="return confirm('Refuser cette inscription de {{ inscription.prenom }} {{ inscription.nom }} ?');">
+                                                ❌ Refuser
+                                            </a>
+                                        {% elif inscription.statut == 'valide' %}
+                                            <span class="text-green-600 font-semibold">
+                                                Validé le {{ inscription.date_validation|date:"d/m/Y" }}
+                                            </span>
+                                        {% else %}
+                                            <span class="text-red-600 font-semibold">Refusé</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="px-6 py-12 text-center">
+                    <p class="text-gray-500 text-lg font-secondary">
+                        Aucune inscription pour le moment.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleDetails(id) {
+        const detailsDiv = document.getElementById('details-' + id);
+        if (detailsDiv.classList.contains('hidden')) {
+            detailsDiv.classList.remove('hidden');
+        } else {
+            detailsDiv.classList.add('hidden');
+        }
+    }
+</script>
+
+{% endblock %}

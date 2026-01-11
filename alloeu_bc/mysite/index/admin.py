@@ -5,6 +5,7 @@ from adminsortable2.admin import SortableAdminMixin
 from index.models import *
 
 @admin.register(CarrousselImages)
+@admin.register(InscriptionSoiree)
 class CarrousselImagesAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = ['ordre', 'image_preview', 'titre', 'sous_titre', 'has_button', 'position_texte']
     list_editable = ['titre', 'sous_titre']
@@ -176,3 +177,65 @@ class EquipesAdmin(SortableAdminMixin, admin.ModelAdmin):
             return mark_safe(f"<img src='{obj.photo.url}' style='height:50px;width:50px;object-fit:cover;border-radius:6px;' />")
         return '-'
     photo_preview.short_description = 'Photo'
+
+
+# Admin pour les inscriptions à la soirée festive
+class ParticipantSoireeInline(admin.TabularInline):
+    model = ParticipantSoiree
+    extra = 0
+    fields = ['lien_club']
+    verbose_name = "Participant"
+    verbose_name_plural = "Participants"
+
+
+@admin.register(InscriptionSoiree)
+class InscriptionSoireeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'nom', 'prenom', 'email', 'telephone', 'nombre_personnes', 'statut_badge', 'date_inscription']
+    list_filter = ['statut', 'date_inscription']
+    search_fields = ['nom', 'prenom', 'email', 'telephone']
+    readonly_fields = ['date_inscription', 'date_validation']
+    inlines = [ParticipantSoireeInline]
+    
+    fieldsets = (
+        ('Informations personnelles', {
+            'fields': ('nom', 'prenom', 'email', 'telephone')
+        }),
+        ('Inscription', {
+            'fields': ('nombre_personnes', 'statut', 'date_inscription', 'date_validation')
+        }),
+    )
+    
+    def statut_badge(self, obj):
+        colors = {
+            'en_attente': '#fbbf24',
+            'valide': '#10b981',
+            'refuse': '#ef4444'
+        }
+        labels = {
+            'en_attente': '⏳ En attente',
+            'valide': '✅ Validé',
+            'refuse': '❌ Refusé'
+        }
+        color = colors.get(obj.statut, '#6b7280')
+        label = labels.get(obj.statut, obj.statut)
+        return mark_safe(f'<span style="background-color: {color}; color: white; padding: 4px 12px; border-radius: 12px; font-weight: bold;">{label}</span>')
+    statut_badge.short_description = 'Statut'
+    
+    actions = ['valider_inscriptions']
+    
+    def valider_inscriptions(self, request, queryset):
+        from django.utils import timezone
+        from .email_service import BrevoEmailService
+        
+        count = 0
+        for inscription in queryset.filter(statut='en_attente'):
+            inscription.statut = 'valide'
+            inscription.date_validation = timezone.now()
+            inscription.save()
+            
+            # Envoyer l'email de validation
+            BrevoEmailService.send_validation_email(inscription)
+            count += 1
+        
+        self.message_user(request, f"{count} inscription(s) validée(s) et email(s) envoyé(s).")
+    valider_inscriptions.short_description = "Valider les inscriptions sélectionnées"

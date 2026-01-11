@@ -227,3 +227,56 @@ class DocumentsDossierInscription(models.Model):
 
     def __str__(self):
         return f"{self.nom} / {os.path.basename(self.document.name)}"
+
+
+class InscriptionSoiree(models.Model):
+    """Modèle pour les inscriptions à la soirée festive"""
+    STATUT_CHOICES = [
+        ('en_attente', 'En attente'),
+        ('valide', 'Validé'),
+        ('refuse', 'Refusé'),
+    ]
+    
+    nom = models.CharField(max_length=100, verbose_name="Nom")
+    prenom = models.CharField(max_length=100, verbose_name="Prénom")
+    email = models.EmailField(verbose_name="Adresse email")
+    telephone = models.CharField(max_length=20, verbose_name="Numéro de téléphone")
+    nombre_personnes = models.PositiveIntegerField(verbose_name="Nombre de personnes")
+    statut = models.CharField(
+        max_length=20,
+        choices=STATUT_CHOICES,
+        default='en_attente',
+        verbose_name="Statut"
+    )
+    date_inscription = models.DateTimeField(auto_now_add=True, verbose_name="Date d'inscription")
+    date_validation = models.DateTimeField(null=True, blank=True, verbose_name="Date de validation")
+    
+    class Meta:
+        verbose_name = "Inscription soirée festive"
+        verbose_name_plural = "Inscriptions soirée festive"
+        ordering = ['-date_inscription']
+    
+    def __str__(self):
+        return f"{self.prenom} {self.nom} - {self.nombre_personnes} personne(s)"
+
+
+class ParticipantSoiree(models.Model):
+    """Modèle pour chaque participant d'une inscription"""
+    inscription = models.ForeignKey(
+        InscriptionSoiree,
+        on_delete=models.CASCADE,
+        related_name='participants',
+        verbose_name="Inscription"
+    )
+    lien_club = models.CharField(
+        max_length=200,
+        verbose_name="Lien avec le club",
+        help_text="Ex: Joueur, Parent, Entraîneur, Bénévole, etc."
+    )
+    
+    class Meta:
+        verbose_name = "Participant"
+        verbose_name_plural = "Participants"
+    
+    def __str__(self):
+        return f"{self.lien_club} - {self.inscription}"

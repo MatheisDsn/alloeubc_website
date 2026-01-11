@@ -342,9 +342,9 @@ def inscription_soiree(request):
             # Envoyer l'email de confirmation à l'inscrit
             BrevoEmailService.send_confirmation_email(inscription)
             
-            # Construire l'URL complète pour le panel admin Django
+            # Construire l'URL complète pour le panel admin
             admin_url = reverse('index:admin_soiree')
-            validation_url = request.build_absolute_uri('/admin/login/?next=' + admin_url)
+            validation_url = request.build_absolute_uri(admin_url)
             
             # Envoyer la notification aux admins
             BrevoEmailService.send_admin_notification(inscription, validation_url)

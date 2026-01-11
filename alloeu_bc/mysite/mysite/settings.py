@@ -145,6 +145,10 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 AUTH_USER_MODEL = 'accounts.User'
 
+# Configuration de l'authentification
+LOGIN_URL = '/admin/login'
+LOGIN_REDIRECT_URL = '/'
+
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [

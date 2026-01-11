@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription validée</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #27ae60;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            margin: -30px -30px 20px -30px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .success-icon {
+            font-size: 48px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .button {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        .button:hover {
+            background-color: #c0392b;
+        }
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .info-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #27ae60;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✅ Inscription Validée !</h1>
+            <p>Soirée Festive - Alloeu Basket Club</p>
+        </div>
+        
+        <div class="success-icon">🎉</div>
+        
+        <p>Bonjour {{ inscription.prenom }} {{ inscription.nom }},</p>
+        
+        <p><strong>Excellente nouvelle !</strong> Votre inscription à notre soirée festive a été validée.</p>
+        
+        <div class="info-box">
+            <p><strong>🎯 Prochaine étape :</strong></p>
+            <p>Pour finaliser votre inscription et réserver vos places, veuillez cliquer sur le bouton ci-dessous pour accéder au formulaire HelloAsso.</p>
+        </div>
+        
+        <div class="button-container">
+            <a href="{{ helloasso_url }}" class="button">
+                🔗 Finaliser mon inscription sur HelloAsso
+            </a>
+        </div>
+        
+        <p><strong>Rappel de votre inscription :</strong></p>
+        <ul>
+            <li>Nombre de personnes : <strong>{{ inscription.nombre_personnes }}</strong></li>
+            <li>Email de contact : {{ inscription.email }}</li>
+            <li>Téléphone : {{ inscription.telephone }}</li>
+        </ul>
+        
+        <p style="margin-top: 30px; background-color: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107;">
+            <strong>⚠️ Important :</strong> N'oubliez pas de compléter le formulaire HelloAsso pour confirmer définitivement votre participation. 
+            Sans cette étape, votre inscription ne sera pas finalisée.
+        </p>
+        
+        <p>Nous avons hâte de vous voir à notre soirée festive ! 🏀</p>
+        
+        <p>Si vous avez la moindre question, n'hésitez pas à nous contacter.</p>
+        
+        <p>Sportivement,<br>
+        <strong>L'équipe d'Alloeu Basket Club</strong></p>
+        
+        <div class="footer">
+            <p>Alloeu Basket Club<br>
+            Email : site.alloeubc@gmail.com<br>
+            Secrétariat : secretariat.alloeubc@gmail.com</p>
+        </div>
+    </div>
+</body>
+</html>

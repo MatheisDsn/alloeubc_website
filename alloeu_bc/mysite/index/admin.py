@@ -5,7 +5,6 @@ from adminsortable2.admin import SortableAdminMixin
 from index.models import *
 
 @admin.register(CarrousselImages)
-@admin.register(InscriptionSoiree)
 class CarrousselImagesAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = ['ordre', 'image_preview', 'titre', 'sous_titre', 'has_button', 'position_texte']
     list_editable = ['titre', 'sous_titre']

@@ -1,0 +1,108 @@
+{% extends 'index/base.html' %}
+{% load static %}
+
+{% block title %}Inscription réussie - Alloeu Basket Club{% endblock %}
+
+{% block contain %}
+
+<style>
+    .bg-basket {
+        background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    }
+    .success-card {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.95);
+    }
+</style>
+
+<div class="min-h-screen bg-basket py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        
+        <!-- Carte de succès -->
+        <div class="success-card rounded-2xl shadow-2xl p-8 md:p-12 text-center">
+            
+            <!-- Icône de succès -->
+            <div class="mb-8">
+                <div class="inline-flex items-center justify-center w-24 h-24 bg-green-100 rounded-full">
+                    <svg class="w-16 h-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Titre -->
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4 font-primary">
+                🎉 Inscription envoyée !
+            </h1>
+
+            <!-- Message principal -->
+            <div class="mb-8">
+                <p class="text-xl text-gray-700 mb-4 font-secondary">
+                    Merci pour votre inscription à notre soirée festive !
+                </p>
+                <p class="text-gray-600 font-secondary">
+                    Votre demande a bien été enregistrée et vous allez recevoir un email de confirmation dans quelques instants.
+                </p>
+            </div>
+
+            <!-- Étapes suivantes -->
+            <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-8 text-left">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 font-primary flex items-center">
+                    <span class="text-blue-500 mr-2">📋</span> Prochaines étapes
+                </h2>
+                <ol class="space-y-3 text-gray-700 font-secondary">
+                    <li class="flex items-start">
+                        <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">1</span>
+                        <span>Vérifiez votre boîte email (et les spams) pour l'email de confirmation</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">2</span>
+                        <span>Nous allons examiner votre inscription</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">3</span>
+                        <span><strong>Surveillez votre boîte mail :</strong> nous vous enverrons prochainement un email avec le lien pour finaliser votre inscription</span>
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Alerte importante -->
+            <div class="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-6 mb-8">
+                <div class="flex items-start">
+                    <span class="text-3xl mr-3">⚠️</span>
+                    <div class="text-left">
+                        <h3 class="font-bold text-gray-800 mb-2 font-primary">Important</h3>
+                        <p class="text-gray-700 text-sm font-secondary">
+                            N'oubliez pas de <strong>vérifier régulièrement votre boîte mail</strong> (y compris les courriers indésirables). 
+                            Une fois votre inscription validée, vous recevrez un email avec un lien pour compléter votre inscription sur HelloAsso.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="space-y-4">
+                <a href="{% url 'index:index' %}" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-200 shadow-lg">
+                    🏠 Retour à l'accueil
+                </a>
+            </div>
+
+            <!-- Informations de contact -->
+            <div class="mt-8 pt-8 border-t-2 border-gray-200">
+                <p class="text-gray-600 text-sm font-secondary">
+                    Une question ? Contactez-nous à<br>
+                    <a href="mailto:site.alloeubc@gmail.com" class="text-green-600 font-bold hover:underline">site.alloeubc@gmail.com</a>
+                    ou
+                    <a href="mailto:secretariat.alloeubc@gmail.com" class="text-green-600 font-bold hover:underline">secretariat.alloeubc@gmail.com</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Logo en bas -->
+        <div class="text-center mt-8">
+            <img src="{% static 'index/assets/img/logo_alloeu.png' %}" alt="Logo Alloeu BC" class="h-20 w-20 mx-auto opacity-90">
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,12 +1,17 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.urls import reverse, NoReverseMatch
 from django.contrib import messages
 from django.template.loader import render_to_string
-from .models import CarrousselImages, FAQ, Organisation_card, Entrainement, Tarifs, PartenairesSponsor, DocumentsFonctionnement, Equipes, DocumentsDossierInscription
+from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from .models import (CarrousselImages, FAQ, Organisation_card, Entrainement, Tarifs, 
+                     PartenairesSponsor, DocumentsFonctionnement, Equipes, 
+                     DocumentsDossierInscription, InscriptionSoiree, ParticipantSoiree)
 from annonces.models import Annonce
 from .services import get_next_matches, get_last_results
-from .forms import InscriptionForm
+from .forms import InscriptionForm, InscriptionSoireeForm
+from .email_service import BrevoEmailService
 import logging
 import requests as http_requests
 from datetime import datetime
@@ -308,3 +313,131 @@ def matches(request):
 
 def mentions_legales(request):
     return render(request, 'index/mentions_legales.html')
+
+
+def inscription_soiree(request):
+    """Vue pour le formulaire d'inscription à la soirée festive"""
+    if request.method == 'POST':
+        form = InscriptionSoireeForm(request.POST)
+        
+        if form.is_valid():
+            # Créer l'inscription
+            inscription = InscriptionSoiree.objects.create(
+                nom=form.cleaned_data['nom'],
+                prenom=form.cleaned_data['prenom'],
+                email=form.cleaned_data['email'],
+                telephone=form.cleaned_data['telephone'],
+                nombre_personnes=form.cleaned_data['nombre_personnes']
+            )
+            
+            # Créer les participants
+            for i in range(1, form.cleaned_data['nombre_personnes'] + 1):
+                lien_club = form.cleaned_data.get(f'lien_club_{i}', '')
+                if lien_club:
+                    ParticipantSoiree.objects.create(
+                        inscription=inscription,
+                        lien_club=lien_club
+                    )
+            
+            # Envoyer l'email de confirmation à l'inscrit
+            BrevoEmailService.send_confirmation_email(inscription)
+            
+            # Construire l'URL complète pour le panel admin Django
+            admin_url = reverse('index:admin_soiree')
+            validation_url = request.build_absolute_uri('/admin/login/?next=' + admin_url)
+            
+            # Envoyer la notification aux admins
+            BrevoEmailService.send_admin_notification(inscription, validation_url)
+            
+            messages.success(
+                request,
+                "Votre inscription a bien été enregistrée ! Vous allez recevoir un email de confirmation."
+            )
+            return redirect('index:inscription_soiree_success')
+        else:
+            messages.error(
+                request,
+                "Une erreur s'est produite. Veuillez vérifier les informations saisies."
+            )
+    else:
+        # Récupérer le nombre de personnes depuis GET si présent
+        nombre_personnes = request.GET.get('nombre_personnes')
+        initial_data = {}
+        if nombre_personnes:
+            try:
+                initial_data['nombre_personnes'] = int(nombre_personnes)
+            except (ValueError, TypeError):
+                pass
+        
+        form = InscriptionSoireeForm(initial=initial_data)
+    
+    context = {
+        'form': form,
+    }
+    return render(request, 'index/inscription_soiree.html', context)
+
+
+def inscription_soiree_success(request):
+    """Page de confirmation après inscription"""
+    return render(request, 'index/inscription_soiree_success.html')
+
+
+@login_required
+def admin_soiree(request):
+    """Panel admin pour gérer les inscriptions"""
+    inscriptions = InscriptionSoiree.objects.all().prefetch_related('participants')
+    
+    # Calculer les statistiques
+    total_inscriptions = inscriptions.count()
+    inscriptions_en_attente = inscriptions.filter(statut='en_attente').count()
+    inscriptions_validees = inscriptions.filter(statut='valide').count()
+    
+    context = {
+        'inscriptions': inscriptions,
+        'total_inscriptions': total_inscriptions,
+        'inscriptions_en_attente': inscriptions_en_attente,
+        'inscriptions_validees': inscriptions_validees,
+    }
+    return render(request, 'index/admin_soiree.html', context)
+
+
+@login_required
+def valider_inscription(request, inscription_id):
+    """Valider une inscription et envoyer l'email avec le lien HelloAsso"""
+    inscription = get_object_or_404(InscriptionSoiree, id=inscription_id)
+    
+    if inscription.statut != 'valide':
+        inscription.statut = 'valide'
+        inscription.date_validation = timezone.now()
+        inscription.save()
+        
+        # Envoyer l'email de validation avec le lien HelloAsso
+        BrevoEmailService.send_validation_email(inscription)
+        
+        messages.success(
+            request,
+            f"L'inscription de {inscription.prenom} {inscription.nom} a été validée et un email lui a été envoyé."
+        )
+    else:
+        messages.info(
+            request,
+            f"L'inscription de {inscription.prenom} {inscription.nom} était déjà validée."
+        )
+    
+    return redirect('index:admin_soiree')
+
+
+@login_required
+def refuser_inscription(request, inscription_id):
+    """Refuser une inscription"""
+    inscription = get_object_or_404(InscriptionSoiree, id=inscription_id)
+    
+    inscription.statut = 'refuse'
+    inscription.save()
+    
+    messages.warning(
+        request,
+        f"L'inscription de {inscription.prenom} {inscription.nom} a été refusée."
+    )
+    
+    return redirect('index:admin_soiree')

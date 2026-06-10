@@ -7,8 +7,6 @@ __pycache__/
 
 # Environnements
 .env
-.env.*
-!.env.example
 venv/
 .envrc
 

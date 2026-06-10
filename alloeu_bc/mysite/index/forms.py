@@ -92,7 +92,7 @@ class InscriptionForm(forms.Form):
     birth_date = forms.DateField(
         label="Date de naissance",
         widget=forms.DateInput(format="%d/%m/%Y", attrs={
-            "type": "date",  # HTML5 date input utilise toujours YYYY-MM-DD en interne
+            "type": "date",
             "class": "w-full rounded-lg border-gray-300 font-secondary focus:border-primary-500 focus:ring-primary-500",
         }),
     )
@@ -118,10 +118,20 @@ class InscriptionForm(forms.Form):
             "class": "h-4 w-4 text-primary-600 border-gray-300 rounded",
         }),
     )
+    
+    # NOUVEAU CHAMP AJOUTÉ ICI
+    vu_avec_coach = forms.BooleanField(
+        label="J'ai déjà vu avec le coach",
+        required=False, # Laisse à False si ce n'est pas strictement obligatoire pour envoyer le formulaire
+        widget=forms.CheckboxInput(attrs={
+            "class": "h-4 w-4 text-primary-600 border-gray-300 rounded",
+        }),
+    )
 
+    # MODIFICATION DE LA LIGNE "loisir"
     PARTICIPATION_CHOICES = (
         ("competition", "Jouer en compétition"),
-        ("loisir", "Jouer en loisir"),
+        ("loisir", "Jouer en loisir (18 ans minimum)"), 
         ("entrainer", "Entraîner une équipe"),
         ("arbitrer", "Arbitrer"),
         ("officier", "Officier hors arbitrage"),

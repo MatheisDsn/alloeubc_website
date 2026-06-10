@@ -158,15 +158,7 @@
                 Matchs
               </a>
 
-              <a
-                href="{% url 'annonces:list' %}"
-                class="{% if request.resolver_match.url_name == 'list' %}text-primary-600 border-b-2 border-primary-500{% else %}text-secondary-700 hover:text-primary-600{% endif %} px-3 py-2 text-sm font-medium transition-all duration-200"
-              >
-                Annonces
-              </a>
 
-            </div>
-          </div>
 
           <!-- Espace pour équilibrer (remplace le bouton boutique) -->
           <!-- <div class="flex-shrink-0 w-32">
@@ -229,12 +221,6 @@
               class="{% if request.resolver_match.url_name == 'partenaires' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
             >
               Partenaires
-            </a>
-            <a
-              href="{% url 'annonces:list' %}"
-              class="{% if request.resolver_match.url_name == 'list' %}text-primary-600 bg-primary-50{% else %}text-secondary-700 hover:text-primary-600 hover:bg-gray-50{% endif %} block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200"
-            >
-              Annonces
             </a>
             <a
               href="{% url 'index:matches' %}"
@@ -490,13 +476,6 @@
                 href="{% url 'index:mentions_legales' %}"
                 class="hover:underline me-4 md:me-6"
                 >Mentions légales</a
-              >
-            </li>
-            <li>
-              <a
-                href="{% url 'annonces:list' %}"
-                class="hover:underline me-4 md:me-6"
-                >Annonces</a
               >
             </li>
             <li>

@@ -8,7 +8,6 @@ from django.utils import timezone
 from .models import (CarrousselImages, FAQ, Organisation_card, Entrainement, Tarifs, 
                      PartenairesSponsor, DocumentsFonctionnement, Equipes, 
                      DocumentsDossierInscription, InscriptionSoiree, ParticipantSoiree)
-from annonces.models import Annonce
 from .services import get_next_matches, get_last_results
 from .forms import InscriptionForm, InscriptionSoireeForm
 from .email_service import BrevoEmailService
@@ -43,8 +42,6 @@ def index(requests):
         "FAQ": FAQ.objects.all().order_by('ordre'),
         "next_matches": next_matches,
         "last_results": last_results,
-        # 1 ligne d'annonces (max 3)
-        "home_annonces": Annonce.objects.filter(is_published=True).order_by('-created_at')[:3],
     # Formulaire d'inscription sur la page d'accueil
     "home_inscription_form": InscriptionForm(),
     }
@@ -78,6 +75,9 @@ def inscriptions(requests):
             phone = form.cleaned_data['phone']
             licensed_before = form.cleaned_data.get('licensed_before') or False
             participation_roles = form.cleaned_data.get('participation_roles') or []
+            
+            # NOUVEAU : Récupération du champ vu avec le coach
+            vu_avec_coach = form.cleaned_data.get('vu_avec_coach') or False
 
             # Email de confirmation au sportif
             subject_user = "Confirmation d'inscription - Alloeu Basket Club"
@@ -125,6 +125,7 @@ def inscriptions(requests):
                 choices_map = dict(form.fields['participation_roles'].choices)
                 roles_labels = [choices_map.get(r, r) for r in participation_roles]
 
+            # NOUVEAU : On ajoute vu_avec_coach_text au contexte
             email_context = {
                 'full_name': full_name,
                 'sexe_label': sexe_label,
@@ -132,6 +133,7 @@ def inscriptions(requests):
                 'email': email,
                 'phone': phone,
                 'licensed_before_text': 'Oui' if licensed_before else 'Non',
+                'vu_avec_coach_text': 'Oui' if vu_avec_coach else 'Non', # AJOUT ICI
                 'participation_roles': roles_labels,
                 'current_date': current_datetime.strftime('%d/%m/%Y'),
                 'current_time': current_datetime.strftime('%H:%M'),
@@ -217,24 +219,23 @@ def inscriptions(requests):
                 messages.success(requests, "Votre demande d'inscription a été envoyée avec succès ! Vous allez recevoir un email de confirmation.")
 
             return redirect('index:index')
+            
         # Form invalide: on laisse afficher les erreurs
         return render(requests, 'index/accueil.html', {
             "home_inscription_form": form,
-            # Ajouter contenus minimaux pour éviter erreurs template si attendu
             "sliders": CarrousselImages.objects.all().order_by('ordre'),
             "FAQ": FAQ.objects.all().order_by('ordre'),
-            "home_annonces": Annonce.objects.filter(is_published=True).order_by('-created_at')[:3],
             "next_matches": get_next_matches(limit=7),
             "last_results": get_last_results(limit=7),
         })
     else:
         form = InscriptionForm()
+        
     # GET request: ré-afficher la page d'accueil avec le formulaire
     return render(requests, 'index/accueil.html', {
         "home_inscription_form": form,
         "sliders": CarrousselImages.objects.all().order_by('ordre'),
         "FAQ": FAQ.objects.all().order_by('ordre'),
-        "home_annonces": Annonce.objects.filter(is_published=True).order_by('-created_at')[:3],
         "next_matches": get_next_matches(limit=7),
         "last_results": get_last_results(limit=7),
     })

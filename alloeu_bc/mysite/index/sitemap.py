@@ -17,9 +17,7 @@ class StaticViewSitemap(Sitemap):
             "index:lesequipes",
             "index:partenaires",
             "index:matches",
-            "annonces:list",
             "news:article_list",
-            "boutique:index",
         ]
 
     def location(self, item):

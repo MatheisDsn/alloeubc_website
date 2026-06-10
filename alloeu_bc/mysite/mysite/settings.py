@@ -1,8 +1,12 @@
 from pathlib import Path
 import os   
 import dj_database_url
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables from .env file
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv("CLOUD_NAME"),
@@ -13,10 +17,10 @@ CLOUDINARY_STORAGE = {
 }
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-SECRET_KEY = os.getenv("API_SECRET")
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [".onrender.com", "127.0.0.1"]
 
@@ -33,7 +37,6 @@ INSTALLED_APPS = [
     "tailwind",
     "theme",
     'django_browser_reload',
-    'boutique',
     'accounts',
     'adminsortable2',
     'analytics',
@@ -41,7 +44,6 @@ INSTALLED_APPS = [
     'cloudinary',
     'cloudinary_storage',
     "django.contrib.sitemaps",
-    'annonces',
 ]
 
 MIDDLEWARE = [
@@ -132,7 +134,7 @@ TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
-NPM_BIN_PATH = "C:\Program Files\\nodejs\\npm.cmd"
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 
 
 # EMAIL CONFIG with Brevo

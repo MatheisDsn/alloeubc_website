@@ -16,7 +16,7 @@ def signup(request):
         user.save()
         login(request, user)
         messages.success(request, "Vous êtes bien connecté.")
-        return redirect("boutique:index")
+        return redirect("index:index")
     else:       
         return render(request, "accounts/signup.html")
 
@@ -28,7 +28,7 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
-            return redirect("boutique:index")
+            return redirect("index:index")
         else:
             messages.error(request, "Erreur : Email ou mot de passe incorrect")
             return redirect("accounts:connexion")
@@ -37,4 +37,4 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    return redirect('boutique:index')
+    return redirect('index:index')

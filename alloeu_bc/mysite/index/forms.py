@@ -132,6 +132,7 @@ class InscriptionForm(forms.Form):
     PARTICIPATION_CHOICES = (
         ("competition", "Jouer en compétition"),
         ("loisir", "Jouer en loisir (18 ans minimum)"), 
+        ("loisir_maman", "Jouer en loisir feminin"),
         ("entrainer", "Entraîner une équipe"),
         ("arbitrer", "Arbitrer"),
         ("officier", "Officier hors arbitrage"),

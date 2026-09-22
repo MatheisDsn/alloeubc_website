@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     "index",
     "tailwind",
     "theme",
-    'django_browser_reload',
     'accounts',
     'adminsortable2',
     'analytics',

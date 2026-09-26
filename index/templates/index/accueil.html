@@ -11,8 +11,6 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
 
 <!-- Hero Section avec Carrousel Swiper -->
 <section class="relative w-full overflow-hidden">
-  <!-- ...logo superposé retiré... -->
-
   <!-- Swiper Carrousel -->
   <div class="swiper heroSwiper" style="cursor:grab;">
     <div class="swiper-wrapper">
@@ -134,158 +132,35 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
 <!-- Style pour les scrollbars personnalisées et carrousel -->
 <style>
   /* Scrollbar webkit pour navigateurs webkit */
-  .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  .scrollbar-thin::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 3px;
-  }
-  
-  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
-  
-  /* Support Firefox */
-  .scrollbar-thin {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-  }
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 3px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
+  .scrollbar-thin { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.2) transparent; }
 
-  /* Styles pour le carrousel dynamique */
-  
-  /* Positionnement du contenu */
-  .carrousel-content-center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-  
-  .carrousel-content-left {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    text-align: left;
-    padding-left: 2rem;
-  }
-  
-  .carrousel-content-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-    text-align: right;
-    padding-right: 2rem;
-  }
-  
-  .carrousel-content-bottom-left {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-end;
-    text-align: left;
-    padding-left: 2rem;
-    padding-bottom: 3rem;
-  }
-  
-  .carrousel-content-bottom-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: flex-end;
-    text-align: right;
-    padding-right: 2rem;
-    padding-bottom: 3rem;
-  }
-  
-  .carrousel-content-top-left {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    text-align: left;
-    padding-left: 2rem;
-    padding-top: 3rem;
-  }
-  
-  .carrousel-content-top-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: flex-start;
-    text-align: right;
-    padding-right: 2rem;
-    padding-top: 3rem;
-  }
+  /* Styles carrousel */
+  .carrousel-content-center { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .carrousel-content-left { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; text-align: left; padding-left: 2rem; }
+  .carrousel-content-right { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; text-align: right; padding-right: 2rem; }
+  .carrousel-content-bottom-left { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; text-align: left; padding-left: 2rem; padding-bottom: 3rem; }
+  .carrousel-content-bottom-right { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; text-align: right; padding-right: 2rem; padding-bottom: 3rem; }
+  .carrousel-content-top-left { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; text-align: left; padding-left: 2rem; padding-top: 3rem; }
+  .carrousel-content-top-right { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start; text-align: right; padding-right: 2rem; padding-top: 3rem; }
 
-  /* Couleurs de texte */
-  .carrousel-text-white {
-    color: white;
-  }
-  
-  .carrousel-text-black {
-    color: #1f2937;
-  }
-  
-  .carrousel-text-primary {
-    color: #3b82f6;
-  }
+  .carrousel-text-white { color: white; }
+  .carrousel-text-black { color: #1f2937; }
+  .carrousel-text-primary { color: #3b82f6; }
 
-  /* Boutons avec couleurs adaptatives */
-  .carrousel-button-white {
-    background: rgba(255, 255, 255, 0.15);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    color: white;
-  }
-  
-  .carrousel-button-white:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.5);
-    color: white;
-  }
-  
-  .carrousel-button-black {
-    background: rgba(0, 0, 0, 0.8);
-    border: 2px solid rgba(0, 0, 0, 0.9);
-    color: white;
-  }
-  
-  .carrousel-button-black:hover {
-    background: rgba(0, 0, 0, 0.9);
-    border-color: rgba(0, 0, 0, 1);
-    color: white;
-  }
-  
-  .carrousel-button-primary {
-    background: #3b82f6;
-    border: 2px solid #2563eb;
-    color: white;
-  }
-  
-  .carrousel-button-primary:hover {
-    background: #2563eb;
-    border-color: #1d4ed8;
-    color: white;
-  }
+  .carrousel-button-white { background: rgba(255, 255, 255, 0.15); border: 2px solid rgba(255, 255, 255, 0.3); color: white; }
+  .carrousel-button-white:hover { background: rgba(255, 255, 255, 0.25); border-color: rgba(255, 255, 255, 0.5); color: white; }
+  .carrousel-button-black { background: rgba(0, 0, 0, 0.8); border: 2px solid rgba(0, 0, 0, 0.9); color: white; }
+  .carrousel-button-black:hover { background: rgba(0, 0, 0, 0.9); border-color: rgba(0, 0, 0, 1); color: white; }
+  .carrousel-button-primary { background: #3b82f6; border: 2px solid #2563eb; color: white; }
+  .carrousel-button-primary:hover { background: #2563eb; border-color: #1d4ed8; color: white; }
 
-  /* Animations pour le carrousel */
   @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   
   .swiper-slide-active .carrousel-content-center > *,
@@ -298,17 +173,9 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
     animation: fadeInUp 0.8s ease-out forwards;
   }
   
-  .swiper-slide-active .carrousel-content-center > *:nth-child(2) {
-    animation-delay: 0.2s;
-  }
-  
-  .swiper-slide-active .carrousel-content-center > *:nth-child(3) {
-    animation-delay: 0.4s;
-  }
-  
-  .swiper-slide-active .carrousel-content-center > *:nth-child(4) {
-    animation-delay: 0.6s;
-  }
+  .swiper-slide-active .carrousel-content-center > *:nth-child(2) { animation-delay: 0.2s; }
+  .swiper-slide-active .carrousel-content-center > *:nth-child(3) { animation-delay: 0.4s; }
+  .swiper-slide-active .carrousel-content-center > *:nth-child(4) { animation-delay: 0.6s; }
 </style>
 
 <!-- Section Inscription (début de page) -->
@@ -335,6 +202,28 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
       <div>
         <form method="post" action="{% url 'index:inscriptions' %}" class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
           {% csrf_token %}
+
+          <!-- BANDEAU D'ALERTE PERMANENT SUR LA PROCÉDURE D'INSCRIPTION -->
+          <div class="mb-8 bg-blue-50 border-l-4 border-primary-500 p-4 rounded-r-lg">
+            <div class="flex items-start">
+              <div class="flex-shrink-0 mt-0.5">
+                <svg class="h-5 w-5 text-primary-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3">
+                <h3 class="text-sm font-bold text-primary-800 font-secondary">Étape 1 sur 2 : Pré-inscription</h3>
+                <div class="mt-2 text-sm text-primary-700 font-tertiary leading-relaxed">
+                  <p>Attention : Ce formulaire ne finalise pas votre inscription. <strong>Après soumission :</strong></p>
+                  <ul class="list-disc pl-4 mt-1 space-y-1">
+                    <li>Vous recevrez un mail de la fédération (FFBB) pour créer votre licence officielle.</li>
+                    <li>L'inscription ne sera définitive qu'une fois votre licence validée et votre accès à <b>SportEasy (SE)</b> confirmé.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="grid grid-cols-1 gap-5">
             <div>
               <label for="id_full_name" class="block text-sm font-medium text-secondary-700 mb-1">Nom et prénom</label>
@@ -369,8 +258,9 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
               <p class="block text-sm font-medium text-secondary-700 mb-2">Souhait(s) au club</p>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {% for cb in home_inscription_form.participation_roles %}
-                  <label class="flex items-start gap-2 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 hover:bg-gray-100 text-sm text-secondary-800">
-                    {{ cb.tag }} {{ cb.choice_label }}
+                  <label class="flex items-start gap-2 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 hover:bg-gray-100 text-sm text-secondary-800 cursor-pointer">
+                    <div class="mt-0.5">{{ cb.tag }}</div>
+                    <span>{{ cb.choice_label }}</span>
                   </label>
                 {% endfor %}
               </div>
@@ -383,7 +273,7 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
             </div>
           </div>
           <div class="mt-6 flex items-center gap-4">
-            <button type="submit" class="inline-flex items-center px-6 py-3 rounded-xl bg-primary-600 text-white hover:bg-primary-700 font-secondary">Je m'inscris</button>
+            <button type="submit" class="inline-flex items-center px-6 py-3 rounded-xl bg-primary-600 text-white hover:bg-primary-700 font-secondary transition-all">Je m'inscris</button>
           </div>
         </form>
       </div>
@@ -403,13 +293,11 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
     const originalHTML = submitBtn.innerHTML;
     
     form.addEventListener('submit', function(e) {
-      if (submitBtn.disabled) return; // Already submitting
+      if (submitBtn.disabled) return; 
       
-      // Désactiver le bouton et changer l'apparence
+      // Désactiver le bouton
       submitBtn.disabled = true;
       submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
-      
-      // Ajouter une animation de chargement avec icône
       submitBtn.innerHTML = `
         <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -418,94 +306,61 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
         Envoi en cours...
       `;
       
-      // Afficher une notification immédiate
-      showInstantNotification();
+      // Afficher un bel overlay centré de chargement (façon Vuexy)
+      showCenteredLoadingOverlay();
       
-      // Timeout de sécurité de 30 secondes
       setTimeout(() => {
         if (submitBtn.disabled) {
           submitBtn.disabled = false;
           submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
           submitBtn.innerHTML = originalHTML;
-          showErrorNotification('Délai d\'attente dépassé. Veuillez réessayer.');
+          removeCenteredLoadingOverlay();
+          // Fallback d'erreur si timeout
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'error',
+              title: 'Délai d\'attente dépassé',
+              text: 'Veuillez réessayer de soumettre le formulaire.',
+              confirmButtonColor: '#3b82f6',
+              customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-xl px-6 py-3 font-semibold' }
+            });
+          }
         }
       }, 30000);
     });
     
-    // Fonction pour afficher une notification immédiate
-    function showInstantNotification() {
-      const notification = document.createElement('div');
-      notification.className = 'fixed top-4 right-4 z-[100] max-w-sm bg-blue-500 text-white rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 ease-out';
-      notification.innerHTML = `
-        <div class="flex items-center p-4">
-          <div class="flex-shrink-0">
-            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    function showCenteredLoadingOverlay() {
+      const overlay = document.createElement('div');
+      overlay.id = 'loading-overlay';
+      overlay.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-gray-900/40 backdrop-blur-sm transition-opacity opacity-0 duration-300';
+      overlay.innerHTML = `
+        <div class="bg-white rounded-2xl p-8 max-w-sm w-full mx-4 shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col items-center text-center border border-gray-100">
+          <div class="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mb-5">
+            <svg class="animate-spin w-8 h-8 text-primary-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           </div>
-          <div class="ml-3">
-            <p class="text-sm font-medium">
-              Envoi de votre demande d'inscription...
-            </p>
-          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2 font-primary">Traitement en cours...</h3>
+          <p class="text-gray-500 font-secondary text-sm">Veuillez patienter pendant l'envoi de votre demande au secrétariat.</p>
         </div>
       `;
+      document.body.appendChild(overlay);
       
-      document.body.appendChild(notification);
-      
-      // Animation d'entrée
-      setTimeout(() => {
-        notification.classList.remove('translate-x-full');
-        notification.classList.add('translate-x-0');
-      }, 100);
-      
-      // Cette notification sera automatiquement remplacée par le message Django
-      // ou supprimée si l'envoi prend trop de temps
-      setTimeout(() => {
-        if (notification.parentNode) {
-          notification.classList.add('translate-x-full');
-          setTimeout(() => {
-            if (notification.parentNode) {
-              notification.parentNode.removeChild(notification);
-            }
-          }, 300);
-        }
-      }, 10000);
+      // Déclencher l'animation
+      requestAnimationFrame(() => {
+        overlay.classList.remove('opacity-0');
+        overlay.querySelector('div').classList.remove('scale-95');
+        overlay.querySelector('div').classList.add('scale-100');
+      });
     }
-    
-    // Fonction pour afficher une erreur de timeout
-    function showErrorNotification(message) {
-      const notification = document.createElement('div');
-      notification.className = 'fixed top-4 right-4 z-[100] max-w-sm bg-red-500 text-white rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 ease-out';
-      notification.innerHTML = `
-        <div class="flex items-center p-4">
-          <div class="flex-shrink-0">
-            <svg class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-            </svg>
-          </div>
-          <div class="ml-3">
-            <p class="text-sm font-medium">${message}</p>
-          </div>
-        </div>
-      `;
-      
-      document.body.appendChild(notification);
-      
-      setTimeout(() => {
-        notification.classList.remove('translate-x-full');
-        notification.classList.add('translate-x-0');
-      }, 100);
-      
-      setTimeout(() => {
-        notification.classList.add('translate-x-full');
-        setTimeout(() => {
-          if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
-          }
-        }, 300);
-      }, 5000);
+
+    function removeCenteredLoadingOverlay() {
+      const overlay = document.getElementById('loading-overlay');
+      if (overlay) {
+        overlay.classList.add('opacity-0');
+        setTimeout(() => overlay.remove(), 300);
+      }
     }
   })();
 </script>
@@ -1172,7 +1027,6 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
 <script>
 // JavaScript optimisé pour la FAQ avec animations fluides et correction des bugs
 document.addEventListener('DOMContentLoaded', function() {
-  // Fonction utilitaire pour calculer la hauteur réelle
   function getScrollHeight(element) {
     const clone = element.cloneNode(true);
     clone.style.position = 'absolute';
@@ -1185,16 +1039,13 @@ document.addEventListener('DOMContentLoaded', function() {
     return height;
   }
 
-  // Fermer tous les autres éléments FAQ
   function closeAllFAQ(except = null) {
     const allButtons = document.querySelectorAll('[id^="question"]');
     allButtons.forEach((button, index) => {
       if (button === except) return;
-      
       const questionNumber = index + 1;
       const answer = document.getElementById('answer' + questionNumber);
       const arrow = document.getElementById('arrow' + questionNumber);
-      
       if (button.getAttribute('aria-expanded') === 'true') {
         answer.style.maxHeight = '0px';
         arrow.style.transform = 'rotate(0deg)';
@@ -1204,9 +1055,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Initialisation des boutons FAQ
   const faqButtons = document.querySelectorAll('[id^="question"]');
-  
   faqButtons.forEach(function(button, index) {
     button.addEventListener('click', function() {
       const questionNumber = index + 1;
@@ -1215,35 +1064,22 @@ document.addEventListener('DOMContentLoaded', function() {
       const isExpanded = button.getAttribute('aria-expanded') === 'true';
       
       if (isExpanded) {
-        // Fermer l'élément actuel
         answer.style.maxHeight = '0px';
         arrow.style.transform = 'rotate(0deg)';
         button.setAttribute('aria-expanded', 'false');
         button.setAttribute('data-state', 'closed');
       } else {
-        // Fermer tous les autres éléments d'abord
         closeAllFAQ(button);
-        
-        // Calculer et appliquer la hauteur correcte
         const scrollHeight = getScrollHeight(answer);
-        
-        // Ouvrir l'élément actuel
-        answer.style.maxHeight = scrollHeight + 20 + 'px'; // +20px pour la marge
+        answer.style.maxHeight = scrollHeight + 20 + 'px';
         arrow.style.transform = 'rotate(180deg)';
         button.setAttribute('aria-expanded', 'true');
         button.setAttribute('data-state', 'open');
-        
-        // Scroll fluide vers l'élément ouvert
         setTimeout(() => {
-          button.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest'
-          });
+          button.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }, 200);
       }
     });
-
-    // Support clavier (accessibilité)
     button.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -1252,7 +1088,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Recalculer les hauteurs lors du redimensionnement
   let resizeTimeout;
   window.addEventListener('resize', function() {
     clearTimeout(resizeTimeout);
@@ -1272,165 +1107,57 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <style>
 /* Styles modernisés pour la FAQ avec corrections des bugs d'affichage */
-.faq-answer {
-  transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-  max-height: 0;
-  overflow: hidden;
-}
-
-.faq-paragraph {
-  position: relative;
-  overflow: hidden;
-}
-
-.faq-paragraph::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #3B82F6, #6366F1, #8B5CF6);
-  border-radius: 1rem 1rem 0 0;
-  opacity: 0.7;
-}
-
-/* Animations d'entrée pour les éléments FAQ */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.container > div:nth-child(2) > div {
-  animation: fadeInUp 0.6s ease-out;
-  animation-fill-mode: both;
-}
-
+.faq-answer { transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1); max-height: 0; overflow: hidden; }
+.faq-paragraph { position: relative; overflow: hidden; }
+.faq-paragraph::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #3B82F6, #6366F1, #8B5CF6); border-radius: 1rem 1rem 0 0; opacity: 0.7; }
+.container > div:nth-child(2) > div { animation: fadeInUp 0.6s ease-out; animation-fill-mode: both; }
 .container > div:nth-child(2) > div:nth-child(1) { animation-delay: 0.1s; }
 .container > div:nth-child(2) > div:nth-child(2) { animation-delay: 0.2s; }
 .container > div:nth-child(2) > div:nth-child(3) { animation-delay: 0.3s; }
 .container > div:nth-child(2) > div:nth-child(4) { animation-delay: 0.4s; }
 .container > div:nth-child(2) > div:nth-child(5) { animation-delay: 0.5s; }
 .container > div:nth-child(2) > div:nth-child(6) { animation-delay: 0.6s; }
-
-/* Styles pour la prose dans les réponses */
-.prose p {
-  margin-bottom: 1rem;
-}
-
-.prose p:last-child {
-  margin-bottom: 0;
-}
-
-/* Amélioration du focus pour l'accessibilité */
-button:focus-visible {
-  outline: 3px solid rgb(59 130 246 / 0.5);
-  outline-offset: 2px;
-}
-
-/* Animation du gradient de fond */
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.bg-gradient-to-r {
-  background-size: 200% 200%;
-  animation: gradientShift 8s ease-in-out infinite;
-}
-
-/* Styles responsive améliorés */
-@media (max-width: 768px) {
-  .faq-paragraph {
-    padding: 1.5rem;
-    margin-left: 0;
-  }
-  
-  [id^="question"] .flex.items-start {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  [id^="question"] .w-10.h-10 {
-    align-self: flex-start;
-  }
-}
-
-/* Styles pour le scroll horizontal */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-/* Smooth scroll behavior */
-.scroll-smooth {
-  scroll-behavior: smooth;
-}
+.prose p { margin-bottom: 1rem; }
+.prose p:last-child { margin-bottom: 0; }
+button:focus-visible { outline: 3px solid rgb(59 130 246 / 0.5); outline-offset: 2px; }
+@keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+.bg-gradient-to-r { background-size: 200% 200%; animation: gradientShift 8s ease-in-out infinite; }
+@media (max-width: 768px) { .faq-paragraph { padding: 1.5rem; margin-left: 0; } [id^="question"] .flex.items-start { flex-direction: column; gap: 1rem; } [id^="question"] .w-10.h-10 { align-self: flex-start; } }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scroll-smooth { scroll-behavior: smooth; }
 </style>
 
 <script>
-// Fonction pour gérer le scroll horizontal des matchs
 function scrollMatches(section, direction) {
   const containerId = section === 'next' ? 'next-matches-container' : 'results-container';
   const container = document.getElementById(containerId);
-  
   if (!container) return;
-  
-  const scrollAmount = 320; // Largeur d'une carte + gap
+  const scrollAmount = 320; 
   const currentScroll = container.scrollLeft;
-  
   if (direction === 'left') {
-    container.scrollTo({
-      left: currentScroll - scrollAmount,
-      behavior: 'smooth'
-    });
+    container.scrollTo({ left: currentScroll - scrollAmount, behavior: 'smooth' });
   } else {
-    container.scrollTo({
-      left: currentScroll + scrollAmount,
-      behavior: 'smooth'
-    });
+    container.scrollTo({ left: currentScroll + scrollAmount, behavior: 'smooth' });
   }
 }
 
-// Support du swipe tactile pour mobile
 function setupTouchScroll() {
   const containers = ['next-matches-container', 'results-container'];
-  
   containers.forEach(containerId => {
     const container = document.getElementById(containerId);
     if (!container) return;
-    
     let isDown = false;
     let startX;
     let scrollLeft;
-    
     container.addEventListener('mousedown', (e) => {
       isDown = true;
       container.style.cursor = 'grabbing';
       startX = e.pageX - container.offsetLeft;
       scrollLeft = container.scrollLeft;
     });
-    
-    container.addEventListener('mouseleave', () => {
-      isDown = false;
-      container.style.cursor = 'grab';
-    });
-    
-    container.addEventListener('mouseup', () => {
-      isDown = false;
-      container.style.cursor = 'grab';
-    });
-    
+    container.addEventListener('mouseleave', () => { isDown = false; container.style.cursor = 'grab'; });
+    container.addEventListener('mouseup', () => { isDown = false; container.style.cursor = 'grab'; });
     container.addEventListener('mousemove', (e) => {
       if (!isDown) return;
       e.preventDefault();
@@ -1438,16 +1165,12 @@ function setupTouchScroll() {
       const walk = (x - startX) * 2;
       container.scrollLeft = scrollLeft - walk;
     });
-    
-    // Touch events pour mobile
     let touchStartX = 0;
     let touchScrollLeft = 0;
-    
     container.addEventListener('touchstart', (e) => {
       touchStartX = e.touches[0].pageX;
       touchScrollLeft = container.scrollLeft;
     });
-    
     container.addEventListener('touchmove', (e) => {
       const touchX = e.touches[0].pageX;
       const walk = touchStartX - touchX;
@@ -1456,19 +1179,58 @@ function setupTouchScroll() {
   });
 }
 
-// Initialiser au chargement de la page
 document.addEventListener('DOMContentLoaded', () => {
   setupTouchScroll();
-  
-  // Ajouter la classe cursor aux conteneurs
   const containers = document.querySelectorAll('#next-matches-container, #results-container');
-  containers.forEach(container => {
-    container.style.cursor = 'grab';
-  });
+  containers.forEach(container => { container.style.cursor = 'grab'; });
 });
-
-// Rendre les fonctions globalement accessibles
 window.scrollMatches = scrollMatches;
 </script>
+
+<!-- NOUVELLE POPUP DE SUCCÈS - STYLE VUEXY -->
+{% if messages %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      {% for message in messages %}
+        {% if message.tags == 'success' %}
+          Swal.fire({
+            title: 'Inscription envoyée !',
+            html: `
+              <p class="mb-4 text-gray-600 text-sm font-secondary">{{ message }}</p>
+              <div class="bg-blue-50 border border-blue-100 p-4 text-left rounded-xl mt-4">
+                <p class="text-sm text-blue-800 font-bold mb-2 font-primary">Que se passe-t-il ensuite ?</p>
+                <ul class="text-sm text-blue-700 list-disc pl-4 space-y-2 font-tertiary">
+                  <li>Vous allez recevoir un <b>mail de la fédération (FFBB)</b> pour créer votre licence officielle.</li>
+                  <li>L'inscription ne sera définitive qu'une fois votre licence validée et votre accès à <b>SportEasy (SE)</b> activé par le club.</li>
+                </ul>
+              </div>
+            `,
+            icon: 'success',
+            confirmButtonColor: '#3b82f6',
+            confirmButtonText: 'C\'est compris !',
+            customClass: {
+              popup: 'rounded-3xl shadow-2xl border border-gray-100',
+              confirmButton: 'rounded-xl px-8 py-3 font-semibold text-md font-secondary shadow-lg hover:shadow-xl transition-all',
+              title: 'font-primary font-bold text-2xl text-secondary-900',
+            }
+          });
+        {% else %}
+          Swal.fire({
+            title: 'Information',
+            text: '{{ message }}',
+            icon: '{{ message.tags }}' === 'error' ? 'error' : 'warning',
+            confirmButtonColor: '#3b82f6',
+            confirmButtonText: 'Fermer',
+            customClass: {
+              popup: 'rounded-3xl shadow-2xl',
+              confirmButton: 'rounded-xl px-8 py-3 font-semibold'
+            }
+          });
+        {% endif %}
+      {% endfor %}
+    });
+  </script>
+{% endif %}
 
 {% endblock %}

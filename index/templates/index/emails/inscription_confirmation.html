@@ -4,226 +4,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation d'inscription - Alloeu Basket Club</title>
+    <title>Confirmation de pré-inscription - Alloeu Basket Club</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
+            color: #374151;
+            background-color: #f3f4f6;
+            -webkit-font-smoothing: antialiased;
+        }
+        .email-wrapper {
+            padding: 40px 20px;
         }
         .email-container {
             max-width: 600px;
             margin: 0 auto;
             background-color: #ffffff;
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
         }
         .header {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            color: #111;
-            padding: 30px 20px;
+            background-color: #dc2626; /* Rouge du club */
+            background-image: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+            color: #ffffff;
+            padding: 40px 30px;
             text-align: center;
-            border-bottom: 2px solid #eee;
         }
         .header h1 {
             margin: 0;
-            font-size: 28px;
-            font-weight: 700;
-            color: #111;
-            letter-spacing: 1px;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
         }
         .header .subtitle {
-            margin: 10px 0 0 0;
+            margin: 8px 0 0 0;
             font-size: 16px;
+            font-weight: 500;
             opacity: 0.9;
         }
         .content {
-            padding: 30px 25px;
+            padding: 40px 30px;
         }
         .greeting {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 24px;
         }
         .important-box {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-left: 4px solid #f59e0b;
+            background-color: #fef2f2;
+            border-left: 4px solid #ef4444;
             padding: 20px;
-            margin: 20px 0;
-            border-radius: 8px;
+            margin: 0 0 30px 0;
+            border-radius: 0 8px 8px 0;
         }
-        .important-box h3 {
-            margin: 0 0 10px 0;
-            color: #92400e;
+        .important-box p {
+            margin: 0;
+            color: #991b1b;
+            font-size: 15px;
+        }
+        .important-box strong {
+            color: #7f1d1d;
+        }
+        .steps-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        .section-title {
+            margin: 0 0 15px 0;
+            color: #1f2937;
             font-size: 16px;
             font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .steps-list {
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        .steps-list h3 {
-            margin: 0 0 15px 0;
-            color: #374151;
-            font-size: 16px;
-            font-weight: 700;
-        }
-        .steps-list ul {
             margin: 0;
             padding-left: 20px;
+            color: #4b5563;
         }
         .steps-list li {
-            color: #4b5563;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            padding-left: 5px;
+        }
+        .steps-list li:last-child {
+            margin-bottom: 0;
         }
         .recap-box {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            border: 1px solid #3b82f6;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        .recap-box h3 {
-            margin: 0 0 15px 0;
-            color: #1d4ed8;
-            font-size: 16px;
-            font-weight: 700;
+            border: 1px solid #e5e7eb;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
         }
         .recap-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            color: #374151;
+            margin-bottom: 12px;
+            font-size: 15px;
+            border-bottom: 1px dashed #e5e7eb;
+            padding-bottom: 8px;
+        }
+        .recap-item:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
         }
         .recap-label {
             font-weight: 600;
+            color: #374151;
+            display: inline-block;
+            width: 160px;
         }
-        .footer {
-            background: #1f2937;
-            color: white;
-            padding: 25px;
+        .recap-value {
+            color: #111827;
+        }
+        .roles-list {
+            margin: 8px 0 0 0;
+            padding-left: 160px;
+            list-style-type: none;
+        }
+        .roles-list li::before {
+            content: "•";
+            color: #ef4444;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+        .contact-info {
             text-align: center;
+            font-size: 15px;
+            color: #4b5563;
         }
         .signature {
-            font-style: italic;
-            margin-top: 20px;
-            color: #6b7280;
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #e5e7eb;
+            font-size: 16px;
+            color: #1f2937;
         }
-        .logo {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 15px auto;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: #ef4444;
+        .footer {
+            background-color: #1f2937;
+            color: #9ca3af;
+            padding: 30px;
+            text-align: center;
+            font-size: 13px;
         }
-        @media (max-width: 600px) {
-            .content {
-                padding: 20px 15px;
-            }
-            .header {
-                padding: 20px 15px;
-            }
+        .footer strong {
+            color: #f3f4f6;
+            font-size: 15px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .footer a {
+            color: #93c5fd;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        @media only screen and (max-width: 600px) {
+            .email-wrapper { padding: 20px 10px; }
+            .content { padding: 30px 20px; }
+            .recap-label { display: block; width: auto; margin-bottom: 4px; color: #6b7280; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;}
+            .roles-list { padding-left: 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="email-container">
-        <div class="header">
-            <h1>Alloeu Basket Club</h1>
-            <p class="subtitle">Confirmation de votre demande d'inscription</p>
-        </div>
-        
-        <div class="content">
-            <div class="greeting">Bonjour {{ full_name }},</div>
-            
-            <p>Nous avons bien reçu votre demande d'inscription. Merci de votre intérêt pour notre club !</p>
-            
-            <div class="important-box">
-                <h3>⚠️ IMPORTANT</h3>
-                <p><strong>Ce formulaire ne signifie pas encore l'inscription au club.</strong> Il s'agit d'une première étape pour nous faire connaître votre intérêt.</p>
+    <div class="email-wrapper">
+        <div class="email-container">
+            <div class="header">
+                <h1>Alloeu Basket Club</h1>
+                <p class="subtitle">Confirmation de pré-inscription</p>
             </div>
             
-            <div class="steps-list">
-                <h3>📋 Prochaines étapes :</h3>
-                <ul>
-                    <li>Vous recevrez sous peu (ou dans les prochains jours) un e-mail de la <strong>Fédération Française de Basketball</strong> pour compléter la licence</li>
-                    <li>Surveillez vos <strong>spams / courriers indésirables</strong> : l'e-mail peut s'y retrouver</li>
-                    <li>Notre secrétariat vous recontactera pour prendre rendez-vous et finaliser votre inscription</li>
-                </ul>
-            </div>
-            
-            <div class="recap-box">
-                <h3>📋 Récapitulatif de votre demande :</h3>
-                <div class="recap-item">
-                    <span class="recap-label">Nom et prénom : </span>
-                    <span> {{ full_name }}</span>
+            <div class="content">
+                <div class="greeting">Bonjour {{ full_name }},</div>
+                
+                <p style="margin-top: 0; margin-bottom: 24px;">Nous avons bien reçu votre demande via notre site web. Merci de votre intérêt pour l'Alloeu Basket Club !</p>
+                
+                <div class="important-box">
+                    <p><strong>⚠️ Attention :</strong> Ce formulaire ne finalise pas votre inscription. Il s'agit de la première étape de notre processus d'adhésion.</p>
                 </div>
-                <div class="recap-item">
-                    <span class="recap-label">Sexe : </span>
-                    <span> {{ sexe_label }}</span>
-                </div>
-                <div class="recap-item">
-                    <span class="recap-label">Date de naissance : </span>
-                    <span> {{ birth_date }}</span>
-                </div>
-                <div class="recap-item">
-                    <span class="recap-label">E-mail : </span>
-                    <span> {{ email }}</span>
-                </div>
-                <div class="recap-item">
-                    <span class="recap-label">Téléphone : </span>
-                    <span> {{ phone }}</span>
-                </div>
-                <div class="recap-item">
-                    <span class="recap-label">Déjà licencié(e) : </span>
-                    <span> {{ licensed_before_text }}</span>
-                </div>
-                <div class="recap-item">
-                    <span class="recap-label">Vu avec le coach : </span>
-                    <span> {{ vu_avec_coach_text }}</span>
-                </div>
-                {% if participation_roles %}
-                <div style="margin-top:12px;padding-top:10px;border-top:1px solid #1d4ed833;">
-                    <div class="recap-item" style="margin-bottom:6px;">
-                        <span class="recap-label">Souhait(s) au club :</span>
-                        <span></span>
-                    </div>
-                    <ul style="margin:0;padding-left:20px;color:#374151;">
-                        {% for role in participation_roles %}<li>• {{ role }}</li>{% endfor %}
+                
+                <div class="steps-box">
+                    <h3 class="section-title">Que se passe-t-il ensuite ?</h3>
+                    <ul class="steps-list">
+                        <li>Vous allez recevoir prochainement un e-mail de la <strong>Fédération Française de Basketball (FFBB)</strong> pour créer votre e-Licence officielle.</li>
+                        <li>N'hésitez pas à vérifier vos <strong>courriers indésirables (spams)</strong>, ce mail s'y glisse fréquemment.</li>
+                        <li>Votre inscription ne sera définitive qu'une fois votre licence validée et votre accès à <strong>SportEasy (SE)</strong> activé.</li>
                     </ul>
                 </div>
-                {% endif %}
+                
+                <div class="recap-box">
+                    <h3 class="section-title">Récapitulatif de vos informations</h3>
+                    
+                    <div class="recap-item">
+                        <span class="recap-label">Nom et prénom</span>
+                        <span class="recap-value">{{ full_name }}</span>
+                    </div>
+                    <div class="recap-item">
+                        <span class="recap-label">Sexe</span>
+                        <span class="recap-value">{{ sexe_label }}</span>
+                    </div>
+                    <div class="recap-item">
+                        <span class="recap-label">Date de naissance</span>
+                        <span class="recap-value">{{ birth_date }}</span>
+                    </div>
+                    <div class="recap-item">
+                        <span class="recap-label">E-mail</span>
+                        <span class="recap-value">{{ email }}</span>
+                    </div>
+                    <div class="recap-item">
+                        <span class="recap-label">Téléphone</span>
+                        <span class="recap-value">{{ phone }}</span>
+                    </div>
+                    <div class="recap-item">
+                        <span class="recap-label">Déjà licencié(e)</span>
+                        <span class="recap-value">{{ licensed_before_text }}</span>
+                    </div>
+                    <div class="recap-item">
+                        <span class="recap-label">Vu avec le coach</span>
+                        <span class="recap-value">{{ vu_avec_coach_text }}</span>
+                    </div>
+                    
+                    {% if participation_roles %}
+                    <div class="recap-item" style="border-bottom: none;">
+                        <span class="recap-label">Souhait(s) au club</span>
+                        <ul class="roles-list">
+                            {% for role in participation_roles %}
+                                <li class="recap-value">{{ role }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="contact-info">
+                    <p>Une question ? Contactez-nous à <strong>alloeu.basket.club@gmail.com</strong><br>ou au <strong>06 89 84 43 54</strong>.</p>
+                </div>
+                
+                <div class="signature">
+                    <strong>Sportivement,</strong><br>
+                    L'équipe Alloeu Basket Club
+                </div>
             </div>
             
-            <p>Si vous avez des questions, n'hésitez pas à nous contacter à <strong>alloeu.basket.club@gmail.com</strong> ou au <strong>06 89 84 43 54</strong>.</p>
-            
-            <div class="signature">
-                <p>Sportivement,<br><strong>L'équipe Alloeu Basket Club</strong></p>
+            <div class="footer">
+                <strong>🏀 Alloeu Basket Club</strong>
+                SALLE COSEC, AVENUE HENRI PUCHOIS<br>62840 LAVENTIE
+                <div style="margin-top: 20px; border-top: 1px solid #374151; padding-top: 20px;">
+                    Cet e-mail a été envoyé automatiquement depuis notre site web.<br>
+                    Pour toute question administrative : <a href="mailto:secretariat.alloeubc@gmail.com">secretariat.alloeubc@gmail.com</a>
+                </div>
             </div>
-        </div>
-        
-        <div class="footer">
-            <p>🏀 <strong>Alloeu Basket Club</strong></p>
-            <p>SALLE COSEC, AVENUE HENRI PUCHOIS<br>62840 LAVENTIE</p>
-            <p style="font-size: 12px; margin-top: 15px; opacity: 0.8;">
-                Cet email a été envoyé automatiquement depuis notre site web.<br>
-                Pour toute question, contactez-nous à 
-                <a href="mailto:alloeu.basket.club@gmail.com" style="color: #93c5fd; text-decoration: underline;">alloeu.basket.club@gmail.com</a> / 
-                <a href="mailto:secretariat.alloeubc@gmail.com" style="color: #93c5fd; text-decoration: underline;">secretariat.alloeubc@gmail.com</a>
-            </p>
         </div>
     </div>
 </body>

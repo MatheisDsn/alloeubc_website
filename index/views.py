@@ -68,7 +68,8 @@ def inscriptions(requests):
     if requests.method == 'POST':
         form = InscriptionForm(requests.POST)
         if form.is_valid():
-            full_name = form.cleaned_data['full_name']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
             sexe = form.cleaned_data['sexe']
             birth_date = form.cleaned_data['birth_date']
             email = form.cleaned_data['email']
@@ -128,7 +129,8 @@ def inscriptions(requests):
                 roles_labels = [choices_map.get(r, r) for r in participation_roles]
 
             email_context = {
-                'full_name': full_name,
+                'last_name': last_name,
+                'first_name': first_name,
                 'birth_name': birth_name, 
                 'sexe_label': sexe_label,
                 'birth_date': formatted_birth_date,
@@ -157,7 +159,7 @@ def inscriptions(requests):
                         "name": settings.DEFAULT_FROM_NAME,
                         "email": settings.DEFAULT_FROM_EMAIL
                     },
-                    "to": [{"email": email, "name": full_name}],
+                    "to": [{"email": email, "name": f"{first_name} {last_name}"}],
                     "subject": subject_user,
                     "htmlContent": html_content
                 }

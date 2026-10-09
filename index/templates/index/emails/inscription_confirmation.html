@@ -207,8 +207,18 @@
                     <h3 class="section-title">Récapitulatif de vos informations</h3>
                     
                     <div class="recap-item">
-                        <span class="recap-label">Nom et prénom</span>
-                        <span class="recap-value">{{ full_name }}</span>
+                        <span class="recap-label">Nom</span>
+                        <span class="recap-value">{{ last_name }}</span>
+                    </div>
+                    {% if birth_name %}
+                    <div class="recap-item">
+                        <span class="recap-label">Nom de naissance</span>
+                        <span class="recap-value">{{ birth_name }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="recap-item">
+                        <span class="recap-label">Prénom</span>
+                        <span class="recap-value">{{ first_name }}</span>
                     </div>
                     <div class="recap-item">
                         <span class="recap-label">Sexe</span>
@@ -234,12 +244,6 @@
                         <span class="recap-label">Vu avec le coach</span>
                         <span class="recap-value">{{ vu_avec_coach_text }}</span>
                     </div>
-                    {% if birth_name %}
-                    <div class="recap-item">
-                        <span class="recap-label">Nom de naissance</span>
-                        <span class="recap-value">{{ birth_name }}</span>
-                    </div>
-                    {% endif %}
                     {% if surclassement %}
                     <div class="recap-item">
                         <span class="recap-label">Surclassement</span>

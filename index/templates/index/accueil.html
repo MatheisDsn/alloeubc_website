@@ -229,8 +229,13 @@ Découvrez l'Alloeu Basket Club : actualités, calendriers de matchs, équipes e
             <!-- ===== Identité ===== -->
             <fieldset class="space-y-5">
               <div>
-                <label for="id_full_name" class="block text-sm font-medium text-secondary-700 mb-1">Nom et prénom</label>
-                {{ home_inscription_form.full_name }}
+                <label for="id_full_name" class="block text-sm font-medium text-secondary-700 mb-1">Nom</label>
+                {{ home_inscription_form.last_name }}
+              </div>
+
+              <div>
+                <label for="id_full_name" class="block text-sm font-medium text-secondary-700 mb-1">Prénom</label>
+                {{ home_inscription_form.first_name }}
               </div>
 
               <div>

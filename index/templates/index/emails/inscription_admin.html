@@ -154,8 +154,18 @@
             
             <div class="info-grid">
                 <div class="info-item">
-                    <div class="info-label">👤 Nom et prénom</div>
-                    <div class="info-value">{{ full_name }}</div>
+                    <div class="info-label">👤 Nom</div>
+                    <div class="info-value">{{ last_name }}</div>
+                </div>
+                {% if birth_name %}
+                <div class="info-item">
+                    <div class="info-label">💍 Nom de naissance</div>
+                    <div class="info-value">{{ birth_name }}</div>
+                </div>
+                {% endif %}
+                <div class="info-item">
+                    <div class="info-label">👤 Prénom</div>
+                    <div class="info-value">{{ first_name }}</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">⚧ Sexe</div>
@@ -181,12 +191,6 @@
                     <div class="info-label">🗣️ Vu avec le coach</div>
                     <div class="info-value">{{ vu_avec_coach_text }}</div>
                 </div>
-                {% if birth_name %}
-                <div class="info-item">
-                    <div class="info-label">💍 Nom de naissance</div>
-                    <div class="info-value">{{ birth_name }}</div>
-                </div>
-                {% endif %}
                 <div class="info-item"{% if surclassement %} style="background:#fef3c7;border-color:#f59e0b;"{% endif %}>
                     <div class="info-label">⬆️ Surclassement</div>
                     <div class="info-value">{% if surclassement %}<strong>Oui, demandé</strong>{% else %}Non{% endif %}</div>

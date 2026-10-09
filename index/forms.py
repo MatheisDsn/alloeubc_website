@@ -3,12 +3,20 @@ from django import forms
 
 
 class InscriptionForm(forms.Form):
-    full_name = forms.CharField(
-        label="Nom et prénom",
+    last_name = forms.CharField(
+        label="Nom",
         max_length=150,
         widget=forms.TextInput(attrs={
             "class": "w-full rounded-lg border-gray-300 font-secondary focus:border-primary-500 focus:ring-primary-500",
-            "placeholder": "Ex: Martin Dupont",
+            "placeholder": "Ex: Dupont",
+        }),
+    )
+    first_name = forms.CharField(
+        label="Prénom",
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            "class": "w-full rounded-lg border-gray-300 font-secondary focus:border-primary-500 focus:ring-primary-500",
+            "placeholder": "Ex: Martin",
         }),
     )
     birth_name = forms.CharField(

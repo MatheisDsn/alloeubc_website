@@ -20,14 +20,13 @@ class InscriptionForm(forms.Form):
         }),
     )
     birth_name = forms.CharField(
-    label="Nom de naissance",
-    required=False,
-    max_length=150,
-    widget=forms.TextInput(attrs={
-        "class": "w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-secondary-900 placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 transition",
-        "placeholder": "Ex : nom de jeune fille",
-        "autocomplete": "off",
-    }),
+        label="Nom de naissance",
+        required=False,
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            "class": "w-full rounded-lg border-gray-300 font-secondary focus:border-primary-500 focus:ring-primary-500",
+            "placeholder": "Ex : nom de jeune fille",
+        }),
     )
     sexe = forms.ChoiceField(
         label="Sexe",

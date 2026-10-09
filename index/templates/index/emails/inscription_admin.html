@@ -181,6 +181,16 @@
                     <div class="info-label">🗣️ Vu avec le coach</div>
                     <div class="info-value">{{ vu_avec_coach_text }}</div>
                 </div>
+                {% if birth_name %}
+                <div class="info-item">
+                    <div class="info-label">💍 Nom de naissance</div>
+                    <div class="info-value">{{ birth_name }}</div>
+                </div>
+                {% endif %}
+                <div class="info-item"{% if surclassement %} style="background:#fef3c7;border-color:#f59e0b;"{% endif %}>
+                    <div class="info-label">⬆️ Surclassement</div>
+                    <div class="info-value">{% if surclassement %}<strong>Oui, demandé</strong>{% else %}Non{% endif %}</div>
+                </div>
             </div>
 
             {% if participation_roles %}

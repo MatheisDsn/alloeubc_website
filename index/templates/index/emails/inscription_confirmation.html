@@ -234,6 +234,19 @@
                         <span class="recap-label">Vu avec le coach</span>
                         <span class="recap-value">{{ vu_avec_coach_text }}</span>
                     </div>
+                    {% if birth_name %}
+                    <div class="recap-item">
+                        <span class="recap-label">Nom de naissance</span>
+                        <span class="recap-value">{{ birth_name }}</span>
+                    </div>
+                    {% endif %}
+                    {% if surclassement %}
+                    <div class="recap-item">
+                        <span class="recap-label">Surclassement</span>
+                        <span class="recap-value">Demandé (sous réserve de validation par le club)</span>
+                    </div>
+                    {% endif %}
+
                     
                     {% if participation_roles %}
                     <div class="recap-item" style="border-bottom: none;">

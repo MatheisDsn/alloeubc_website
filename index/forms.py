@@ -1,77 +1,6 @@
 from django import forms
 
 
-class InscriptionSoireeForm(forms.Form):
-    """Formulaire d'inscription à la soirée festive"""
-    nom = forms.CharField(
-        label="Nom",
-        max_length=100,
-        widget=forms.TextInput(attrs={
-            "class": "w-full rounded-lg border-gray-300 font-secondary focus:border-primary-500 focus:ring-primary-500",
-            "placeholder": "Votre nom",
-        }),
-    )
-    prenom = forms.CharField(
-        label="Prénom",
-        max_length=100,
-        widget=forms.TextInput(attrs={
-            "class": "w-full rounded-lg border-gray-300 font-secondary focus:border-primary-500 focus:ring-primary-500",
-            "placeholder": "Votre prénom",
-        }),
-    )
-    email = forms.EmailField(
-        label="Adresse email",
-        widget=forms.EmailInput(attrs={
-            "class": "w-full rounded-lg border-gray-300 font-secondary focus:border-primary-500 focus:ring-primary-500",
-            "placeholder": "votre.email@example.com",
-        }),
-    )
-    telephone = forms.CharField(
-        label="Numéro de téléphone",
-        max_length=20,
-        widget=forms.TextInput(attrs={
-            "class": "w-full rounded-lg border-gray-300 font-secondary focus:border-primary-500 focus:ring-primary-500",
-            "placeholder": "06 12 34 56 78",
-        }),
-    )
-    nombre_personnes = forms.IntegerField(
-        label="Nombre de personnes à inscrire",
-        min_value=1,
-        max_value=20,
-        initial=1,
-        widget=forms.NumberInput(attrs={
-            "class": "w-full rounded-lg border-gray-300 font-secondary focus:border-primary-500 focus:ring-primary-500",
-            "min": "1",
-            "max": "20",
-        }),
-    )
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Récupérer le nombre de personnes depuis les données POST ou initial
-        nombre = self.data.get('nombre_personnes') if self.data else None
-        if nombre is None and self.initial:
-            nombre = self.initial.get('nombre_personnes', 1)
-        if nombre is None:
-            nombre = 1
-        
-        try:
-            nombre = int(nombre)
-        except (ValueError, TypeError):
-            nombre = 1
-        
-        # Créer dynamiquement les champs pour chaque participant
-        for i in range(1, nombre + 1):
-            self.fields[f'lien_club_{i}'] = forms.CharField(
-                label=f"Lien avec le club - Personne {i}",
-                max_length=200,
-                widget=forms.TextInput(attrs={
-                    "class": "w-full rounded-lg border-gray-300 font-secondary focus:border-primary-500 focus:ring-primary-500",
-                    "placeholder": "Ex: Joueur, Parent, Entraîneur, Bénévole...",
-                }),
-                help_text="Précisez le lien de cette personne avec le club"
-            )
-
 
 class InscriptionForm(forms.Form):
     full_name = forms.CharField(
@@ -81,6 +10,16 @@ class InscriptionForm(forms.Form):
             "class": "w-full rounded-lg border-gray-300 font-secondary focus:border-primary-500 focus:ring-primary-500",
             "placeholder": "Ex: Martin Dupont",
         }),
+    )
+    birth_name = forms.CharField(
+    label="Nom de naissance",
+    required=False,
+    max_length=150,
+    widget=forms.TextInput(attrs={
+        "class": "w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-secondary-900 placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 transition",
+        "placeholder": "Ex : nom de jeune fille",
+        "autocomplete": "off",
+    }),
     )
     sexe = forms.ChoiceField(
         label="Sexe",
@@ -119,13 +58,20 @@ class InscriptionForm(forms.Form):
         }),
     )
     
-    # NOUVEAU CHAMP AJOUTÉ ICI
     vu_avec_coach = forms.BooleanField(
         label="J'ai déjà vu avec le coach",
         required=False, # Laisse à False si ce n'est pas strictement obligatoire pour envoyer le formulaire
         widget=forms.CheckboxInput(attrs={
             "class": "h-4 w-4 text-primary-600 border-gray-300 rounded",
         }),
+    )
+
+    surclassement = forms.BooleanField(
+    label="Je souhaite un surclassement",
+    required=False,
+    widget=forms.CheckboxInput(attrs={
+        "class": "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500",
+    }),
     )
 
     # MODIFICATION DE LA LIGNE "loisir"
